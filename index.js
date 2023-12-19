@@ -125,22 +125,16 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  let datas = {
-    from:{vertically:1,horizontally:0},
-    to:{vertically:1,horizontally:0}
-  }
-
-
 
   console.log(`User Connected: ${socket.id}`);
 
-  socket.on("join_room", (data) => {
-    let datas = {
-      from:{vertically:2,horizontally:0},
-      to:{vertically:3,horizontally:0}
-    }
-    let a = step(datas)
-    socket.join(a);
+  socket.on("start", (data) => {
+    // let datas = {
+    //   from:{vertically:2,horizontally:0},
+    //   to:{vertically:3,horizontally:0}
+    // }
+    // let a = step(datas)
+    socket.join(board);
   });
 
   socket.on("send_message", (data) => {
