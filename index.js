@@ -135,6 +135,7 @@ io.on("connection", (socket) => {
     // }
     // let a = step(datas)
     socket.join(board);
+    socket.emit("receive_start", board);
   });
 
   socket.on("send_message", (data) => {
