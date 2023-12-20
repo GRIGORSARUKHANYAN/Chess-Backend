@@ -107,7 +107,9 @@ if (board[vertically+1][horizontally].color==null) {
 if (board[vertically+2][horizontally].color==null && board[vertically+1][horizontally].color==null && board[vertically+1][horizontally].isTouched==false  ) {
   allow.push({vertically:vertically+2,horizontally})
 }
-
+// if (horizontally==7 &&) {
+  
+// }
 
 
 if (board[vertically+1][horizontally+1].color=="white" && board[vertically+1][horizontally].color==null && board[vertically+1][horizontally].isTouched==false  ) {
@@ -153,13 +155,12 @@ function step(data) {
 // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
 // 			throw new HttpException(400, 'you cannot perform this step');
 // }  
-// console.log("start",board[data.to.horizontally][data.to.vertically].color);
-  board[data.to.horizontally][data.to.vertically].color= board[data.from.horizontally][data.from.vertically].color
-  board[data.to.horizontally][data.to.vertically].pieces=board[data.from.horizontally][data.from.vertically].pieces
-  board[data.from.horizontally][data.from.vertically].color=null
-  board[data.from.horizontally][data.from.vertically].pieces=null
-  console.log(board);
-  // console.log(board[data.to.horizontally][data.to.vertically].color);
+console.log("start",board[data.to.vertically][data.to.horizontally].color);
+  board[data.to.vertically][data.to.horizontally].color= board[data.from.vertically][data.from.horizontally].color
+  board[data.to.vertically][data.to.horizontally].pieces=board[data.from.vertically][data.from.horizontally].pieces
+  board[data.from.vertically][data.from.horizontally].color=null
+  board[data.from.vertically][data.from.horizontally].pieces=null
+  console.log(board[data.to.vertically][data.to.horizontally].color);
   // console.log(  board[data.from.horizontally][data.from.vertically]);
 return board
 
@@ -191,6 +192,7 @@ io.on("connection", (socket) => {
   socket.on("step", (data) => {
     // socket.to(data.room).emit("receive_message", data);
     step(data)
+    console.log(board);
     console.log(data);
     socket.emit("receive_step", board);
   });
