@@ -8,85 +8,85 @@ const { log } = require("console");
 // vertically:^^^^^,horizontally:>>>>>>
 const board=
 [
-[
-  {color:"black",vertically:0,horizontally:7,pieces:"rook"},
-  {color:"black",vertically:1,horizontally:7,pieces:"knight"},
-  {color:"black",vertically:2,horizontally:7,pieces:"bishop"},
-  {color:"black",vertically:3,horizontally:7,pieces:"queen"},
-  {color:"black",vertically:4,horizontally:7,pieces:"king"},
-  {color:"black",vertically:5,horizontally:7,pieces:"bishop"},
-  {color:"black",vertically:6,horizontally:7,pieces:"knight"},
-  {color:"black",vertically:7,horizontally:7,pieces:"rook"},
- ],
- [
+  [
+    {color:null,vertically:0,horizontally:2,pieces:null,isTouched:false},
+    {color:null,vertically:1,horizontally:2,pieces:null,isTouched:false},
+    {color:null,vertically:2,horizontally:2,pieces:null,isTouched:false},
+    {color:null,vertically:3,horizontally:2,pieces:null,isTouched:false},
+    {color:null,vertically:4,horizontally:2,pieces:null,isTouched:false},
+    {color:null,vertically:5,horizontally:2,pieces:null,isTouched:false},
+    {color:null,vertically:6,horizontally:2,pieces:null,isTouched:false},
+    {color:null,vertically:7,horizontally:2,pieces:null,isTouched:false},
+   ],
+  [
   {color:"black",vertically:0,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:1,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:2,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:3,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:4,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:5,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:6,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:7,horizontally:6,pieces:"pawn"},
+  {color:null,vertically:1,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:2,pieces:null,isTouched:false},
  ],
  [
-  {color:null,vertically:0,horizontally:5,pieces:null},
-  {color:null,vertically:1,horizontally:5,pieces:null},
-  {color:null,vertically:2,horizontally:5,pieces:null},
-  {color:null,vertically:3,horizontally:5,pieces:null},
-  {color:null,vertically:4,horizontally:5,pieces:null},
-  {color:null,vertically:5,horizontally:5,pieces:null},
-  {color:null,vertically:6,horizontally:5,pieces:null},
-  {color:null,vertically:7,horizontally:5,pieces:null},
+  {color:null,vertically:0,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:5,pieces:null,isTouched:false},
  ],
  [
-  {color:null,vertically:0,horizontally:4,pieces:null},
-  {color:null,vertically:1,horizontally:4,pieces:null},
-  {color:null,vertically:2,horizontally:4,pieces:null},
-  {color:null,vertically:3,horizontally:4,pieces:null},
-  {color:null,vertically:4,horizontally:4,pieces:null},
-  {color:null,vertically:5,horizontally:4,pieces:null},
-  {color:null,vertically:6,horizontally:4,pieces:null},
-  {color:null,vertically:7,horizontally:4,pieces:null},
+  {color:null,vertically:0,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:4,pieces:null,isTouched:false},
  ],
  [
-  {color:null,vertically:0,horizontally:3,pieces:null},
-  {color:null,vertically:1,horizontally:3,pieces:null},
-  {color:null,vertically:2,horizontally:3,pieces:null},
-  {color:null,vertically:3,horizontally:3,pieces:null},
-  {color:null,vertically:4,horizontally:3,pieces:null},
-  {color:null,vertically:5,horizontally:3,pieces:null},
-  {color:null,vertically:6,horizontally:3,pieces:null},
-  {color:null,vertically:7,horizontally:3,pieces:null},
+  {color:null,vertically:0,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:3,pieces:null,isTouched:false},
  ],
  [
-  {color:null,vertically:0,horizontally:2,pieces:null},
-  {color:null,vertically:1,horizontally:2,pieces:null},
-  {color:null,vertically:2,horizontally:2,pieces:null},
-  {color:null,vertically:3,horizontally:2,pieces:null},
-  {color:null,vertically:4,horizontally:2,pieces:null},
-  {color:null,vertically:5,horizontally:2,pieces:null},
-  {color:null,vertically:6,horizontally:2,pieces:null},
-  {color:null,vertically:7,horizontally:2,pieces:null},
+  {color:null,vertically:0,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:2,pieces:null,isTouched:false},
  ],
  [
-  {color:"white",vertically:0,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:1,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:2,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:3,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:4,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:5,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:6,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:7,horizontally:1,pieces:"pawn"},
+  {color:null,vertically:0,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:2,pieces:null,isTouched:false},
  ],
  [
-  {color:"white",vertically:0,horizontally:0,pieces:"rook"},
-  {color:"white",vertically:1,horizontally:0,pieces:"knight"},
-  {color:"white",vertically:2,horizontally:0,pieces:"bishop"},
-  {color:"white",vertically:3,horizontally:0,pieces:"queen"},
-  {color:"white",vertically:4,horizontally:0,pieces:"king"},
-  {color:"white",vertically:5,horizontally:0,pieces:"bishop"},
-  {color:"white",vertically:6,horizontally:0,pieces:"knight"},
-  {color:"white",vertically:7,horizontally:0,pieces:"rook"},
+  {color:null,vertically:0,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:2,pieces:null,isTouched:false},
  ],
 ]
 // let datas = {
@@ -95,17 +95,72 @@ const board=
 // }
 
 
+function allowBlackPawn(data) {
+  data={vertically:0,horizontally:0}
+let allow=[]
+if (vertically>6) {
+  return []
+}
+if (board[vertically+1][horizontally].color==null) {
+  allow.push({vertically:vertically+1,horizontally})
+}
+if (board[vertically+2][horizontally].color==null && board[vertically+1][horizontally].color==null && board[vertically+1][horizontally].isTouched==false  ) {
+  allow.push({vertically:vertically+2,horizontally})
+}
+
+
+
+if (board[vertically+1][horizontally+1].color=="white" && board[vertically+1][horizontally].color==null && board[vertically+1][horizontally].isTouched==false  ) {
+  allow.push({vertically:vertically+2,horizontally})
+}
+
+
+
+
+
+
+if (board[vertically+1][horizontally].color==null) {
+  allow.push({vertically:vertically+1,horizontally})
+}
+
+
+if (Math.abs(data.to.vertically-data.from.vertically)==1 && data.to.horizontally==data.from.horizontally &&board[data.to.horizontally][data.to.vertically].color == null ) {
+  allow.push(data)
+}
+
+
+  if (board[data.to.horizontally][data.to.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
+    return false
+  }
+  if (Math.abs(data.from.vertically-data.to.vertically)!=1) {
+    if (Math.abs(data.from.vertically-data.to.vertically)!=2) {
+    return false
+    }
+
+
+    return false
+  }
+  if (data.from.horizontally!=data.to.horizontally) {
+    if (Math.abs(data.from.horizontally-data.to.horizontally)!==1) {
+      
+    }
+    return false
+  }
+
+}
+
 function step(data) {
-  console.log(data,"gh");
 // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
 // 			throw new HttpException(400, 'you cannot perform this step');
 // }  
-  board[data.to.horizontally][data.from.vertically].color= board[data.from.horizontally][data.from.vertically].color
-  board[data.to.horizontally][data.from.vertically].pieces=board[data.from.horizontally][data.from.vertically].pieces
+// console.log("start",board[data.to.horizontally][data.to.vertically].color);
+  board[data.to.horizontally][data.to.vertically].color= board[data.from.horizontally][data.from.vertically].color
+  board[data.to.horizontally][data.to.vertically].pieces=board[data.from.horizontally][data.from.vertically].pieces
   board[data.from.horizontally][data.from.vertically].color=null
   board[data.from.horizontally][data.from.vertically].pieces=null
   console.log(board);
-  console.log(  board[data.from.horizontally][data.from.vertically]);
+  // console.log(board[data.to.horizontally][data.to.vertically].color);
+  // console.log(  board[data.from.horizontally][data.from.vertically]);
 return board
 
 }
@@ -136,7 +191,8 @@ io.on("connection", (socket) => {
   socket.on("step", (data) => {
     // socket.to(data.room).emit("receive_message", data);
     step(data)
-    socket.emit("receive_step", true);
+    console.log(data);
+    socket.emit("receive_step", board);
   });
 });
 
