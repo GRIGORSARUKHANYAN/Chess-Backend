@@ -6,89 +6,472 @@ const cors = require("cors");
 const { log } = require("console");
 
 // vertically:^^^^^,horizontally:>>>>>>
-const board=
-[
-[
-  {color:"black",vertically:0,horizontally:7,pieces:"rook"},
-  {color:"black",vertically:1,horizontally:7,pieces:"knight"},
-  {color:"black",vertically:2,horizontally:7,pieces:"bishop"},
-  {color:"black",vertically:3,horizontally:7,pieces:"queen"},
-  {color:"black",vertically:4,horizontally:7,pieces:"king"},
-  {color:"black",vertically:5,horizontally:7,pieces:"bishop"},
-  {color:"black",vertically:6,horizontally:7,pieces:"knight"},
-  {color:"black",vertically:7,horizontally:7,pieces:"rook"},
- ],
- [
-  {color:"black",vertically:0,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:1,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:2,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:3,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:4,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:5,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:6,horizontally:6,pieces:"pawn"},
-  {color:"black",vertically:7,horizontally:6,pieces:"pawn"},
- ],
- [
-  {color:null,vertically:0,horizontally:5,pieces:null},
-  {color:null,vertically:1,horizontally:5,pieces:null},
-  {color:null,vertically:2,horizontally:5,pieces:null},
-  {color:null,vertically:3,horizontally:5,pieces:null},
-  {color:null,vertically:4,horizontally:5,pieces:null},
-  {color:null,vertically:5,horizontally:5,pieces:null},
-  {color:null,vertically:6,horizontally:5,pieces:null},
-  {color:null,vertically:7,horizontally:5,pieces:null},
- ],
- [
-  {color:null,vertically:0,horizontally:4,pieces:null},
-  {color:null,vertically:1,horizontally:4,pieces:null},
-  {color:null,vertically:2,horizontally:4,pieces:null},
-  {color:null,vertically:3,horizontally:4,pieces:null},
-  {color:null,vertically:4,horizontally:4,pieces:null},
-  {color:null,vertically:5,horizontally:4,pieces:null},
-  {color:null,vertically:6,horizontally:4,pieces:null},
-  {color:null,vertically:7,horizontally:4,pieces:null},
- ],
- [
-  {color:null,vertically:0,horizontally:3,pieces:null},
-  {color:null,vertically:1,horizontally:3,pieces:null},
-  {color:null,vertically:2,horizontally:3,pieces:null},
-  {color:null,vertically:3,horizontally:3,pieces:null},
-  {color:null,vertically:4,horizontally:3,pieces:null},
-  {color:null,vertically:5,horizontally:3,pieces:null},
-  {color:null,vertically:6,horizontally:3,pieces:null},
-  {color:null,vertically:7,horizontally:3,pieces:null},
- ],
- [
-  {color:null,vertically:0,horizontally:2,pieces:null},
-  {color:null,vertically:1,horizontally:2,pieces:null},
-  {color:null,vertically:2,horizontally:2,pieces:null},
-  {color:null,vertically:3,horizontally:2,pieces:null},
-  {color:null,vertically:4,horizontally:2,pieces:null},
-  {color:null,vertically:5,horizontally:2,pieces:null},
-  {color:null,vertically:6,horizontally:2,pieces:null},
-  {color:null,vertically:7,horizontally:2,pieces:null},
- ],
- [
-  {color:"white",vertically:0,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:1,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:2,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:3,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:4,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:5,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:6,horizontally:1,pieces:"pawn"},
-  {color:"white",vertically:7,horizontally:1,pieces:"pawn"},
- ],
- [
-  {color:"white",vertically:0,horizontally:0,pieces:"rook"},
-  {color:"white",vertically:1,horizontally:0,pieces:"knight"},
-  {color:"white",vertically:2,horizontally:0,pieces:"bishop"},
-  {color:"white",vertically:3,horizontally:0,pieces:"queen"},
-  {color:"white",vertically:4,horizontally:0,pieces:"king"},
-  {color:"white",vertically:5,horizontally:0,pieces:"bishop"},
-  {color:"white",vertically:6,horizontally:0,pieces:"knight"},
-  {color:"white",vertically:7,horizontally:0,pieces:"rook"},
- ],
-]
+const board = [
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 6,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+];
 // let datas = {
 //   from:{vertically:1,horizontally:0},
 //   to:{vertically:1,horizontally:0}
@@ -107,10 +490,12 @@ function allowBlackPawn(data) {
       horizontally: data.horizontally,
     });
   }
-  if (data.vertically < 6 &&
+  console.log(board[data.vertically][data.horizontally], "asa tenm inch ka");
+  if (
+    data.vertically < 6 &&
     board[data.vertically + 2][data.horizontally].color == null &&
     board[data.vertically + 1][data.horizontally].color == null &&
-    board[data.vertically + 1][data.horizontally].isTouched == false
+    board[data.vertically][data.horizontally].isTouched == false
   ) {
     allow.push({
       vertically: data.vertically + 2,
@@ -135,38 +520,37 @@ function allowBlackPawn(data) {
     });
   } else {
     if (data.horizontally > 0 && data.horizontally < 7) {
-    if (board[data.vertically][data.horizontally + 1].color == "white") {
-      allow.push({
-        vertically: data.vertically + 1,
-        horizontally: data.horizontally + 1,
-      });
-    }
-    if (board[data.vertically][data.horizontally - 1].color == "white") {
-      allow.push({
-        vertically: data.vertically + 1,
-        horizontally: data.horizontally - 1,
-      });
+      if (board[data.vertically][data.horizontally + 1].color == "white") {
+        allow.push({
+          vertically: data.vertically + 1,
+          horizontally: data.horizontally + 1,
+        });
+      }
+      if (board[data.vertically][data.horizontally - 1].color == "white") {
+        allow.push({
+          vertically: data.vertically + 1,
+          horizontally: data.horizontally - 1,
+        });
+      }
     }
   }
-
-
-  }
-  return allow
+  return allow;
 }
 
 function step(data) {
   // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
   // 			throw new HttpException(400, 'you cannot perform this step');
   // }
-  console.log("start", board[data.to.vertically][data.to.horizontally].color);
   board[data.to.vertically][data.to.horizontally].color =
     board[data.from.vertically][data.from.horizontally].color;
   board[data.to.vertically][data.to.horizontally].pieces =
     board[data.from.vertically][data.from.horizontally].pieces;
   board[data.from.vertically][data.from.horizontally].color = null;
   board[data.from.vertically][data.from.horizontally].pieces = null;
-  console.log(board[data.to.vertically][data.to.horizontally].color);
   // console.log(  board[data.from.horizontally][data.from.vertically]);
+  board[data.from.vertically][data.from.horizontally].isTouched = true;
+  board[data.to.vertically][data.to.horizontally].isTouched = true;
+
   return board;
 }
 
@@ -201,8 +585,7 @@ io.on("connection", (socket) => {
       );
     }
     step(data);
-    // console.log(board);
-    // console.log(data);
+
     socket.emit("receive_step", board);
   });
 });
