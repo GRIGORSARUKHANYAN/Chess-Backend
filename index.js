@@ -129,17 +129,14 @@ io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
   socket.on("start", (data) => {
-    // let datas = {
-    //   from:{vertically:2,horizontally:0},
-    //   to:{vertically:3,horizontally:0}
-    // }
-    // let a = step(datas)
     socket.join(board);
     socket.emit("receive_start", board);
   });
 
-  socket.on("send_message", (data) => {
-    socket.to(data.room).emit("receive_message", data);
+  socket.on("step", (data) => {
+    // socket.to(data.room).emit("receive_message", data);
+    step(data)
+    socket.emit("receive_step", true);
   });
 });
 
