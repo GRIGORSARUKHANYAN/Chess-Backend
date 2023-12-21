@@ -477,6 +477,81 @@ const board = [
 //   to:{vertically:1,horizontally:0}
 // }
 
+// function allowKing(data) {
+//       // data = { vertically: 0, horizontally: 0 };
+//       let allow = [];
+//       const activeColor=board[data.vertically][data.horizontally].color
+//       if (data.vertically+1<8 &&data.horizontally+1<8 &&board[data.vertically+1][data.horizontally+1].color !==activeColor) {
+//         allow.push({
+//           vertically: data.vertically+1,
+//           horizontally: data.horizontally+1,
+//         });
+//       }
+      
+//       if (data.vertically<8 &&data.horizontally+1<8 &&board[data.vertically][data.horizontally+1].color !==activeColor) {
+//         allow.push({
+//           vertically: data.vertically,
+//           horizontally: data.horizontally+1,
+//         });
+//       }    
+
+//       if (data.vertically<8 &&data.horizontally-1>-1 &&board[data.vertically][data.horizontally-1].color !==activeColor) {
+//         allow.push({
+//           vertically: data.vertically,
+//           horizontally: data.horizontally-1,
+//         });
+//       }      
+
+//       if (data.vertically+1<8 &&data.horizontally<8 &&board[data.vertically+1][data.horizontally].color !==activeColor) {
+//         allow.push({
+//           vertically: data.vertically+1,
+//           horizontally: data.horizontally,
+//         });
+//       }
+      
+      
+//       if (data.vertically+1<8 &&data.horizontally-1>-1 &&board[data.vertically+1][data.horizontally-1].color !==activeColor) {
+//         allow.push({
+//           vertically: data.vertically+1,
+//           horizontally: data.horizontally-1,
+//         });
+//       }      
+
+
+//       if (data.vertically-1>-1 &&data.horizontally-1>-1 &&board[data.vertically-1][data.horizontally-1].color !==activeColor) {
+//         allow.push({
+//           vertically: data.vertically-1,
+//           horizontally: data.horizontally-1,
+//         });
+//       }            
+
+
+
+//       if (data.vertically-1>-1 &&data.horizontally>-1 &&board[data.vertically-1][data.horizontally].color !==activeColor) {
+//         allow.push({
+//           vertically: data.vertically-1,
+//           horizontally: data.horizontally,
+//         });
+//       }            
+
+
+
+//       if (data.vertically-1>-1 &&data.horizontally+1<8 &&board[data.vertically-1][data.horizontally+1].color !==activeColor) {
+//         allow.push({
+//           vertically: data.vertically-1,
+//           horizontally: data.horizontally+1,
+//         });
+//       }            
+
+// }
+
+
+
+
+
+
+
+
 
 function allowKinght(data) {
     // data = { vertically: 0, horizontally: 0 };
