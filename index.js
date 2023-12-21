@@ -67,300 +67,300 @@ const board = [
   ],
   [
     {
-      color: "black",
+      color: null,
+      vertically: 1,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 0,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 1,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 6,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 7,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: "white",
       vertically: 0,
       horizontally: 6,
       pieces: "pawn",
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 2,
-      pieces: null,
       isTouched: false,
     },
     {
@@ -477,6 +477,274 @@ const board = [
 //   to:{vertically:1,horizontally:0}
 // }
 
+
+function allowKinght(data) {
+    // data = { vertically: 0, horizontally: 0 };
+  let allow = [];
+    const activeColor=board[data.vertically][data.horizontally].color
+  if (data.vertically+2<8 &&data.horizontally+1<8 &&board[data.vertically+2][data.horizontally+1].color !==activeColor ) {
+    allow.push({
+      vertically: data.vertically+2,
+      horizontally: data.horizontally+1,
+    });
+  }
+
+  if (data.vertically+2<8 &&data.horizontally-1>-1 && board[data.vertically+2][data.horizontally-1].color !== activeColor) {
+    allow.push({
+      vertically: data.vertically+2,
+      horizontally: data.horizontally-1,
+    });
+  }  
+
+  if (data.vertically+1<8 &&data.horizontally+2<8&& board[data.vertically+1][data.horizontally+2].color !== activeColor) {
+    allow.push({
+      vertically: data.vertically+1,
+      horizontally: data.horizontally+2,
+    });
+  }
+
+
+
+  if (data.vertically-1>-1 &&data.horizontally+2<8&& board[data.vertically-1][data.horizontally+2].color !== activeColor) {
+    allow.push({
+      vertically: data.vertically-1,
+      horizontally: data.horizontally+2,
+    });  
+  }
+
+
+  if (data.vertically-2>-1 &&data.horizontally-1>-1 && board[data.vertically-2][data.horizontally-1].color !== activeColor) {
+    allow.push({
+      vertically: data.vertically-2,
+      horizontally: data.horizontally-1,
+    });  
+  }
+
+
+
+  if (data.vertically-2>-1 &&data.horizontally+1<8 &&board[data.vertically-2][data.horizontally+1].color !== activeColor) {
+    allow.push({
+      vertically: data.vertically-2,
+      horizontally: data.horizontally+1,
+    });  
+  }
+
+  if (data.vertically-1>-1 &&data.horizontally-2>-1 && board[data.vertically-1][data.horizontally-2].color !== activeColor) {
+    allow.push({
+      vertically: data.vertically-1,
+      horizontally: data.horizontally-2,
+    });  
+  }
+
+
+
+  if (data.vertically+1<8 &&data.horizontally-2>-1 && board[data.vertically+1][data.horizontally-2].color !== activeColor) {
+    allow.push({
+      vertically: data.vertically+1,
+      horizontally: data.horizontally-2,
+    });  
+  }  
+return allow
+}
+
+
+
+
+
+
+
+
+
+
+function allowRook(data) {
+    // data = { vertically: 0, horizontally: 0 };
+    const opponentColor = "black"
+    const activeColor="white"
+    if (board[data.vertically][data.horizontally].color=="black") {
+      opponentColor = "white"
+      activeColor="black"
+    }
+  let allow = [];
+  for (let i = data.vertically+1; i < 8; i++) {
+    if (   board[i][data.horizontally].color == activeColor
+      ) {
+        console.log(board[data.vertically][data.horizontally].color );
+        break;
+    }
+    console.log(i);
+    if (   board[i][data.horizontally].color == null
+      ) {
+        allow.push({
+          vertically: i,
+          horizontally: data.horizontally,
+        });
+    }
+    if ( board[i][data.horizontally].color == opponentColor
+      ) {
+        allow.push({
+          vertically: i,
+          horizontally: data.horizontally,
+        });
+        break;
+    }
+  }
+
+  for (let i = data.vertically-1; i > -1; i--) {
+    if (   board[i][data.horizontally].color == activeColor
+      ) {
+        break;
+    }
+    if (   board[i][data.horizontally].color == null
+      ) {
+        allow.push({
+          vertically: i,
+          horizontally: data.horizontally,
+        });
+    }
+    if ( board[i][data.horizontally].color == opponentColor
+      ) {
+        allow.push({
+          vertically: i,
+          horizontally: data.horizontally,
+        });
+        break;
+    }
+  }
+
+
+
+  for (let i = data.horizontally-1; i > -1; i--) {
+    if (   board[data.vertically][i].color == activeColor
+      ) {
+        break;
+    }
+    if (   board[data.vertically][i].color == null
+      ) {
+        allow.push({
+          vertically: data.vertically,
+          horizontally: i,
+        });
+    }
+    if ( board[data.vertically][i].color == opponentColor
+      ) {
+        allow.push({
+          vertically: data.vertically,
+          horizontally: i,
+        });
+        break;
+    }
+
+  }
+
+
+  for (let i = data.horizontally+1; i < 8; i++) {
+    if (   board[data.vertically][i].color == activeColor
+      ) {
+        break;
+    }
+    if (   board[data.vertically][i].color == null
+      ) {
+        allow.push({
+          vertically: data.vertically,
+          horizontally: i,
+        });
+    }
+    if ( board[data.vertically][i].color == opponentColor
+      ) {
+        allow.push({
+          vertically: data.vertically,
+          horizontally: i,
+        });
+        break;
+    }
+  }
+  // console.log("Aaaagcsadhggaskjgdfzusckhdfuyszdhfjhhsviugfhsdoifyjghjdbf",allow);
+  return allow
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function allowWhitePawn(data) {
+  // console.log("kgfgsdhgfdsfdttsdytesaefdreas", data);
+  // data = { vertically: 0, horizontally: 0 };
+  let allow = [];
+  if (data.vertically < 1) {
+    return [];
+  }
+  if (board[data.vertically - 1][data.horizontally].color == null) {
+    allow.push({
+      vertically: data.vertically - 1,
+      horizontally: data.horizontally,
+    });
+  }
+  console.log(board[data.vertically][data.horizontally], "asa tenm inch ka");
+  if (
+    data.vertically > 0 &&
+    board[data.vertically][data.horizontally].isTouched == false &&
+    board[data.vertically - 2][data.horizontally].color == null &&
+    board[data.vertically - 1][data.horizontally].color == null
+  ) {
+    console.log(
+      "aaaaaaaaaaaaaa",
+      board[data.vertically][data.horizontally].isTouched
+    );
+
+    allow.push({
+      vertically: data.vertically - 2,
+      horizontally: data.horizontally,
+    });
+  }
+  if (
+    data.horizontally == 0 &&
+    board[data.vertically][data.horizontally + 1].color == "black"
+  ) {
+    allow.push({
+      vertically: data.vertically - 1,
+      horizontally: data.horizontally + 1,
+    });
+  } else if (
+    data.horizontally == 7 &&
+    board[data.vertically][data.horizontally - 1].color == "black"
+  ) {
+    allow.push({
+      vertically: data.vertically - 1,
+      horizontally: data.horizontally - 1,
+    });
+  } else {
+    if (data.horizontally < 7 && data.horizontally > 0) {
+      if (board[data.vertically][data.horizontally - 1].color == "black") {
+        allow.push({
+          vertically: data.vertically - 1,
+          horizontally: data.horizontally - 1,
+        });
+      }
+      if (board[data.vertically][data.horizontally + 1].color == "black") {
+        allow.push({
+          vertically: data.vertically - 1,
+          horizontally: data.horizontally + 1,
+        });
+      }
+    }
+  }
+  return allow;
+}
+
 function allowBlackPawn(data) {
   console.log("kgfgsdhgfdsfdttsdytesaefdreas", data);
   // data = { vertically: 0, horizontally: 0 };
@@ -493,9 +761,9 @@ function allowBlackPawn(data) {
   console.log(board[data.vertically][data.horizontally], "asa tenm inch ka");
   if (
     data.vertically < 6 &&
+    board[data.vertically][data.horizontally].isTouched == false &&
     board[data.vertically + 2][data.horizontally].color == null &&
-    board[data.vertically + 1][data.horizontally].color == null &&
-    board[data.vertically][data.horizontally].isTouched == false
+    board[data.vertically + 1][data.horizontally].color == null
   ) {
     allow.push({
       vertically: data.vertically + 2,
@@ -578,7 +846,7 @@ io.on("connection", (socket) => {
     if (board[data.from.vertically][data.from.horizontally].pieces == "pawn") {
       console.log(
         "bâ",
-        allowBlackPawn({
+        allowKinght({
           vertically: data.from.vertically,
           horizontally: data.from.horizontally,
         })
