@@ -6,485 +6,176 @@ const cors = require("cors");
 const { log } = require("console");
 
 // vertically:^^^^^,horizontally:>>>>>>
-const board = [
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 5,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 4,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 3,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: "white",
-      vertically: 0,
-      horizontally: 6,
-      pieces: "pawn",
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-  [
-    {
-      color: null,
-      vertically: 0,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 1,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 2,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 3,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 4,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 5,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 6,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-    {
-      color: null,
-      vertically: 7,
-      horizontally: 2,
-      pieces: null,
-      isTouched: false,
-    },
-  ],
-];
+const board=
+[
+[
+  {color:"black",vertically:0,horizontally:7,pieces:"rook",isTouched:false},
+  {color:"black",vertically:1,horizontally:7,pieces:"knight",isTouched:false},
+  {color:"black",vertically:2,horizontally:7,pieces:"bishop",isTouched:false},
+  {color:"black",vertically:3,horizontally:7,pieces:"queen",isTouched:false},
+  {color:"black",vertically:4,horizontally:7,pieces:"king",isTouched:false},
+  {color:"black",vertically:5,horizontally:7,pieces:"bishop",isTouched:false},
+  {color:"black",vertically:6,horizontally:7,pieces:"knight",isTouched:false},
+  {color:"black",vertically:7,horizontally:7,pieces:"rook",isTouched:false},
+ ],
+ [
+  {color:"black",vertically:0,horizontally:6,pieces:"pawn",isTouched:false},
+  {color:"black",vertically:1,horizontally:6,pieces:"pawn",isTouched:false},
+  {color:"black",vertically:2,horizontally:6,pieces:"pawn",isTouched:false},
+  {color:"black",vertically:3,horizontally:6,pieces:"pawn",isTouched:false},
+  {color:"black",vertically:4,horizontally:6,pieces:"pawn",isTouched:false},
+  {color:"black",vertically:5,horizontally:6,pieces:"pawn",isTouched:false},
+  {color:"black",vertically:6,horizontally:6,pieces:"pawn",isTouched:false},
+  {color:"black",vertically:7,horizontally:6,pieces:"pawn",isTouched:false},
+ ],
+ [
+  {color:null,vertically:0,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:5,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:5,pieces:null,isTouched:false},
+ ],
+ [
+  {color:null,vertically:0,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:4,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:4,pieces:null,isTouched:false},
+ ],
+ [
+  {color:null,vertically:0,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:3,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:3,pieces:null,isTouched:false},
+ ],
+ [
+  {color:null,vertically:0,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:1,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:6,horizontally:2,pieces:null,isTouched:false},
+  {color:null,vertically:7,horizontally:2,pieces:null,isTouched:false},
+ ],
+ [
+  {color:"white",vertically:0,horizontally:1,pieces:"pawn",isTouched:false},
+  {color:"white",vertically:1,horizontally:1,pieces:"pawn",isTouched:false},
+  {color:"white",vertically:2,horizontally:1,pieces:"pawn",isTouched:false},
+  {color:"white",vertically:3,horizontally:1,pieces:"pawn",isTouched:false},
+  {color:"white",vertically:4,horizontally:1,pieces:"pawn",isTouched:false},
+  {color:"white",vertically:5,horizontally:1,pieces:"pawn",isTouched:false},
+  {color:"white",vertically:6,horizontally:1,pieces:"pawn",isTouched:false},
+  {color:"white",vertically:7,horizontally:1,pieces:"pawn",isTouched:false},
+ ],
+ [
+  {color:"white",vertically:0,horizontally:0,pieces:"rook",isTouched:false},
+  {color:"white",vertically:1,horizontally:0,pieces:"knight",isTouched:false},
+  {color:"white",vertically:2,horizontally:0,pieces:"bishop",isTouched:false},
+  {color:"white",vertically:3,horizontally:0,pieces:"queen",isTouched:false},
+  {color:"white",vertically:4,horizontally:0,pieces:"king",isTouched:false},
+  {color:"white",vertically:5,horizontally:0,pieces:"bishop",isTouched:false},
+  {color:"white",vertically:6,horizontally:0,pieces:"knight",isTouched:false},
+  {color:"white",vertically:7,horizontally:0,pieces:"rook",isTouched:false},
+ ],
+]
 // let datas = {
 //   from:{vertically:1,horizontally:0},
 //   to:{vertically:1,horizontally:0}
 // }
+function allowSteps(data) {
+  if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "white") {
+    const steps = allowWhitePawn({
+      vertically: data.from.vertically,
+      horizontally: data.from.horizontally,
+    })
+    return steps
+  }
+  if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "black") {
+    const steps = allowBlackPawn({
+      vertically: data.from.vertically,
+      horizontally: data.from.horizontally,
+    })
+    return steps
+  }  
+  if (board[data.from.vertically][data.from.horizontally].pieces == "rook") {
+    const steps = allowRook({
+      vertically: data.from.vertically,
+      horizontally: data.from.horizontally,
+    })
+    return steps
+  }
+  if (board[data.from.vertically][data.from.horizontally].pieces == "knight") {
+    const steps = allowknight({
+      vertically: data.from.vertically,
+      horizontally: data.from.horizontally,
+    })
+    return steps
+  }      
+  if (board[data.from.vertically][data.from.horizontally].pieces == "bishop") {
+    const steps = allowBishop({
+      vertically: data.from.vertically,
+      horizontally: data.from.horizontally,
+    })
+    return steps
+  }      
+  if (board[data.from.vertically][data.from.horizontally].pieces == "queen") {
+    const steps = allowQueen({
+      vertically: data.from.vertically,
+      horizontally: data.from.horizontally,
+    })
+    return steps
+  }      
+  if (board[data.from.vertically][data.from.horizontally].pieces == "king") {
+    const steps = allowKing({
+      vertically: data.from.vertically,
+      horizontally: data.from.horizontally,
+    })
+    return steps
+  }      
+}
+function checkSteps(step,allowSteps) {          
+  for (let i = 0; i < allowSteps.length; i++) {
+    if (step.vertically==allowSteps[i].vertically && step.horizontally==allowSteps[i].horizontally) {
+      return true
+    }
+  }
+  return false
+}
 
-// its wronge runing
+
+
+
+function allowQueen(data) {
+  const steps1=allowBishop(data)
+  const steps2=allowRook(data)
+  for (let i = 0; i < steps2.length; i++) {
+    steps1.push(steps2[i])
+  }
+  return steps1
+}
+
+
+
+
+
 function allowBishop(data) {
-  const opponentColor = "black"
+  let opponentColor = "black"
+  let activeColor=board[data.vertically][data.horizontally].color
   if (board[data.vertically][data.horizontally].color=="black") {
     opponentColor = "white"
     activeColor="black"
   }
-  const activeColor=board[data.vertically][data.horizontally].color
   let allow = [];
   for (let i = 1; i <data.vertically; i++) {
     console.log("ppppppppppppppppp");
@@ -690,7 +381,7 @@ function allowKing(data) {
 
 
 
-function allowKinght(data) {
+function allowknight(data) {
     // data = { vertically: 0, horizontally: 0 };
   let allow = [];
     const activeColor=board[data.vertically][data.horizontally].color
@@ -770,8 +461,8 @@ return allow
 
 function allowRook(data) {
     // data = { vertically: 0, horizontally: 0 };
-    const opponentColor = "black"
-    const activeColor="white"
+    let opponentColor = "black"
+    let activeColor="white"
     if (board[data.vertically][data.horizontally].color=="black") {
       opponentColor = "white"
       activeColor="black"
@@ -891,7 +582,7 @@ function allowRook(data) {
 
 
 
-
+// let isTouched={}
 function allowWhitePawn(data) {
   // console.log("kgfgsdhgfdsfdttsdytesaefdreas", data);
   // data = { vertically: 0, horizontally: 0 };
@@ -1055,17 +746,26 @@ io.on("connection", (socket) => {
 
   socket.on("step", (data) => {
     // socket.to(data.room).emit("receive_message", data);
-    if (board[data.from.vertically][data.from.horizontally].pieces == "pawn") {
-      console.log(
-        "bâ",
-        allowBishop({
-          vertically: data.from.vertically,
-          horizontally: data.from.horizontally,
-        })
-      );
-    }
+    // if (board[data.from.vertically][data.from.horizontally].pieces == "pawn") {
+    //   console.log(
+    //     "bâ",
+    //     allowQueen({
+    //       vertically: data.from.vertically,
+    //       horizontally: data.from.horizontally,
+    //     })
+    //   );
+    // }
+    const steps= allowSteps(data)
+    if (steps) {
+      const myStep={
+        vertically: data.to.vertically,
+        horizontally: data.to.horizontally
+  }
+  console.log(steps,"alooooooooooooooooo");
+  if (checkSteps(myStep,steps)) {
     step(data);
-
+  }      
+    }
     socket.emit("receive_step", board);
   });
 });
