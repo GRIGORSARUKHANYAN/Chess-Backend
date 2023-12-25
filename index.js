@@ -89,6 +89,8 @@ const board=
   {color:"white",vertically:7,horizontally:0,pieces:"rook",isTouched:false},
  ],
 ]
+// pawn  unexpected
+const  enPassant={black:{vertically:2,horizontally:1},white:{vertically:7,horizontally:0}}
 // let datas = {
 //   from:{vertically:1,horizontally:0},
 //   to:{vertically:1,horizontally:0}
@@ -613,17 +615,29 @@ function allowWhitePawn(data) {
       horizontally: data.horizontally,
     });
   }
+  console.log("81888888888",enPassant.black,data);
   if (
     data.horizontally == 0 &&
-    board[data.vertically][data.horizontally + 1].color == "black"
+    board[data.vertically-1][data.horizontally + 1].color == null&&
+    (enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1)
+  ) {  
+    allow.push({
+    vertically: data.vertically - 1,
+    horizontally: data.horizontally + 1,
+  });}
+
+  if (
+    data.horizontally == 0 &&
+    board[data.vertically-1][data.horizontally + 1].color == "black"
   ) {
+    console.log("arivaaaa",);
     allow.push({
       vertically: data.vertically - 1,
       horizontally: data.horizontally + 1,
     });
   } else if (
     data.horizontally == 7 &&
-    board[data.vertically][data.horizontally - 1].color == "black"
+    board[data.vertically-1][data.horizontally - 1].color == "black"
   ) {
     allow.push({
       vertically: data.vertically - 1,
@@ -631,13 +645,13 @@ function allowWhitePawn(data) {
     });
   } else {
     if (data.horizontally < 7 && data.horizontally > 0) {
-      if (board[data.vertically][data.horizontally - 1].color == "black") {
+      if (board[data.vertically-1][data.horizontally - 1].color == "black") {
         allow.push({
           vertically: data.vertically - 1,
           horizontally: data.horizontally - 1,
         });
       }
-      if (board[data.vertically][data.horizontally + 1].color == "black") {
+      if (board[data.vertically-1][data.horizontally + 1].color == "black") {
         allow.push({
           vertically: data.vertically - 1,
           horizontally: data.horizontally + 1,
@@ -675,7 +689,7 @@ function allowBlackPawn(data) {
   }
   if (
     data.horizontally == 7 &&
-    board[data.vertically][data.horizontally - 1].color == "white"
+    board[data.vertically+1][data.horizontally - 1].color == "white"
   ) {
     allow.push({
       vertically: data.vertically + 1,
@@ -683,7 +697,7 @@ function allowBlackPawn(data) {
     });
   } else if (
     data.horizontally == 0 &&
-    board[data.vertically][data.horizontally + 1].color == "white"
+    board[data.vertically+1][data.horizontally + 1].color == "white"
   ) {
     allow.push({
       vertically: data.vertically + 1,
@@ -691,13 +705,13 @@ function allowBlackPawn(data) {
     });
   } else {
     if (data.horizontally > 0 && data.horizontally < 7) {
-      if (board[data.vertically][data.horizontally + 1].color == "white") {
+      if (board[data.vertically+1][data.horizontally + 1].color == "white") {
         allow.push({
           vertically: data.vertically + 1,
           horizontally: data.horizontally + 1,
         });
       }
-      if (board[data.vertically][data.horizontally - 1].color == "white") {
+      if (board[data.vertically+1][data.horizontally - 1].color == "white") {
         allow.push({
           vertically: data.vertically + 1,
           horizontally: data.horizontally - 1,
