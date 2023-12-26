@@ -4,7 +4,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const { log } = require("console");
-
+// let globalColor="white"
 // vertically:^^^^^,horizontally:>>>>>>
 const board=
 [
@@ -90,12 +90,13 @@ const board=
  ],
 ]
 // pawn  unexpected
-const  enPassant={black:{vertically:2,horizontally:1},white:{vertically:7,horizontally:0}}
+let  enPassant={black:{vertically:null,horizontally:null},white:{vertically:7,horizontally:0}}
 // let datas = {
 //   from:{vertically:1,horizontally:0},
 //   to:{vertically:1,horizontally:0}
 // }
 function allowSteps(data) {
+
   if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "white") {
     const steps = allowWhitePawn({
       vertically: data.from.vertically,
@@ -180,7 +181,6 @@ function allowBishop(data) {
   }
   let allow = [];
   for (let i = 1; i <data.vertically; i++) {
-    console.log("ppppppppppppppppp");
     if (data.vertically-i<0||data.horizontally-i<0) {
         break;
     }    
@@ -279,7 +279,6 @@ function allowBishop(data) {
       ) {
         break;
     }    
-    console.log(data,board[data.vertically+i][data.horizontally+i]);
     if (board[data.vertically+i][data.horizontally+i].color == activeColor
       ) {
         break;
@@ -372,7 +371,7 @@ function allowKing(data) {
           horizontally: data.horizontally+1,
         });
       }            
-
+return allow
 }
 
 
@@ -473,10 +472,8 @@ function allowRook(data) {
   for (let i = data.vertically+1; i < 8; i++) {
     if (   board[i][data.horizontally].color == activeColor
       ) {
-        console.log(board[data.vertically][data.horizontally].color );
         break;
     }
-    console.log(i);
     if (   board[i][data.horizontally].color == null
       ) {
         allow.push({
@@ -563,7 +560,6 @@ function allowRook(data) {
         break;
     }
   }
-  // console.log("Aaaagcsadhggaskjgdfzusckhdfuyszdhfjhhsviugfhsdoifyjghjdbf",allow);
   return allow
 }
 
@@ -586,7 +582,6 @@ function allowRook(data) {
 
 // let isTouched={}
 function allowWhitePawn(data) {
-  // console.log("kgfgsdhgfdsfdttsdytesaefdreas", data);
   // data = { vertically: 0, horizontally: 0 };
   let allow = [];
   if (data.vertically < 1) {
@@ -598,46 +593,51 @@ function allowWhitePawn(data) {
       horizontally: data.horizontally,
     });
   }
-  console.log(board[data.vertically][data.horizontally], "asa tenm inch ka");
   if (
     data.vertically > 0 &&
     board[data.vertically][data.horizontally].isTouched == false &&
     board[data.vertically - 2][data.horizontally].color == null &&
     board[data.vertically - 1][data.horizontally].color == null
   ) {
-    console.log(
-      "aaaaaaaaaaaaaa",
-      board[data.vertically][data.horizontally].isTouched
-    );
+
 
     allow.push({
       vertically: data.vertically - 2,
       horizontally: data.horizontally,
     });
   }
-  console.log("81888888888",enPassant.black,data);
-  if (
-    data.horizontally == 0 &&
-    board[data.vertically-1][data.horizontally + 1].color == null&&
-    (enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1)
-  ) {  
-    allow.push({
-    vertically: data.vertically - 1,
-    horizontally: data.horizontally + 1,
-  });}
+  // if (
+  //   data.horizontally == 0 &&
+  //   board[data.vertically-1][data.horizontally + 1].color == null&&
+  //   (enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1)
+  // ) {  
+  //   allow.push({
+  //   vertically: data.vertically - 1,
+  //   horizontally: data.horizontally + 1,
+  // });}
 
   if (
     data.horizontally == 0 &&
     board[data.vertically-1][data.horizontally + 1].color == "black"
-  ) {
-    console.log("arivaaaa",);
-    allow.push({
-      vertically: data.vertically - 1,
-      horizontally: data.horizontally + 1,
-    });
+    ||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1
+    ) {
+    // if (board[data.vertically-1][data.horizontally + 1].color == "black"||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
+      allow.push({
+        vertically: data.vertically - 1,
+        horizontally: data.horizontally + 1,
+      });      
+    // }
+    // if (enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
+    //   allow.push({
+    //     vertically: data.vertically - 1,
+    //     horizontally: data.horizontally + 1,
+    //   });
+    // }
+
   } else if (
     data.horizontally == 7 &&
     board[data.vertically-1][data.horizontally - 1].color == "black"
+    ||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally-1
   ) {
     allow.push({
       vertically: data.vertically - 1,
@@ -645,13 +645,13 @@ function allowWhitePawn(data) {
     });
   } else {
     if (data.horizontally < 7 && data.horizontally > 0) {
-      if (board[data.vertically-1][data.horizontally - 1].color == "black") {
+      if (board[data.vertically-1][data.horizontally - 1].color == "black" ||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally-1 ) {
         allow.push({
           vertically: data.vertically - 1,
           horizontally: data.horizontally - 1,
         });
       }
-      if (board[data.vertically-1][data.horizontally + 1].color == "black") {
+      if (board[data.vertically-1][data.horizontally + 1].color == "black"||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
         allow.push({
           vertically: data.vertically - 1,
           horizontally: data.horizontally + 1,
@@ -663,7 +663,6 @@ function allowWhitePawn(data) {
 }
 
 function allowBlackPawn(data) {
-  console.log("kgfgsdhgfdsfdttsdytesaefdreas", data);
   // data = { vertically: 0, horizontally: 0 };
   let allow = [];
   if (data.vertically > 6) {
@@ -675,7 +674,6 @@ function allowBlackPawn(data) {
       horizontally: data.horizontally,
     });
   }
-  console.log(board[data.vertically][data.horizontally], "asa tenm inch ka");
   if (
     data.vertically < 6 &&
     board[data.vertically][data.horizontally].isTouched == false &&
@@ -689,7 +687,7 @@ function allowBlackPawn(data) {
   }
   if (
     data.horizontally == 7 &&
-    board[data.vertically+1][data.horizontally - 1].color == "white"
+    board[data.vertically+1][data.horizontally - 1].color == "white" ||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally-1
   ) {
     allow.push({
       vertically: data.vertically + 1,
@@ -697,7 +695,7 @@ function allowBlackPawn(data) {
     });
   } else if (
     data.horizontally == 0 &&
-    board[data.vertically+1][data.horizontally + 1].color == "white"
+    board[data.vertically+1][data.horizontally + 1].color == "white"||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally+1
   ) {
     allow.push({
       vertically: data.vertically + 1,
@@ -705,13 +703,13 @@ function allowBlackPawn(data) {
     });
   } else {
     if (data.horizontally > 0 && data.horizontally < 7) {
-      if (board[data.vertically+1][data.horizontally + 1].color == "white") {
+      if (board[data.vertically+1][data.horizontally + 1].color == "white"||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally+1) {
         allow.push({
           vertically: data.vertically + 1,
           horizontally: data.horizontally + 1,
         });
       }
-      if (board[data.vertically+1][data.horizontally - 1].color == "white") {
+      if (board[data.vertically+1][data.horizontally - 1].color == "white"||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally-1) {
         allow.push({
           vertically: data.vertically + 1,
           horizontally: data.horizontally - 1,
@@ -726,15 +724,68 @@ function step(data) {
   // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
   // 			throw new HttpException(400, 'you cannot perform this step');
   // }
+  if (board[data.from.vertically][data.from.horizontally].pieces=="pawn") {
+    if (board[data.from.vertically][data.from.horizontally].color=="white") {
+      if (data.from.vertically-data.to.vertically==1 && Math.abs(data.from.horizontally-data.to.horizontally)==1&&board[data.to.vertically][data.to.horizontally].color==null) {
+        board[data.to.vertically+1][data.to.horizontally].color = null;
+        board[data.to.vertically+1][data.to.horizontally].pieces = null;
+      }
+    }
+    if (board[data.from.vertically][data.from.horizontally].color=="black") {
+      if (data.to.vertically-data.from.vertically==1 && Math.abs(data.from.horizontally-data.to.horizontally)==1&&board[data.to.vertically][data.to.horizontally].color==null) {
+        board[data.to.vertically-1][data.to.horizontally].color = null;
+        board[data.to.vertically-1][data.to.horizontally].pieces = null;
+      }
+    }  
+
+
+
+
+    if (Math.abs(data.to.vertically-data.from.vertically)==2) {
+      if (board[data.from.vertically][data.from.horizontally].color=="white") {
+
+        enPassant.white.vertically=data.from.vertically-1
+        enPassant.white.horizontally=data.from.horizontally
+      }else{
+        enPassant.black.vertically=data.from.vertically+1
+        enPassant.black.horizontally=data.from.horizontally
+      }
+    }
+  }
   board[data.to.vertically][data.to.horizontally].color =
   board[data.from.vertically][data.from.horizontally].color;
   board[data.to.vertically][data.to.horizontally].pieces =
   board[data.from.vertically][data.from.horizontally].pieces;
   board[data.from.vertically][data.from.horizontally].color = null;
   board[data.from.vertically][data.from.horizontally].pieces = null;
-  // console.log(  board[data.from.horizontally][data.from.vertically]);
   board[data.from.vertically][data.from.horizontally].isTouched = true;
   board[data.to.vertically][data.to.horizontally].isTouched = true;
+
+
+      if (board[data.to.vertically][data.to.horizontally].color=="white") {
+        enPassant.black.vertically=null
+        enPassant.black.horizontally=null
+      }else{
+        enPassant.white.vertically=null
+        enPassant.white.horizontally=null
+      }
+
+      
+      // if (board[data.to.vertically][data.to.horizontally].pieces=="pawn") {
+      //   if (board[data.to.vertically][data.to.horizontally].color=="white") {
+      //     if (data.from.vertically-data.to.vertically==1 && Math.abs(data.from.horizontally-data.to.horizontally==1)&&board[data.to.vertically][data.to.horizontally].color==null) {
+      //       board[data.to.vertically-1][data.to.horizontally].color = null;
+      //       board[data.to.vertically-1][data.to.horizontally].pieces = null;
+      //     }
+      //   }
+      //   if (board[data.to.vertically][data.to.horizontally].color=="black") {
+      //     if (data.to.vertically-data.from.vertically==1 && Math.abs(data.from.horizontally-data.to.horizontally==1)&&board[data.to.vertically][data.to.horizontally].color==null) {
+      //       board[data.to.vertically+1][data.to.horizontally].color = null;
+      //       board[data.to.vertically+1][data.to.horizontally].pieces = null;
+      //     }
+      //   }        
+      // }
+
 
   return board;
 }
@@ -775,7 +826,6 @@ io.on("connection", (socket) => {
         vertically: data.to.vertically,
         horizontally: data.to.horizontally
   }
-  console.log(steps,"alooooooooooooooooo");
   if (checkSteps(myStep,steps)) {
     step(data);
   }      
