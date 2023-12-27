@@ -3,8 +3,9 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-const { log } = require("console");
 let globalColor="black"
+// let activeColor="white"
+let allPlayers =[]
 // vertically:^^^^^,horizontally:>>>>>>
 globaklcheck=false
 const board=
@@ -99,36 +100,37 @@ let  enPassant={black:{vertically:null,horizontally:null},white:{vertically:7,ho
 
 
 
-function check(data) {
+function check(data,activeColor) {
   // data={verticly,horizontally}
-  const rookStep = allowRook(data)
+  
+  const rookStep = allowRook(data,activeColor)
   for (let i = 0; i < rookStep.length; i++) {
     if (board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="rook"||board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="queen") {
-      console.log("rook");
+      // console.log("rook");
       return true
     }
   }
-  const bishopStep = allowBishop(data)
+  const bishopStep = allowBishop(data,activeColor)
   for (let i = 0; i < bishopStep.length; i++) {
     if (board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces=="bishop"||board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces=="queen") {
-      console.log("bish",bishopStep);
+      // console.log("bish",bishopStep);
    
       return true
     }
   }
 
   
-  const knightStep = allowknight(data)
+  const knightStep = allowknight(data,activeColor)
   for (let i = 0; i < knightStep.length; i++) {
     if (board[knightStep[i].vertically][knightStep[i].horizontally].pieces=="knight") {
-      console.log("knight",knightStep);
+      // console.log("knight",knightStep);
       
       return true
     }
   }  
 
 
-  const kingStep = allowKing(data)
+  const kingStep = allowKing(data,activeColor)
   for (let i = 0; i < kingStep.length; i++) {
     if (board[kingStep[i].vertically][kingStep[i].horizontally].pieces=="king") {
       return true
@@ -168,7 +170,11 @@ return false
 
 
 
-function allowSteps(data) {
+function allowSteps(data,activeColor) {
+
+  // if (globalColor=="white") {
+  //   activeColor="black"
+  // }else{activeColor="white"}
   if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "white") {
     const steps = allowWhitePawn({
       vertically: data.from.vertically,
@@ -187,35 +193,35 @@ function allowSteps(data) {
     const steps = allowRook({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    })
+    },activeColor)
     return steps
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "knight") {
     const steps = allowknight({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    })
+    },activeColor)
     return steps
   }      
   if (board[data.from.vertically][data.from.horizontally].pieces == "bishop") {
     const steps = allowBishop({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    })
+    },activeColor)
     return steps
   }      
   if (board[data.from.vertically][data.from.horizontally].pieces == "queen") {
     const steps = allowQueen({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    })
+    },activeColor)
     return steps
   }      
   if (board[data.from.vertically][data.from.horizontally].pieces == "king") {
     const steps = allowKing({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    })
+    },activeColor)
     return steps
   }      
 }
@@ -231,9 +237,9 @@ function checkSteps(step,allowSteps) {
 
 
 
-function allowQueen(data) {
-  const steps1=allowBishop(data)
-  const steps2=allowRook(data)
+function allowQueen(data,activeColor) {
+  const steps1=allowBishop(data,activeColor)
+  const steps2=allowRook(data,activeColor)
   for (let i = 0; i < steps2.length; i++) {
     steps1.push(steps2[i])
   }
@@ -244,15 +250,13 @@ function allowQueen(data) {
 
 
 
-function allowBishop(data) {
+function allowBishop(data,activeColor) {
   let opponentColor = "black"
-  let activeColor=board[data.vertically][data.horizontally].color
-  if (board[data.vertically][data.horizontally].color=="black") {
+  if (activeColor=="black") {
     opponentColor = "white"
-    activeColor="black"
   }
   let allow = [];
-  for (let i = 1; i <data.vertically; i++) {
+  for (let i = 1; i <data.vertically +1; i++) {
     if (data.vertically-i<0||data.horizontally-i<0) {
         break;
     }    
@@ -372,16 +376,15 @@ function allowBishop(data) {
     }
   }
 
-
+// console.log(allow);
 return allow
 }
 
 
 
-function allowKing(data) {
+function allowKing(data,activeColor) {
       // data = { vertically: 0, horizontally: 0 };
       let allow = [];
-      const activeColor=board[data.vertically][data.horizontally].color
       if (data.vertically+1<8 &&data.horizontally+1<8 &&board[data.vertically+1][data.horizontally+1].color !==activeColor) {
         allow.push({
           vertically: data.vertically+1,
@@ -454,10 +457,9 @@ return allow
 
 
 
-function allowknight(data) {
+function allowknight(data,activeColor) {
     // data = { vertically: 0, horizontally: 0 };
   let allow = [];
-    const activeColor=board[data.vertically][data.horizontally].color
   if (data.vertically+2<8 &&data.horizontally+1<8 &&board[data.vertically+2][data.horizontally+1].color !==activeColor ) {
     allow.push({
       vertically: data.vertically+2,
@@ -532,14 +534,13 @@ return allow
 
 
 
-function allowRook(data) {
+function allowRook(data,activeColor) {
     // data = { vertically: 0, horizontally: 0 };
-    let opponentColor = "black"
-    let activeColor="white"
-    if (board[data.vertically][data.horizontally].color=="black") {
+    // console.log(data,activeColor);
+    let opponentColor 
+    if (activeColor=="black") {
       opponentColor = "white"
-      activeColor="black"
-    }
+    }else{opponentColor="black"}
   let allow = [];
   for (let i = data.vertically+1; i < 8; i++) {
     if (   board[i][data.horizontally].color == activeColor
@@ -632,6 +633,7 @@ function allowRook(data) {
         break;
     }
   }
+  // console.log(allow,"---------");
   return allow
 }
 
@@ -798,8 +800,10 @@ function step(data) {
   // }
   if (globalColor=="white") {
     globalColor="black"
+    activeColor="white"
   }else{
     globalColor="white"
+    activeColor="black"
   }
   if (board[data.from.vertically][data.from.horizontally].pieces=="pawn") {
     if (board[data.from.vertically][data.from.horizontally].color=="white") {
@@ -873,17 +877,22 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
-
+  allPlayers.push(socket.id)
   socket.on("start", (data) => {
     socket.join(board);
-    socket.emit("receive_start", board);
+    for (let i = 0; i < allPlayers.length; i++) {
+      socket.to(allPlayers[i]).emit("receive_step", board);
+    }
+    if (allPlayers.length) {
+      socket.emit("receive_step", board);
+    }
   });
 
   socket.on("step", (data) => {
@@ -897,10 +906,16 @@ io.on("connection", (socket) => {
     //     })
     //   );
     // }
-    console.log(    check({ vertically: data.to.vertically,
-      horizontally: data.to.horizontally}))
+    // console.log(    check({ vertically: data.to.vertically,
+    //   horizontally: data.to.horizontally}))
+    let activeColor
+    if (globalColor=="white") {
+      activeColor="black"
+    }else{activeColor="white"}
 
-    const steps= allowSteps(data)
+    console.log("shax ara",activeColor,check({vertically:data.to.vertically,horizontally:data.to.horizontally},activeColor))
+
+    const steps= allowSteps(data,board[data.from.vertically][data.from.horizontally].color)
     if (steps) {
       const myStep={
         vertically: data.to.vertically,
@@ -912,7 +927,12 @@ io.on("connection", (socket) => {
     step(data);
   }      
     }
-    socket.emit("receive_step", board);
+    for (let i = 0; i < allPlayers.length; i++) {
+      socket.to(allPlayers[i]).emit("receive_step", board);
+    }
+    if (allPlayers.length) {
+      socket.emit("receive_step", board);
+    }
   });
 });
 
