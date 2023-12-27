@@ -4,8 +4,9 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const { log } = require("console");
-// let globalColor="white"
+let globalColor="black"
 // vertically:^^^^^,horizontally:>>>>>>
+globaklcheck=false
 const board=
 [
 [
@@ -95,8 +96,79 @@ let  enPassant={black:{vertically:null,horizontally:null},white:{vertically:7,ho
 //   from:{vertically:1,horizontally:0},
 //   to:{vertically:1,horizontally:0}
 // }
-function allowSteps(data) {
 
+
+
+function check(data) {
+  // data={verticly,horizontally}
+  const rookStep = allowRook(data)
+  for (let i = 0; i < rookStep.length; i++) {
+    if (board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="rook"||board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="queen") {
+      console.log("rook");
+      return true
+    }
+  }
+  const bishopStep = allowBishop(data)
+  for (let i = 0; i < bishopStep.length; i++) {
+    if (board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces=="bishop"||board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces=="queen") {
+      console.log("bish",bishopStep);
+   
+      return true
+    }
+  }
+
+  
+  const knightStep = allowknight(data)
+  for (let i = 0; i < knightStep.length; i++) {
+    if (board[knightStep[i].vertically][knightStep[i].horizontally].pieces=="knight") {
+      console.log("knight",knightStep);
+      
+      return true
+    }
+  }  
+
+
+  const kingStep = allowKing(data)
+  for (let i = 0; i < kingStep.length; i++) {
+    if (board[kingStep[i].vertically][kingStep[i].horizontally].pieces=="king") {
+      return true
+    }
+  }  
+
+
+  // pawn
+  if (board[data.vertically][data.horizontally].color=="black"&&data.vertically<7) {
+    if (data.horizontally+1<7) {
+      if (board[data.vertically+1][data.horizontally+1].color=="white" &&board[data.vertically+1][data.horizontally+1].pieces=="pawn" ) {
+        return true
+      }
+    }
+
+    if (data.horizontally-1>-1) {
+      if (board[data.vertically+1][data.horizontally-1].color=="white" &&board[data.vertically+1][data.horizontally-1].pieces=="pawn" ) {
+        return true
+      }
+    }
+  }
+  if (board[data.vertically][data.horizontally].color=="white" &&data.vertically>0) {
+    if (data.horizontally+1<7) {
+      if (board[data.vertically-1][data.horizontally+1].color=="black" &&board[data.vertically-1][data.horizontally+1].pieces=="pawn" ) {
+        return true
+      }
+    }
+
+    if (data.horizontally-1>-1) {
+      if (board[data.vertically-1][data.horizontally-1].color=="black" &&board[data.vertically-1][data.horizontally-1].pieces=="pawn" ) {
+        return true
+      }
+    }
+  }
+return false
+}
+
+
+
+function allowSteps(data) {
   if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "white") {
     const steps = allowWhitePawn({
       vertically: data.from.vertically,
@@ -724,6 +796,11 @@ function step(data) {
   // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
   // 			throw new HttpException(400, 'you cannot perform this step');
   // }
+  if (globalColor=="white") {
+    globalColor="black"
+  }else{
+    globalColor="white"
+  }
   if (board[data.from.vertically][data.from.horizontally].pieces=="pawn") {
     if (board[data.from.vertically][data.from.horizontally].color=="white") {
       if (data.from.vertically-data.to.vertically==1 && Math.abs(data.from.horizontally-data.to.horizontally)==1&&board[data.to.vertically][data.to.horizontally].color==null) {
@@ -820,13 +897,18 @@ io.on("connection", (socket) => {
     //     })
     //   );
     // }
+    console.log(    check({ vertically: data.to.vertically,
+      horizontally: data.to.horizontally}))
+
     const steps= allowSteps(data)
     if (steps) {
       const myStep={
         vertically: data.to.vertically,
         horizontally: data.to.horizontally
   }
-  if (checkSteps(myStep,steps)) {
+
+  if (checkSteps(myStep,steps)&&globalColor!==board[data.from.vertically][data.from.horizontally].color) {
+
     step(data);
   }      
     }
