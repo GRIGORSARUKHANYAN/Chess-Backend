@@ -883,6 +883,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
+    if (data.from.vertically<0||data.from.vertically>7||data.from.horizontally<0||data.from.horizontally>7) {
+      return false
+    }
+    if (data.to.vertically<0||data.to.vertically>7||data.to.horizontally<0||data.to.horizontally>7) {
+      return []
+    }    
     // socket.to(data.room).emit("receive_message", data);
     // if (board[data.from.vertically][data.from.horizontally].pieces == "pawn") {
     //   console.log(
