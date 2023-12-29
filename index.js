@@ -969,6 +969,9 @@ if (!notAllowed) {
       return[]
     }
     let allow=allowSteps(data,globalColor)
+    for (let i = 0; i < allPlayers.length; i++) {
+      socket.to(allPlayers[i]).emit("receive_allow", allow);
+    }
       socket.emit("receive_allow", allow);
   });
 });
