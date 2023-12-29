@@ -954,6 +954,17 @@ if (!notAllowed) {
       socket.emit("receive_step", board);
     }
   });
+
+
+
+
+
+
+
+  socket.on("allow", (data) => {
+    let allow=allowSteps(data,activeColor)
+      socket.emit("receive_allow", allow);
+  });
 });
 
 server.listen(3001, () => {
