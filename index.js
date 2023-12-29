@@ -962,7 +962,11 @@ if (!notAllowed) {
 
 
   socket.on("allow", (data) => {
-    let allow=allowSteps(data,activeColor)
+    if (board[data.vertically][data.horizontally].color!==globalColor) {
+      return[]
+    }
+
+    let allow=allowSteps(data,globalColor)
       socket.emit("receive_allow", allow);
   });
 });
