@@ -898,6 +898,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
+    if (!data||!data.vertically||!data.horizontally) {
+      return false
+    }
     if (data.from.vertically<0||data.from.vertically>7||data.from.horizontally<0||data.from.horizontally>7) {
       return false
     }
