@@ -94,48 +94,49 @@ let board=
 // pawn  unexpected
 let  enPassant={black:{vertically:null,horizontally:null},white:{vertically:7,horizontally:0}}
 let kingsPossition = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
+let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
+
 // let datas = {
 //   from:{vertically:1,horizontally:0},
 //   to:{vertically:1,horizontally:0}
 // }
 
 
-
-function check(experimentalBoard,data,activeColor) {
-
-  console.log(data);
+// board, stugvox tagavori position,tagavori guyn
+function check(board,data,activeColor) {
+  // console.log("data",data,activeColor);
   // data={verticly,horizontally}
-  let board =JSON.parse(JSON.stringify(experimentalBoard));
-  const rookStep = allowRook(data,activeColor)
+  // let board =JSON.parse(JSON.stringify(experimentalBoard));
+  const rookStep = allowRook(board,data,activeColor)  
+  console.log(">>>>>>>>>>>>>>>.",rookStep,activeColor,"<<<<<<<<<<<<<<<<<<<<<");
   for (let i = 0; i < rookStep.length; i++) {
     if (board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="rook"||board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="queen") {
-      console.log("rook");
+      // console.log("110",rookStep,rookStep[i].vertically,rookStep[i].horizontally);
       return true
     }
   }
-  const bishopStep = allowBishop(data,activeColor)
+  const bishopStep = allowBishop(board,data,activeColor)
   for (let i = 0; i < bishopStep.length; i++) {
     if (board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces=="bishop"||board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces=="queen") {
-      // console.log("bish",bishopStep);
-   
+      // console.log("117",bishopStep,board[bishopStep[i].vertically][bishopStep[i].horizontally]);
       return true
     }
   }
 
   
-  const knightStep = allowknight(data,activeColor)
+  const knightStep = allowknight(board,data,activeColor)
   for (let i = 0; i < knightStep.length; i++) {
     if (board[knightStep[i].vertically][knightStep[i].horizontally].pieces=="knight") {
-      // console.log("knight",knightStep);
-      
+      console.log("126");
       return true
     }
   }  
 
 
-  const kingStep = allowKing(data,activeColor)
+  const kingStep = allowKing(board,data,activeColor)
   for (let i = 0; i < kingStep.length; i++) {
     if (board[kingStep[i].vertically][kingStep[i].horizontally].pieces=="king") {
+      console.log("135");
       return true
     }
   }  
@@ -145,12 +146,15 @@ function check(experimentalBoard,data,activeColor) {
   if (activeColor=="black"&&data.vertically<7) {
     if (data.horizontally+1<7) {
       if (board[data.vertically+1][data.horizontally+1].color=="white" &&board[data.vertically+1][data.horizontally+1].pieces=="pawn" ) {
+        console.log("145");
         return true
       }
     }
 
     if (data.horizontally-1>-1) {
       if (board[data.vertically+1][data.horizontally-1].color=="white" &&board[data.vertically+1][data.horizontally-1].pieces=="pawn" ) {
+        console.log("152");
+        
         return true
       }
     }
@@ -158,12 +162,15 @@ function check(experimentalBoard,data,activeColor) {
   if (activeColor=="white" &&data.vertically>0) {
     if (data.horizontally+1<7) {
       if (board[data.vertically-1][data.horizontally+1].color=="black" &&board[data.vertically-1][data.horizontally+1].pieces=="pawn" ) {
+        console.log("161");
         return true
       }
     }
 
     if (data.horizontally-1>-1) {
       if (board[data.vertically-1][data.horizontally-1].color=="black" &&board[data.vertically-1][data.horizontally-1].pieces=="pawn" ) {
+        console.log("168");
+        
         return true
       }
     }
@@ -193,35 +200,35 @@ function allowSteps(data,activeColor) {
     return steps
   }  
   if (board[data.from.vertically][data.from.horizontally].pieces == "rook") {
-    const steps = allowRook({
+    const steps = allowRook(board,{
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
     },activeColor)
     return steps
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "knight") {
-    const steps = allowknight({
+    const steps = allowknight(board,{
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
     },activeColor)
     return steps
   }      
   if (board[data.from.vertically][data.from.horizontally].pieces == "bishop") {
-    const steps = allowBishop({
+    const steps = allowBishop(board,{
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
     },activeColor)
     return steps
   }      
   if (board[data.from.vertically][data.from.horizontally].pieces == "queen") {
-    const steps = allowQueen({
+    const steps = allowQueen(board,{
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
     },activeColor)
     return steps
   }      
   if (board[data.from.vertically][data.from.horizontally].pieces == "king") {
-    const steps = allowKing({
+    const steps = allowKing(board,{
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
     },activeColor)
@@ -240,9 +247,9 @@ function checkSteps(step,allowSteps) {
 
 
 
-function allowQueen(data,activeColor) {
-  const steps1=allowBishop(data,activeColor)
-  const steps2=allowRook(data,activeColor)
+function allowQueen(board,data,activeColor) {
+  const steps1=allowBishop(board,data,activeColor)
+  const steps2=allowRook(board,data,activeColor)
   for (let i = 0; i < steps2.length; i++) {
     steps1.push(steps2[i])
   }
@@ -253,7 +260,7 @@ function allowQueen(data,activeColor) {
 
 
 
-function allowBishop(data,activeColor) {
+function allowBishop(board,data,activeColor) {
   let opponentColor = "black"
   if (activeColor=="black") {
     opponentColor = "white"
@@ -379,13 +386,12 @@ function allowBishop(data,activeColor) {
     }
   }
 
-// console.log(allow);
 return allow
 }
 
 
 
-function allowKing(data,activeColor) {
+function allowKing(board,data,activeColor) {
       // data = { vertically: 0, horizontally: 0 };
       let allow = [];
       if (data.vertically+1<8 &&data.horizontally+1<8 &&board[data.vertically+1][data.horizontally+1].color !==activeColor) {
@@ -460,7 +466,7 @@ return allow
 
 
 
-function allowknight(data,activeColor) {
+function allowknight(board,data,activeColor) {
     // data = { vertically: 0, horizontally: 0 };
   let allow = [];
   if (data.vertically+2<8 &&data.horizontally+1<8 &&board[data.vertically+2][data.horizontally+1].color !==activeColor ) {
@@ -537,9 +543,8 @@ return allow
 
 
 
-function allowRook(data,activeColor) {
+function allowRook(board,data,activeColor) {
     // data = { vertically: 0, horizontally: 0 };
-    // console.log(data,activeColor);
     let opponentColor 
     if (activeColor=="black") {
       opponentColor = "white"
@@ -636,7 +641,6 @@ function allowRook(data,activeColor) {
         break;
     }
   }
-  // console.log(allow,"---------");
   return allow
 }
 
@@ -797,18 +801,13 @@ function allowBlackPawn(data) {
   return allow;
 }
 
-function step(data,experimentalBoard) {
+function step(data,experimentalBoard,fake) {
+  kingsPossitionFake=JSON.parse(JSON.stringify(kingsPossition));
   // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
   // 			throw new HttpException(400, 'you cannot perform this step');
   // }
   let board =JSON.parse(JSON.stringify(experimentalBoard));
-  if (globalColor=="white") {
 
-    activeColor="white"
-  }else{
-
-    activeColor="black"
-  }
   if (board[data.from.vertically][data.from.horizontally].pieces=="pawn") {
     if (board[data.from.vertically][data.from.horizontally].color=="white") {
       if (data.from.vertically-data.to.vertically==1 && Math.abs(data.from.horizontally-data.to.horizontally)==1&&board[data.to.vertically][data.to.horizontally].color==null) {
@@ -825,17 +824,21 @@ function step(data,experimentalBoard) {
 
 
 
+if (!fake) {
+  // console.log("hsrftgysdsdytsesdfgjrse");
+  if (Math.abs(data.to.vertically-data.from.vertically)==2) {
+    if (board[data.from.vertically][data.from.horizontally].color=="white") {
 
-    if (Math.abs(data.to.vertically-data.from.vertically)==2) {
-      if (board[data.from.vertically][data.from.horizontally].color=="white") {
-
-        enPassant.white.vertically=data.from.vertically-1
-        enPassant.white.horizontally=data.from.horizontally
-      }else{
-        enPassant.black.vertically=data.from.vertically+1
-        enPassant.black.horizontally=data.from.horizontally
-      }
+      enPassant.white.vertically=data.from.vertically-1
+      enPassant.white.horizontally=data.from.horizontally
+    }else{
+      enPassant.black.vertically=data.from.vertically+1
+      enPassant.black.horizontally=data.from.horizontally
     }
+  }  
+}
+
+
   }
   board[data.to.vertically][data.to.horizontally].color =
   board[data.from.vertically][data.from.horizontally].color;
@@ -846,14 +849,26 @@ function step(data,experimentalBoard) {
   board[data.from.vertically][data.from.horizontally].isTouched = true;
   board[data.to.vertically][data.to.horizontally].isTouched = true;
 
+if (board[data.to.vertically][data.to.horizontally].pieces=="king") {
+  let activeColor
+  if (globalColor=="white") {
+    activeColor="black"
+  }else{
+    activeColor="white"
+  }
+  kingsPossitionFake[activeColor].vertically=data.to.vertically
+  kingsPossitionFake[activeColor].horizontally=data.to.horizontally
+}
+if (!fake) {
+  if (board[data.to.vertically][data.to.horizontally].color=="white") {
+    enPassant.black.vertically=null
+    enPassant.black.horizontally=null
+  }else{
+    enPassant.white.vertically=null
+    enPassant.white.horizontally=null
+  }  
+}
 
-      if (board[data.to.vertically][data.to.horizontally].color=="white") {
-        enPassant.black.vertically=null
-        enPassant.black.horizontally=null
-      }else{
-        enPassant.white.vertically=null
-        enPassant.white.horizontally=null
-      }
 
   return board;
 }
@@ -909,8 +924,8 @@ io.on("connection", (socket) => {
     if (board[data.from.vertically][data.from.horizontally].color ==globalColor) {
      notAllowed=true 
     }
-    if (check(step(data,board),{vertically:kingsPossition[activeColor].vertically,horizontally:kingsPossition[activeColor].horizontally},activeColor)) {
-  console.log("asa");
+    if (check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
+      // console.log("shax tu",kingsPossitionFake);
       notAllowed=true
     }
     // console.log("shax ara",activeColor,check(board,{vertically:data.to.vertically,horizontally:data.to.horizontally},activeColor))
@@ -924,31 +939,37 @@ io.on("connection", (socket) => {
 
   if (!checkSteps(myStep,steps)||globalColor==board[data.from.vertically][data.from.horizontally].color) {
     notAllowed=true
-    console.log(notAllowed,"bo");
   }
 
 
 if (!notAllowed) {
-  board = step(data,board);
+  // console.log(data,activeColor);
+  board = step(data,board,false);
+// baceq es koment@
+  // if (check(step(data,board,true),{vertically:kingsPossitionFake[globalColor].vertically,horizontally:kingsPossitionFake[globalColor].horizontally},globalColor)) {
+  //   kingsPossition[globalColor].check=true
+  // }
 
-  
+
+  kingsPossition=kingsPossitionFake
     let thiscolor
     if (globalColor=="white") {
       globalColor="black"
       thiscolor="black"
     }else{thiscolor="white"
      globalColor="white" }
-  if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)  ) {
-    kingsPossition[globalColor].check=true
-  }
-  if (check(board,{vertically:kingsPossition[thiscolor].vertically,horizontally:kingsPossition[thiscolor].horizontally},activeColor)  ) {
-    kingsPossition[thiscolor].check=false
-  }
+  kingsPossition[thiscolor].check=false
+
+  // if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)  ) {
+  //   kingsPossition[globalColor].check=true
+  // }
+  // if (check(board,{vertically:kingsPossition[thiscolor].vertically,horizontally:kingsPossition[thiscolor].horizontally},activeColor)  ) {
+  //   kingsPossition[thiscolor].check=false
+  // }
 
 
   if (!kingsPossition[activeColor].check) {
     // return check
-    console.log(kingsPossition[thiscolor],"booom");
   }
 }
 
