@@ -992,6 +992,15 @@ if (!notAllowed) {
 
 
   socket.on("allow", (data) => {
+    if (!data||!data.from||!data.to||!data.from.vertically||!data.from.horizontally||!data.to.vertically||!data.to.horizontally) {
+      return false
+    }
+    if (data.from.vertically<0||data.from.vertically>7||data.from.horizontally<0||data.from.horizontally>7) {
+      return false
+    }
+    if (data.to.vertically<0||data.to.vertically>7||data.to.horizontally<0||data.to.horizontally>7) {
+      return []
+    }    
     if (data.vertically<0||data.vertically>7||data.horizontally<0||data.horizontally>7) {
       return []
     }
