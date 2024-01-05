@@ -3,6 +3,7 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+const { verify } = require("crypto");
 let globalColor="black"
 // let activeColor="white"
 let allPlayers =[]
@@ -102,13 +103,38 @@ let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:
 // }
 
 
+
+
+
+
+
+function allowedArray(board,from,toArray,activeColor,kingsPossitionFake) {
+let result=[]
+for (let i = 0; i < toArray.length; i++) {
+let data = {
+  from:from,
+  to:{vertically:toArray[i].vertically,horizontally:toArray[i].horizontally}
+}
+  if (!check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
+result.push(toArray[i])
+    
+  }  
+}
+return result
+}
+
+
+
+
+
+
 // board, stugvox tagavori position,tagavori guyn
 function check(board,data,activeColor) {
   // console.log("data",data,activeColor);
   // data={verticly,horizontally}
   // let board =JSON.parse(JSON.stringify(experimentalBoard));
   const rookStep = allowRook(board,data,activeColor)  
-  console.log(">>>>>>>>>>>>>>>.",rookStep,activeColor,"<<<<<<<<<<<<<<<<<<<<<");
+  // console.log(">>>>>>>>>>>>>>>.",rookStep,activeColor,"<<<<<<<<<<<<<<<<<<<<<");
   for (let i = 0; i < rookStep.length; i++) {
     if (board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="rook"||board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="queen") {
       // console.log("110",rookStep,rookStep[i].vertically,rookStep[i].horizontally);
@@ -189,14 +215,14 @@ function allowSteps(data,activeColor) {
     const steps = allowWhitePawn({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    })
+    },kingsPossitionFake)
     return steps
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "black") {
     const steps = allowBlackPawn({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    })
+    },kingsPossitionFake)
     return steps
   }  
   if (board[data.from.vertically][data.from.horizontally].pieces == "rook") {
@@ -261,6 +287,7 @@ function allowQueen(board,data,activeColor) {
 
 
 function allowBishop(board,data,activeColor) {
+
   let opponentColor = "black"
   if (activeColor=="black") {
     opponentColor = "white"
@@ -662,17 +689,29 @@ function allowRook(board,data,activeColor) {
 
 
 // let isTouched={}
-function allowWhitePawn(data) {
+function allowWhitePawn(data,kingsPossitionFake) {
+  let bigData={from:{ vertically: data.vertically, horizontally: data.horizontally},to:{ vertically: data.vertically, horizontally: data.horizontally} }
   // data = { vertically: 0, horizontally: 0 };
   let allow = [];
   if (data.vertically < 1) {
     return [];
   }
+  // if (check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
+  //   // console.log("shax tu",kingsPossitionFake);
+  //   notAllowed=true
+  // }
   if (board[data.vertically - 1][data.horizontally].color == null) {
-    allow.push({
-      vertically: data.vertically - 1,
-      horizontally: data.horizontally,
-    });
+    bigData.to.vertically=data.vertically - 1
+      if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+        allow.push({
+          vertically: data.vertically - 1,
+          horizontally: data.horizontally,
+        });
+  }
+    // allow.push({
+    //   vertically: data.vertically - 1,
+    //   horizontally: data.horizontally,
+    // });
   }
   if (
     data.vertically > 0 &&
@@ -680,12 +719,18 @@ function allowWhitePawn(data) {
     board[data.vertically - 2][data.horizontally].color == null &&
     board[data.vertically - 1][data.horizontally].color == null
   ) {
+    bigData.to.vertically=data.vertically - 2
+      if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+        allow.push({
+          vertically: data.vertically - 2,
+          horizontally: data.horizontally,
+        });
+  }
 
-
-    allow.push({
-      vertically: data.vertically - 2,
-      horizontally: data.horizontally,
-    });
+    // allow.push({
+    //   vertically: data.vertically - 2,
+    //   horizontally: data.horizontally,
+    // });
   }
   // if (
   //   data.horizontally == 0 &&
@@ -703,10 +748,18 @@ function allowWhitePawn(data) {
     ||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1
     ) {
     // if (board[data.vertically-1][data.horizontally + 1].color == "black"||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
-      allow.push({
-        vertically: data.vertically - 1,
-        horizontally: data.horizontally + 1,
-      });      
+      bigData.to.vertically=data.vertically - 1
+      bigData.to.horizontally=data.horizontally + 1
+      if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+        allow.push({
+          vertically: data.vertically - 1,
+          horizontally: data.horizontally+1,
+        });
+  }
+    // allow.push({
+    //     vertically: data.vertically - 1,
+    //     horizontally: data.horizontally + 1,
+    //   });      
     // }
     // if (enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
     //   allow.push({
@@ -720,40 +773,71 @@ function allowWhitePawn(data) {
     board[data.vertically-1][data.horizontally - 1].color == "black"
     ||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally-1
   ) {
-    allow.push({
-      vertically: data.vertically - 1,
-      horizontally: data.horizontally - 1,
-    });
+    bigData.to.vertically=data.vertically - 1
+    bigData.to.horizontally=data.horizontally - 1
+    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+      allow.push({
+        vertically: data.vertically - 1,
+        horizontally: data.horizontally-1,
+      });
+}
+    // allow.push({
+    //   vertically: data.vertically - 1,
+    //   horizontally: data.horizontally - 1,
+    // });
   } else {
     if (data.horizontally < 7 && data.horizontally > 0) {
       if (board[data.vertically-1][data.horizontally - 1].color == "black" ||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally-1 ) {
-        allow.push({
-          vertically: data.vertically - 1,
-          horizontally: data.horizontally - 1,
-        });
+        bigData.to.vertically=data.vertically - 1
+        bigData.to.horizontally=data.horizontally - 1
+        if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+          allow.push({
+            vertically: data.vertically - 1,
+            horizontally: data.horizontally-1,
+          });
+    }
+        // allow.push({
+        //   vertically: data.vertically - 1,
+        //   horizontally: data.horizontally - 1,
+        // });
       }
       if (board[data.vertically-1][data.horizontally + 1].color == "black"||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
-        allow.push({
-          vertically: data.vertically - 1,
-          horizontally: data.horizontally + 1,
-        });
+        bigData.to.vertically=data.vertically - 1
+        bigData.to.horizontally=data.horizontally + 1
+        if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+          allow.push({
+            vertically: data.vertically - 1,
+            horizontally: data.horizontally+1,
+          });
+    }
+        // allow.push({
+        //   vertically: data.vertically - 1,
+        //   horizontally: data.horizontally + 1,
+        // });
       }
     }
   }
   return allow;
 }
 
-function allowBlackPawn(data) {
+function allowBlackPawn(data,kingsPossitionFake) {
+  let bigData={from:{ vertically: data.vertically, horizontally: data.horizontally},to:{ vertically: data.vertically, horizontally: data.horizontally} }
+
   // data = { vertically: 0, horizontally: 0 };
   let allow = [];
   if (data.vertically > 6) {
     return [];
   }
   if (board[data.vertically + 1][data.horizontally].color == null) {
-    allow.push({
-      vertically: data.vertically + 1,
-      horizontally: data.horizontally,
-    });
+    bigData.to.vertically=data.vertically + 1
+    bigData.to.horizontally=data.horizontally 
+    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+      allow.push({
+        vertically: data.vertically + 1,
+        horizontally: data.horizontally,
+      });
+}
+
   }
   if (
     data.vertically < 6 &&
@@ -761,43 +845,66 @@ function allowBlackPawn(data) {
     board[data.vertically + 2][data.horizontally].color == null &&
     board[data.vertically + 1][data.horizontally].color == null
   ) {
-    allow.push({
-      vertically: data.vertically + 2,
-      horizontally: data.horizontally,
-    });
+    bigData.to.vertically=data.vertically + 2
+    bigData.to.horizontally=data.horizontally 
+    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+      allow.push({
+        vertically: data.vertically + 2,
+        horizontally: data.horizontally,
+      });
+}
+
   }
   if (
     data.horizontally == 7 &&
     board[data.vertically+1][data.horizontally - 1].color == "white" ||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally-1
   ) {
-    allow.push({
-      vertically: data.vertically + 1,
-      horizontally: data.horizontally - 1,
-    });
+    bigData.to.vertically=data.vertically + 1
+    bigData.to.horizontally=data.horizontally - 1
+    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+      allow.push({
+        vertically: data.vertically + 1,
+        horizontally: data.horizontally -1,
+      });
+}    
+
   } else if (
     data.horizontally == 0 &&
     board[data.vertically+1][data.horizontally + 1].color == "white"||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally+1
   ) {
-    allow.push({
-      vertically: data.vertically + 1,
-      horizontally: data.horizontally + 1,
-    });
+    bigData.to.vertically=data.vertically + 1
+    bigData.to.horizontally=data.horizontally + 1
+    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+      allow.push({
+        vertically: data.vertically + 1,
+        horizontally: data.horizontally +1,
+      });
+}  
   } else {
     if (data.horizontally > 0 && data.horizontally < 7) {
       if (board[data.vertically+1][data.horizontally + 1].color == "white"||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally+1) {
-        allow.push({
-          vertically: data.vertically + 1,
-          horizontally: data.horizontally + 1,
-        });
+        bigData.to.vertically=data.vertically + 1
+        bigData.to.horizontally=data.horizontally + 1
+        if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+          allow.push({
+            vertically: data.vertically + 1,
+            horizontally: data.horizontally + 1,
+          });
+    }  
       }
       if (board[data.vertically+1][data.horizontally - 1].color == "white"||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally-1) {
-        allow.push({
-          vertically: data.vertically + 1,
-          horizontally: data.horizontally - 1,
-        });
+        bigData.to.vertically=data.vertically + 1
+        bigData.to.horizontally=data.horizontally - 1
+        if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+          allow.push({
+            vertically: data.vertically + 1,
+            horizontally: data.horizontally -1,
+          });
+    }  
       }
     }
   }
+  console.log("---------",allow,"---------------");
   return allow;
 }
 
@@ -898,7 +1005,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
-    if (!data||!data.from||!data.to||!data.from.vertically||!data.from.horizontally||!data.to.vertically||!data.to.horizontally) {
+    // console.log(data);
+    if (!data||!data.from||!data.to||(!data.from.vertically&&data.from.vertically!==0)||(!data.from.horizontally&&data.from.horizontally!==0)||(!data.to.vertically&&data.to.vertically!==0)||(!data.to.horizontally&&data.to.horizontally!==0)) {
       return false
     }
     if (data.from.vertically<0||data.from.vertically>7||data.from.horizontally<0||data.from.horizontally>7) {
@@ -943,7 +1051,6 @@ io.on("connection", (socket) => {
   if (!checkSteps(myStep,steps)||globalColor==board[data.from.vertically][data.from.horizontally].color) {
     notAllowed=true
   }
-
 
 if (!notAllowed) {
   // console.log(data,activeColor);
