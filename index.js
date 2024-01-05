@@ -103,6 +103,25 @@ let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:
 // }
 
 
+function checkMat(board,activeColor,kingsPossitionFake) {
+  for (let v = 0; v < 8; v++) {
+    for (let h = 0; h <8; h++) {
+      if (board[v][h].color==activeColor) {
+       let toArray= allowSteps({from:{vertically:v,horizontally:h}},activeColor)
+       let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,activeColor,kingsPossitionFake)
+       if (mat.length) {
+        console.log(mat,h,v);
+        return false
+       }
+       
+      }
+      
+    }
+    
+  }
+  return true
+}
+
 
 
 
@@ -130,21 +149,17 @@ return result
 
 // board, stugvox tagavori position,tagavori guyn
 function check(board,data,activeColor) {
-  // console.log("data",data,activeColor);
   // data={verticly,horizontally}
   // let board =JSON.parse(JSON.stringify(experimentalBoard));
   const rookStep = allowRook(board,data,activeColor)  
-  // console.log(">>>>>>>>>>>>>>>.",rookStep,activeColor,"<<<<<<<<<<<<<<<<<<<<<");
   for (let i = 0; i < rookStep.length; i++) {
     if (board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="rook"||board[rookStep[i].vertically][rookStep[i].horizontally].pieces=="queen") {
-      // console.log("110",rookStep,rookStep[i].vertically,rookStep[i].horizontally);
       return true
     }
   }
   const bishopStep = allowBishop(board,data,activeColor)
   for (let i = 0; i < bishopStep.length; i++) {
     if (board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces=="bishop"||board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces=="queen") {
-      // console.log("117",bishopStep,board[bishopStep[i].vertically][bishopStep[i].horizontally]);
       return true
     }
   }
@@ -697,7 +712,6 @@ function allowWhitePawn(data,kingsPossitionFake) {
     return [];
   }
   // if (check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
-  //   // console.log("shax tu",kingsPossitionFake);
   //   notAllowed=true
   // }
   if (board[data.vertically - 1][data.horizontally].color == null) {
@@ -904,7 +918,6 @@ function allowBlackPawn(data,kingsPossitionFake) {
       }
     }
   }
-  console.log("---------",allow,"---------------");
   return allow;
 }
 
@@ -932,7 +945,6 @@ function step(data,experimentalBoard,fake) {
 
 
 if (!fake) {
-  // console.log("hsrftgysdsdytsesdfgjrse");
   if (Math.abs(data.to.vertically-data.from.vertically)==2) {
     if (board[data.from.vertically][data.from.horizontally].color=="white") {
 
@@ -1005,7 +1017,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
-    // console.log(data);
     if (!data||!data.from||!data.to||(!data.from.vertically&&data.from.vertically!==0)||(!data.from.horizontally&&data.from.horizontally!==0)||(!data.to.vertically&&data.to.vertically!==0)||(!data.to.horizontally&&data.to.horizontally!==0)) {
       return false
     }
@@ -1035,11 +1046,15 @@ io.on("connection", (socket) => {
     if (board[data.from.vertically][data.from.horizontally].color ==globalColor) {
      notAllowed=true 
     }
+
+    if (kingsPossition[activeColor].check) {
+      console.log("mat",checkMat(board,activeColor,kingsPossition));
+
+    }
+
     if (check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
-      // console.log("shax tu",kingsPossitionFake);
       notAllowed=true
     }
-    // console.log("shax ara",activeColor,check(board,{vertically:data.to.vertically,horizontally:data.to.horizontally},activeColor))
 
     const steps= allowSteps(data,board[data.from.vertically][data.from.horizontally].color)
     if (steps) {
@@ -1053,12 +1068,14 @@ io.on("connection", (socket) => {
   }
 
 if (!notAllowed) {
-  // console.log(data,activeColor);
   board = step(data,board,false);
+  kingsPossition=kingsPossitionFake
 // baceq es koment@
-  // if (check(step(data,board,true),{vertically:kingsPossitionFake[globalColor].vertically,horizontally:kingsPossitionFake[globalColor].horizontally},globalColor)) {
-  //   kingsPossition[globalColor].check=true
-  // }
+  if (check(board,{vertically:kingsPossitionFake[globalColor].vertically,horizontally:kingsPossitionFake[globalColor].horizontally},globalColor)) {
+    console.log("ayauuuuuu",globalColor);
+    kingsPossition[globalColor].check=true
+  }
+  
 
 
   kingsPossition=kingsPossitionFake
@@ -1068,8 +1085,9 @@ if (!notAllowed) {
       thiscolor="black"
     }else{thiscolor="white"
      globalColor="white" }
-  kingsPossition[thiscolor].check=false
-
+    //  console.log("this",kingsPossition[thiscolor].check);
+     kingsPossition[thiscolor].check=false
+// console.log(kingsPossition);
   // if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)  ) {
   //   kingsPossition[globalColor].check=true
   // }
@@ -1078,9 +1096,7 @@ if (!notAllowed) {
   // }
 
 
-  if (!kingsPossition[activeColor].check) {
-    // return check
-  }
+
 }
 
     }
@@ -1125,42 +1141,3 @@ if (!notAllowed) {
 server.listen(3001, () => {
   console.log("SERVER IS RUNNING");
 });
-
-// if (
-//   board[vertically + 1][horizontally + 1].color == "white" &&
-//   board[vertically + 1][horizontally].color == null &&
-//   board[vertically + 1][horizontally].isTouched == false
-// ) {
-//   allow.push({ vertically: vertically + 2, horizontally });
-// }
-
-// if (board[vertically + 1][horizontally].color == null) {
-//   allow.push({ vertically: vertically + 1, horizontally });
-// }
-
-// if (
-//   Math.abs(data.to.vertically - data.from.vertically) == 1 &&
-//   data.to.horizontally == data.from.horizontally &&
-//   board[data.to.horizontally][data.to.vertically].color == null
-// ) {
-//   allow.push(data);
-// }
-
-// if (
-//   board[data.to.horizontally][data.to.vertically].color ==
-//   board[data.from.horizontally][data.from.vertically].color
-// ) {
-//   return false;
-// }
-// if (Math.abs(data.from.vertically - data.to.vertically) != 1) {
-//   if (Math.abs(data.from.vertically - data.to.vertically) != 2) {
-//     return false;
-//   }
-
-//   return false;
-// }
-// if (data.from.horizontally != data.to.horizontally) {
-//   if (Math.abs(data.from.horizontally - data.to.horizontally) !== 1) {
-//   }
-//   return false;
-// }
