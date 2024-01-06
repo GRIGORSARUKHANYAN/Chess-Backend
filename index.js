@@ -108,6 +108,7 @@ function checkMat(board,activeColor,kingsPossitionFake) {
     for (let h = 0; h <8; h++) {
       if (board[v][h].color==activeColor) {
        let toArray= allowSteps({from:{vertically:v,horizontally:h}},activeColor)
+
        let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,activeColor,kingsPossitionFake)
        if (mat.length) {
         console.log(mat,h,v);
@@ -135,8 +136,11 @@ let data = {
   to:{vertically:toArray[i].vertically,horizontally:toArray[i].horizontally}
 }
   if (!check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
-result.push(toArray[i])
-    
+    console.log("----------------------//",step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor,"//---------------------");
+    result.push(toArray[i])
+
+
+
   }  
 }
 return result
@@ -149,6 +153,7 @@ return result
 
 // board, stugvox tagavori position,tagavori guyn
 function check(board,data,activeColor) {
+  
   // data={verticly,horizontally}
   // let board =JSON.parse(JSON.stringify(experimentalBoard));
   const rookStep = allowRook(board,data,activeColor)  
@@ -922,7 +927,7 @@ function allowBlackPawn(data,kingsPossitionFake) {
 }
 
 function step(data,experimentalBoard,fake) {
-  kingsPossitionFake=JSON.parse(JSON.stringify(kingsPossition));
+  // kingsPossitionFake=JSON.parse(JSON.stringify(kingsPossition));
   // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
   // 			throw new HttpException(400, 'you cannot perform this step');
   // }
@@ -1017,6 +1022,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
+    kingsPossitionFake=kingsPossition
     if (!data||!data.from||!data.to||(!data.from.vertically&&data.from.vertically!==0)||(!data.from.horizontally&&data.from.horizontally!==0)||(!data.to.vertically&&data.to.vertically!==0)||(!data.to.horizontally&&data.to.horizontally!==0)) {
       return false
     }
@@ -1053,6 +1059,7 @@ io.on("connection", (socket) => {
     }
 
     if (check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
+    
       notAllowed=true
     }
 
