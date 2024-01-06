@@ -3,12 +3,9 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-const { verify } = require("crypto");
 let globalColor = "black";
-// let activeColor="white"
+
 let allPlayers = [];
-// vertically:^^^^^,horizontally:>>>>>>
-globaklcheck = false;
 let board = [
   [
     {
@@ -475,21 +472,15 @@ let board = [
     },
   ],
 ];
-// pawn  unexpected
+
 let enPassant = {
   black: { vertically: null, horizontally: null },
-  white: { vertically: 7, horizontally: 0 },
+  white: { vertically: null, horizontally: null },
 };
 let kingsPossition = {
   black: { vertically: 0, horizontally: 4, check: false },
   white: { vertically: 7, horizontally: 4, check: false },
 };
-// let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
-
-// let datas = {
-//   from:{vertically:1,horizontally:0},
-//   to:{vertically:1,horizontally:0}
-// }
 
 function checkMat(board, activeColor) {
   for (let v = 0; v < 8; v++) {
@@ -714,6 +705,7 @@ function allowSteps(data, activeColor) {
     return steps;
   }
 }
+
 function checkSteps(step, allowSteps) {
   for (let i = 0; i < allowSteps.length; i++) {
     if (
@@ -1119,7 +1111,7 @@ function allowRook(board, data, activeColor) {
   return allow;
 }
 
-function allowWhitePawn(data, kingsPossitionFake) {
+function allowWhitePawn(data) {
   let bigData = {
     from: { vertically: data.vertically, horizontally: data.horizontally },
     to: { vertically: data.vertically, horizontally: data.horizontally },
@@ -1279,7 +1271,7 @@ function allowWhitePawn(data, kingsPossitionFake) {
   return allow;
 }
 
-function allowBlackPawn(data, kingsPossitionFake) {
+function allowBlackPawn(data) {
   let bigData = {
     from: { vertically: data.vertically, horizontally: data.horizontally },
     to: { vertically: data.vertically, horizontally: data.horizontally },
