@@ -238,14 +238,14 @@ function allowSteps(data,activeColor) {
     const steps = allowWhitePawn({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    },kingsPossitionFake)
+    },kingsPossition)
     return steps
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "black") {
     const steps = allowBlackPawn({
       vertically: data.from.vertically,
       horizontally: data.from.horizontally,
-    },kingsPossitionFake)
+    },kingsPossition)
     return steps
   }  
   if (board[data.from.vertically][data.from.horizontally].pieces == "rook") {
@@ -712,7 +712,7 @@ function allowRook(board,data,activeColor) {
 
 
 // let isTouched={}
-function allowWhitePawn(data,kingsPossitionFake) {
+function allowWhitePawn(data) {
   let bigData={from:{ vertically: data.vertically, horizontally: data.horizontally},to:{ vertically: data.vertically, horizontally: data.horizontally} }
   // data = { vertically: 0, horizontally: 0 };
   let allow = [];
@@ -1093,21 +1093,20 @@ if (!notAllowed) {
 
   kingsPossition=step1.kingsPossitionFake
 // baceq es koment@
-  if (check(board,{vertically:kingsPossitionFake[globalColor].vertically,horizontally:kingsPossitionFake[globalColor].horizontally},globalColor)) {
+  if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)) {
     console.log("ayauuuuuu",globalColor);
     kingsPossition[globalColor].check=true
   }
   
-  if (kingsPossition[globalColor].check) {
-    console.log("mat",globalColor,checkMat(board,globalColor));
-  }
+
      kingsPossition[activeColor].check=false
+     if (kingsPossition[globalColor].check) {
+      console.log("mat",globalColor,checkMat(board,globalColor));
+    }
 console.log(kingsPossition);
-    let thiscolor
     if (globalColor=="white") {
       globalColor="black"
-      thiscolor="black"
-    }else{thiscolor="white"
+    }else{
      globalColor="white" }
     //  console.log("this",kingsPossition[thiscolor].check);
     //  kingsPossition[thiscolor].check=false
