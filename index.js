@@ -95,7 +95,7 @@ let board=
 // pawn  unexpected
 let  enPassant={black:{vertically:null,horizontally:null},white:{vertically:7,horizontally:0}}
 let kingsPossition = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
-let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
+// let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
 
 // let datas = {
 //   from:{vertically:1,horizontally:0},
@@ -103,13 +103,13 @@ let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:
 // }
 
 
-function checkMat(board,activeColor,kingsPossitionFake) {
+function checkMat(board,activeColor) {
   for (let v = 0; v < 8; v++) {
     for (let h = 0; h <8; h++) {
       if (board[v][h].color==activeColor) {
        let toArray= allowSteps({from:{vertically:v,horizontally:h}},activeColor)
 
-       let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,activeColor,kingsPossitionFake)
+       let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,activeColor)
        if (mat.length) {
         console.log(mat,h,v);
         return false
@@ -128,18 +128,21 @@ function checkMat(board,activeColor,kingsPossitionFake) {
 
 
 
-function allowedArray(board,from,toArray,activeColor,kingsPossitionFake) {
+function allowedArray(board,from,toArray,activeColor) {
 let result=[]
 for (let i = 0; i < toArray.length; i++) {
 let data = {
   from:from,
   to:{vertically:toArray[i].vertically,horizontally:toArray[i].horizontally}
 }
-  if (!check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
-    console.log("----------------------//",step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor,"//---------------------");
+let step1 =step(data,board,true)
+  if (!check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
     result.push(toArray[i])
 
 
+    console.log("-------------------------------------");
+console.log(activeColor);
+    console.log("-------------------------------------");
 
   }  
 }
@@ -721,7 +724,8 @@ function allowWhitePawn(data,kingsPossitionFake) {
   // }
   if (board[data.vertically - 1][data.horizontally].color == null) {
     bigData.to.vertically=data.vertically - 1
-      if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+    let step1=step(bigData,board,true)
+      if (!check(step1.board,{vertically:step1.kingsPossitionFake["white"].vertically,horizontally:step1.kingsPossitionFake["white"].horizontally},"white")) {
         allow.push({
           vertically: data.vertically - 1,
           horizontally: data.horizontally,
@@ -739,7 +743,8 @@ function allowWhitePawn(data,kingsPossitionFake) {
     board[data.vertically - 1][data.horizontally].color == null
   ) {
     bigData.to.vertically=data.vertically - 2
-      if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+    let step1=step(bigData,board,true)
+      if (!check(step1.board,{vertically:step1.kingsPossitionFake["white"].vertically,horizontally:step1.kingsPossitionFake["white"].horizontally},"white")) {
         allow.push({
           vertically: data.vertically - 2,
           horizontally: data.horizontally,
@@ -769,7 +774,8 @@ function allowWhitePawn(data,kingsPossitionFake) {
     // if (board[data.vertically-1][data.horizontally + 1].color == "black"||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
       bigData.to.vertically=data.vertically - 1
       bigData.to.horizontally=data.horizontally + 1
-      if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+      let step1 =step(bigData,board,true) 
+      if (!check(step1.board,{vertically:step1.kingsPossitionFake["white"].vertically,horizontally:step1.kingsPossitionFake["white"].horizontally},"white")) {
         allow.push({
           vertically: data.vertically - 1,
           horizontally: data.horizontally+1,
@@ -794,7 +800,8 @@ function allowWhitePawn(data,kingsPossitionFake) {
   ) {
     bigData.to.vertically=data.vertically - 1
     bigData.to.horizontally=data.horizontally - 1
-    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+    let step1 =step(bigData,board,true) 
+    if (!check(step1.board,{vertically:step1.kingsPossitionFake["white"].vertically,horizontally:step1.kingsPossitionFake["white"].horizontally},"white")) {
       allow.push({
         vertically: data.vertically - 1,
         horizontally: data.horizontally-1,
@@ -809,7 +816,8 @@ function allowWhitePawn(data,kingsPossitionFake) {
       if (board[data.vertically-1][data.horizontally - 1].color == "black" ||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally-1 ) {
         bigData.to.vertically=data.vertically - 1
         bigData.to.horizontally=data.horizontally - 1
-        if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+        let step1 =step(bigData,board,true) 
+        if (!check(step1.board,{vertically:step1.kingsPossitionFake["white"].vertically,horizontally:step1.kingsPossitionFake["white"].horizontally},"white")) {
           allow.push({
             vertically: data.vertically - 1,
             horizontally: data.horizontally-1,
@@ -823,7 +831,8 @@ function allowWhitePawn(data,kingsPossitionFake) {
       if (board[data.vertically-1][data.horizontally + 1].color == "black"||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
         bigData.to.vertically=data.vertically - 1
         bigData.to.horizontally=data.horizontally + 1
-        if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["white"].vertically,horizontally:kingsPossitionFake["white"].horizontally},"white")) {
+        let step1 = step(bigData,board,true)
+        if (!check(step1.board,{vertically:step1.kingsPossitionFake["white"].vertically,horizontally:step1.kingsPossitionFake["white"].horizontally},"white")) {
           allow.push({
             vertically: data.vertically - 1,
             horizontally: data.horizontally+1,
@@ -850,7 +859,8 @@ function allowBlackPawn(data,kingsPossitionFake) {
   if (board[data.vertically + 1][data.horizontally].color == null) {
     bigData.to.vertically=data.vertically + 1
     bigData.to.horizontally=data.horizontally 
-    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+    let step1 =step(bigData,board,true) 
+    if (!check(step1.board,{vertically:step1.kingsPossitionFake["black"].vertically,horizontally:step1.kingsPossitionFake["black"].horizontally},"black")) {
       allow.push({
         vertically: data.vertically + 1,
         horizontally: data.horizontally,
@@ -866,7 +876,8 @@ function allowBlackPawn(data,kingsPossitionFake) {
   ) {
     bigData.to.vertically=data.vertically + 2
     bigData.to.horizontally=data.horizontally 
-    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+    let step1 = step(bigData,board,true)
+    if (!check(step1.board,{vertically:step1.kingsPossitionFake["black"].vertically,horizontally:step1.kingsPossitionFake["black"].horizontally},"black")) {
       allow.push({
         vertically: data.vertically + 2,
         horizontally: data.horizontally,
@@ -880,7 +891,8 @@ function allowBlackPawn(data,kingsPossitionFake) {
   ) {
     bigData.to.vertically=data.vertically + 1
     bigData.to.horizontally=data.horizontally - 1
-    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+    let step1 =step(bigData,board,true) 
+    if (!check(step1.board,{vertically:step1.kingsPossitionFake["black"].vertically,horizontally:step1.kingsPossitionFake["black"].horizontally},"black")) {
       allow.push({
         vertically: data.vertically + 1,
         horizontally: data.horizontally -1,
@@ -893,7 +905,8 @@ function allowBlackPawn(data,kingsPossitionFake) {
   ) {
     bigData.to.vertically=data.vertically + 1
     bigData.to.horizontally=data.horizontally + 1
-    if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+    let step1 = step(bigData,board,true)
+    if (!check(step1.board,{vertically:step1.kingsPossitionFake["black"].vertically,horizontally:step1.kingsPossitionFake["black"].horizontally},"black")) {
       allow.push({
         vertically: data.vertically + 1,
         horizontally: data.horizontally +1,
@@ -904,7 +917,8 @@ function allowBlackPawn(data,kingsPossitionFake) {
       if (board[data.vertically+1][data.horizontally + 1].color == "white"||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally+1) {
         bigData.to.vertically=data.vertically + 1
         bigData.to.horizontally=data.horizontally + 1
-        if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+        let step1 =step(bigData,board,true) 
+        if (!check(step1.board,{vertically:step1.kingsPossitionFake["black"].vertically,horizontally:step1.kingsPossitionFake["black"].horizontally},"black")) {
           allow.push({
             vertically: data.vertically + 1,
             horizontally: data.horizontally + 1,
@@ -914,7 +928,8 @@ function allowBlackPawn(data,kingsPossitionFake) {
       if (board[data.vertically+1][data.horizontally - 1].color == "white"||enPassant.white.vertically==data.vertically+1 &&enPassant.white.horizontally==data.horizontally-1) {
         bigData.to.vertically=data.vertically + 1
         bigData.to.horizontally=data.horizontally - 1
-        if (!check(step(bigData,board,true),{vertically:kingsPossitionFake["black"].vertically,horizontally:kingsPossitionFake["black"].horizontally},"black")) {
+        let step1 =step(bigData,board,true) 
+        if (!check(step1.board,{vertically:step1.kingsPossitionFake["black"].vertically,horizontally:step1.kingsPossitionFake["black"].horizontally},"black")) {
           allow.push({
             vertically: data.vertically + 1,
             horizontally: data.horizontally -1,
@@ -927,7 +942,7 @@ function allowBlackPawn(data,kingsPossitionFake) {
 }
 
 function step(data,experimentalBoard,fake) {
-  // kingsPossitionFake=JSON.parse(JSON.stringify(kingsPossition));
+  kingsPossitionFake=JSON.parse(JSON.stringify(kingsPossition));
   // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
   // 			throw new HttpException(400, 'you cannot perform this step');
   // }
@@ -994,7 +1009,7 @@ if (!fake) {
 }
 
 
-  return board;
+  return {board,kingsPossitionFake};
 }
 
 app.use(cors());
@@ -1022,7 +1037,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
-    kingsPossitionFake=kingsPossition
     if (!data||!data.from||!data.to||(!data.from.vertically&&data.from.vertically!==0)||(!data.from.horizontally&&data.from.horizontally!==0)||(!data.to.vertically&&data.to.vertically!==0)||(!data.to.horizontally&&data.to.horizontally!==0)) {
       return false
     }
@@ -1052,13 +1066,12 @@ io.on("connection", (socket) => {
     if (board[data.from.vertically][data.from.horizontally].color ==globalColor) {
      notAllowed=true 
     }
-
+// ban @lni hani comic
     if (kingsPossition[activeColor].check) {
-      console.log("mat",checkMat(board,activeColor,kingsPossition));
-
+      console.log("mat",checkMat(board,activeColor));
     }
-
-    if (check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
+    let step1 =step(data,board,true) 
+    if (check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
     
       notAllowed=true
     }
@@ -1075,17 +1088,21 @@ io.on("connection", (socket) => {
   }
 
 if (!notAllowed) {
-  board = step(data,board,false);
-  kingsPossition=kingsPossitionFake
+  step1 = step(data,board,false)
+  board = step1.board;
+
+  kingsPossition=step1.kingsPossitionFake
 // baceq es koment@
   if (check(board,{vertically:kingsPossitionFake[globalColor].vertically,horizontally:kingsPossitionFake[globalColor].horizontally},globalColor)) {
     console.log("ayauuuuuu",globalColor);
     kingsPossition[globalColor].check=true
   }
   
-
-
-  kingsPossition=kingsPossitionFake
+  if (kingsPossition[globalColor].check) {
+    console.log("mat",globalColor,checkMat(board,globalColor));
+  }
+     kingsPossition[activeColor].check=false
+console.log(kingsPossition);
     let thiscolor
     if (globalColor=="white") {
       globalColor="black"
@@ -1093,7 +1110,7 @@ if (!notAllowed) {
     }else{thiscolor="white"
      globalColor="white" }
     //  console.log("this",kingsPossition[thiscolor].check);
-     kingsPossition[thiscolor].check=false
+    //  kingsPossition[thiscolor].check=false
 // console.log(kingsPossition);
   // if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)  ) {
   //   kingsPossition[globalColor].check=true
