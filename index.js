@@ -4,97 +4,486 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const { verify } = require("crypto");
-let globalColor = "black"
+let globalColor = "black";
 // let activeColor="white"
-let allPlayers = []
+let allPlayers = [];
 // vertically:^^^^^,horizontally:>>>>>>
-globaklcheck = false
-let board =
+globaklcheck = false;
+let board = [
   [
-    [
-      { color: "black", vertically: 0, horizontally: 0, pieces: "rook", isTouched: false },
-      { color: "black", vertically: 0, horizontally: 1, pieces: "knight", isTouched: false },
-      { color: "black", vertically: 0, horizontally: 2, pieces: "bishop", isTouched: false },
-      { color: "black", vertically: 0, horizontally: 3, pieces: "queen", isTouched: false },
-      { color: "black", vertically: 0, horizontally: 4, pieces: "king", isTouched: false },
-      { color: "black", vertically: 0, horizontally: 5, pieces: "bishop", isTouched: false },
-      { color: "black", vertically: 0, horizontally: 6, pieces: "knight", isTouched: false },
-      { color: "black", vertically: 0, horizontally: 7, pieces: "rook", isTouched: false },
-    ],
-    [
-      { color: "black", vertically: 1, horizontally: 0, pieces: "pawn", isTouched: false },
-      { color: "black", vertically: 1, horizontally: 1, pieces: "pawn", isTouched: false },
-      { color: "black", vertically: 1, horizontally: 2, pieces: "pawn", isTouched: false },
-      { color: "black", vertically: 1, horizontally: 3, pieces: "pawn", isTouched: false },
-      { color: "black", vertically: 1, horizontally: 4, pieces: "pawn", isTouched: false },
-      { color: "black", vertically: 1, horizontally: 5, pieces: "pawn", isTouched: false },
-      { color: "black", vertically: 1, horizontally: 6, pieces: "pawn", isTouched: false },
-      { color: "black", vertically: 1, horizontally: 7, pieces: "pawn", isTouched: false },
-    ],
-    [
-      { color: null, vertically: 2, horizontally: 0, pieces: null, isTouched: false },
-      { color: null, vertically: 2, horizontally: 1, pieces: null, isTouched: false },
-      { color: null, vertically: 2, horizontally: 2, pieces: null, isTouched: false },
-      { color: null, vertically: 2, horizontally: 3, pieces: null, isTouched: false },
-      { color: null, vertically: 2, horizontally: 4, pieces: null, isTouched: false },
-      { color: null, vertically: 2, horizontally: 5, pieces: null, isTouched: false },
-      { color: null, vertically: 2, horizontally: 6, pieces: null, isTouched: false },
-      { color: null, vertically: 2, horizontally: 7, pieces: null, isTouched: false },
-    ],
-    [
-      { color: null, vertically: 3, horizontally: 0, pieces: null, isTouched: false },
-      { color: null, vertically: 3, horizontally: 1, pieces: null, isTouched: false },
-      { color: null, vertically: 3, horizontally: 2, pieces: null, isTouched: false },
-      { color: null, vertically: 3, horizontally: 3, pieces: null, isTouched: false },
-      { color: null, vertically: 3, horizontally: 4, pieces: null, isTouched: false },
-      { color: null, vertically: 3, horizontally: 5, pieces: null, isTouched: false },
-      { color: null, vertically: 3, horizontally: 6, pieces: null, isTouched: false },
-      { color: null, vertically: 3, horizontally: 7, pieces: null, isTouched: false },
-    ],
-    [
-      { color: null, vertically: 4, horizontally: 0, pieces: null, isTouched: false },
-      { color: null, vertically: 4, horizontally: 1, pieces: null, isTouched: false },
-      { color: null, vertically: 4, horizontally: 2, pieces: null, isTouched: false },
-      { color: null, vertically: 4, horizontally: 3, pieces: null, isTouched: false },
-      { color: null, vertically: 4, horizontally: 4, pieces: null, isTouched: false },
-      { color: null, vertically: 4, horizontally: 5, pieces: null, isTouched: false },
-      { color: null, vertically: 4, horizontally: 6, pieces: null, isTouched: false },
-      { color: null, vertically: 4, horizontally: 7, pieces: null, isTouched: false },
-    ],
-    [
-      { color: null, vertically: 5, horizontally: 0, pieces: null, isTouched: false },
-      { color: null, vertically: 5, horizontally: 1, pieces: null, isTouched: false },
-      { color: null, vertically: 5, horizontally: 2, pieces: null, isTouched: false },
-      { color: null, vertically: 5, horizontally: 3, pieces: null, isTouched: false },
-      { color: null, vertically: 5, horizontally: 4, pieces: null, isTouched: false },
-      { color: null, vertically: 5, horizontally: 5, pieces: null, isTouched: false },
-      { color: null, vertically: 5, horizontally: 6, pieces: null, isTouched: false },
-      { color: null, vertically: 5, horizontally: 7, pieces: null, isTouched: false },
-    ],
-    [
-      { color: "white", vertically: 6, horizontally: 0, pieces: "pawn", isTouched: false },
-      { color: "white", vertically: 6, horizontally: 1, pieces: "pawn", isTouched: false },
-      { color: "white", vertically: 6, horizontally: 2, pieces: "pawn", isTouched: false },
-      { color: "white", vertically: 6, horizontally: 3, pieces: "pawn", isTouched: false },
-      { color: "white", vertically: 6, horizontally: 4, pieces: "pawn", isTouched: false },
-      { color: "white", vertically: 6, horizontally: 5, pieces: "pawn", isTouched: false },
-      { color: "white", vertically: 6, horizontally: 6, pieces: "pawn", isTouched: false },
-      { color: "white", vertically: 6, horizontally: 7, pieces: "pawn", isTouched: false },
-    ],
-    [
-      { color: "white", vertically: 7, horizontally: 0, pieces: "rook", isTouched: false },
-      { color: "white", vertically: 7, horizontally: 1, pieces: "knight", isTouched: false },
-      { color: "white", vertically: 7, horizontally: 2, pieces: "bishop", isTouched: false },
-      { color: "white", vertically: 7, horizontally: 3, pieces: "queen", isTouched: false },
-      { color: "white", vertically: 7, horizontally: 4, pieces: "king", isTouched: false },
-      { color: "white", vertically: 7, horizontally: 5, pieces: "bishop", isTouched: false },
-      { color: "white", vertically: 7, horizontally: 6, pieces: "knight", isTouched: false },
-      { color: "white", vertically: 7, horizontally: 7, pieces: "rook", isTouched: false },
-    ],
-  ]
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 0,
+      pieces: "rook",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 1,
+      pieces: "knight",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 2,
+      pieces: "bishop",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 3,
+      pieces: "queen",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 4,
+      pieces: "king",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 5,
+      pieces: "bishop",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 6,
+      pieces: "knight",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 0,
+      horizontally: 7,
+      pieces: "rook",
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: "black",
+      vertically: 1,
+      horizontally: 0,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 1,
+      horizontally: 1,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 1,
+      horizontally: 2,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 1,
+      horizontally: 3,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 1,
+      horizontally: 4,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 1,
+      horizontally: 5,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 1,
+      horizontally: 6,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "black",
+      vertically: 1,
+      horizontally: 7,
+      pieces: "pawn",
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 0,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 1,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 6,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 2,
+      horizontally: 7,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 0,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 1,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 6,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 3,
+      horizontally: 7,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 0,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 1,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 6,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 4,
+      horizontally: 7,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 0,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 1,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 2,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 3,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 4,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 5,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 6,
+      pieces: null,
+      isTouched: false,
+    },
+    {
+      color: null,
+      vertically: 5,
+      horizontally: 7,
+      pieces: null,
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: "white",
+      vertically: 6,
+      horizontally: 0,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 6,
+      horizontally: 1,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 6,
+      horizontally: 2,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 6,
+      horizontally: 3,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 6,
+      horizontally: 4,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 6,
+      horizontally: 5,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 6,
+      horizontally: 6,
+      pieces: "pawn",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 6,
+      horizontally: 7,
+      pieces: "pawn",
+      isTouched: false,
+    },
+  ],
+  [
+    {
+      color: "white",
+      vertically: 7,
+      horizontally: 0,
+      pieces: "rook",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 7,
+      horizontally: 1,
+      pieces: "knight",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 7,
+      horizontally: 2,
+      pieces: "bishop",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 7,
+      horizontally: 3,
+      pieces: "queen",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 7,
+      horizontally: 4,
+      pieces: "king",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 7,
+      horizontally: 5,
+      pieces: "bishop",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 7,
+      horizontally: 6,
+      pieces: "knight",
+      isTouched: false,
+    },
+    {
+      color: "white",
+      vertically: 7,
+      horizontally: 7,
+      pieces: "rook",
+      isTouched: false,
+    },
+  ],
+];
 // pawn  unexpected
-let enPassant = { black: { vertically: null, horizontally: null }, white: { vertically: 7, horizontally: 0 } }
-let kingsPossition = { black: { vertically: 0, horizontally: 4, check: false }, white: { vertically: 7, horizontally: 4, check: false } }
+let enPassant = {
+  black: { vertically: null, horizontally: null },
+  white: { vertically: 7, horizontally: 0 },
+};
+let kingsPossition = {
+  black: { vertically: 0, horizontally: 4, check: false },
+  white: { vertically: 7, horizontally: 4, check: false },
+};
 // let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
 
 // let datas = {
@@ -102,220 +491,273 @@ let kingsPossition = { black: { vertically: 0, horizontally: 4, check: false }, 
 //   to:{vertically:1,horizontally:0}
 // }
 
-
 function checkMat(board, activeColor) {
   for (let v = 0; v < 8; v++) {
     for (let h = 0; h < 8; h++) {
       if (board[v][h].color == activeColor) {
-        let toArray = allowSteps({ from: { vertically: v, horizontally: h } }, activeColor)
+        let toArray = allowSteps(
+          { from: { vertically: v, horizontally: h } },
+          activeColor
+        );
 
-        let mat = allowedArray(board, { vertically: v, horizontally: h }, toArray, activeColor)
+        let mat = allowedArray(
+          board,
+          { vertically: v, horizontally: h },
+          toArray,
+          activeColor
+        );
         if (mat.length) {
-          return false
+          return false;
         }
-
       }
-
     }
-
   }
-  return true
+  return true;
 }
 
-
-
-
-
-
 function allowedArray(board, from, toArray, activeColor) {
-  let result = []
+  let result = [];
   for (let i = 0; i < toArray.length; i++) {
     let data = {
       from: from,
-      to: { vertically: toArray[i].vertically, horizontally: toArray[i].horizontally }
-    }
-    let step1 = step(data, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake[activeColor].vertically, horizontally: step1.kingsPossitionFake[activeColor].horizontally }, activeColor)) {
-      result.push(toArray[i])
+      to: {
+        vertically: toArray[i].vertically,
+        horizontally: toArray[i].horizontally,
+      },
+    };
+    let step1 = step(data, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake[activeColor].vertically,
+          horizontally: step1.kingsPossitionFake[activeColor].horizontally,
+        },
+        activeColor
+      )
+    ) {
+      result.push(toArray[i]);
     }
   }
-  return result
+  return result;
 }
 
-
-
-
-
-
-// board, stugvox tagavori position,tagavori guyn
 function check(board, data, activeColor) {
-
   // data={verticly,horizontally}
   // let board =JSON.parse(JSON.stringify(experimentalBoard));
-  const rookStep = allowRook(board, data, activeColor)
+  const rookStep = allowRook(board, data, activeColor);
   for (let i = 0; i < rookStep.length; i++) {
-    if (board[rookStep[i].vertically][rookStep[i].horizontally].pieces == "rook" || board[rookStep[i].vertically][rookStep[i].horizontally].pieces == "queen") {
-      return true
+    if (
+      board[rookStep[i].vertically][rookStep[i].horizontally].pieces ==
+        "rook" ||
+      board[rookStep[i].vertically][rookStep[i].horizontally].pieces == "queen"
+    ) {
+      return true;
     }
   }
-  const bishopStep = allowBishop(board, data, activeColor)
+  const bishopStep = allowBishop(board, data, activeColor);
   for (let i = 0; i < bishopStep.length; i++) {
-    if (board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces == "bishop" || board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces == "queen") {
-      return true
+    if (
+      board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces ==
+        "bishop" ||
+      board[bishopStep[i].vertically][bishopStep[i].horizontally].pieces ==
+        "queen"
+    ) {
+      return true;
     }
   }
 
-
-  const knightStep = allowknight(board, data, activeColor)
+  const knightStep = allowknight(board, data, activeColor);
   for (let i = 0; i < knightStep.length; i++) {
-    if (board[knightStep[i].vertically][knightStep[i].horizontally].pieces == "knight") {
-      return true
+    if (
+      board[knightStep[i].vertically][knightStep[i].horizontally].pieces ==
+      "knight"
+    ) {
+      return true;
     }
   }
 
-
-  const kingStep = allowKing(board, data, activeColor)
+  const kingStep = allowKing(board, data, activeColor);
   for (let i = 0; i < kingStep.length; i++) {
-    if (board[kingStep[i].vertically][kingStep[i].horizontally].pieces == "king") {
-      return true
+    if (
+      board[kingStep[i].vertically][kingStep[i].horizontally].pieces == "king"
+    ) {
+      return true;
     }
   }
-
 
   // pawn
   if (activeColor == "black" && data.vertically < 7) {
     if (data.horizontally + 1 < 7) {
-      if (board[data.vertically + 1][data.horizontally + 1].color == "white" && board[data.vertically + 1][data.horizontally + 1].pieces == "pawn") {
-        return true
+      if (
+        board[data.vertically + 1][data.horizontally + 1].color == "white" &&
+        board[data.vertically + 1][data.horizontally + 1].pieces == "pawn"
+      ) {
+        return true;
       }
     }
 
     if (data.horizontally - 1 > -1) {
-      if (board[data.vertically + 1][data.horizontally - 1].color == "white" && board[data.vertically + 1][data.horizontally - 1].pieces == "pawn") {
-        return true
+      if (
+        board[data.vertically + 1][data.horizontally - 1].color == "white" &&
+        board[data.vertically + 1][data.horizontally - 1].pieces == "pawn"
+      ) {
+        return true;
       }
     }
   }
   if (activeColor == "white" && data.vertically > 0) {
     if (data.horizontally + 1 < 7) {
-      if (board[data.vertically - 1][data.horizontally + 1].color == "black" && board[data.vertically - 1][data.horizontally + 1].pieces == "pawn") {
-        return true
+      if (
+        board[data.vertically - 1][data.horizontally + 1].color == "black" &&
+        board[data.vertically - 1][data.horizontally + 1].pieces == "pawn"
+      ) {
+        return true;
       }
     }
 
     if (data.horizontally - 1 > -1) {
-      if (board[data.vertically - 1][data.horizontally - 1].color == "black" && board[data.vertically - 1][data.horizontally - 1].pieces == "pawn") {
-        return true
+      if (
+        board[data.vertically - 1][data.horizontally - 1].color == "black" &&
+        board[data.vertically - 1][data.horizontally - 1].pieces == "pawn"
+      ) {
+        return true;
       }
     }
   }
-  return false
+  return false;
 }
-
-
 
 function allowSteps(data, activeColor) {
   // if (globalColor=="white") {
   //   activeColor="black"
   // }else{activeColor="white"}
-  if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "white") {
-    const steps = allowWhitePawn({
-      vertically: data.from.vertically,
-      horizontally: data.from.horizontally,
-    }, kingsPossitionFake)
-    return steps
+  if (
+    board[data.from.vertically][data.from.horizontally].pieces == "pawn" &&
+    board[data.from.vertically][data.from.horizontally].color == "white"
+  ) {
+    const steps = allowWhitePawn(
+      {
+        vertically: data.from.vertically,
+        horizontally: data.from.horizontally,
+      },
+      kingsPossitionFake
+    );
+    return steps;
   }
-  if (board[data.from.vertically][data.from.horizontally].pieces == "pawn" && board[data.from.vertically][data.from.horizontally].color == "black") {
-    const steps = allowBlackPawn({
-      vertically: data.from.vertically,
-      horizontally: data.from.horizontally,
-    }, kingsPossitionFake)
-    return steps
+  if (
+    board[data.from.vertically][data.from.horizontally].pieces == "pawn" &&
+    board[data.from.vertically][data.from.horizontally].color == "black"
+  ) {
+    const steps = allowBlackPawn(
+      {
+        vertically: data.from.vertically,
+        horizontally: data.from.horizontally,
+      },
+      kingsPossitionFake
+    );
+    return steps;
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "rook") {
-    const steps = allowRook(board, {
-      vertically: data.from.vertically,
-      horizontally: data.from.horizontally,
-    }, activeColor)
-    return steps
+    const steps = allowRook(
+      board,
+      {
+        vertically: data.from.vertically,
+        horizontally: data.from.horizontally,
+      },
+      activeColor
+    );
+    return steps;
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "knight") {
-    const steps = allowknight(board, {
-      vertically: data.from.vertically,
-      horizontally: data.from.horizontally,
-    }, activeColor)
-    return steps
+    const steps = allowknight(
+      board,
+      {
+        vertically: data.from.vertically,
+        horizontally: data.from.horizontally,
+      },
+      activeColor
+    );
+    return steps;
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "bishop") {
-    const steps = allowBishop(board, {
-      vertically: data.from.vertically,
-      horizontally: data.from.horizontally,
-    }, activeColor)
-    return steps
+    const steps = allowBishop(
+      board,
+      {
+        vertically: data.from.vertically,
+        horizontally: data.from.horizontally,
+      },
+      activeColor
+    );
+    return steps;
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "queen") {
-    const steps = allowQueen(board, {
-      vertically: data.from.vertically,
-      horizontally: data.from.horizontally,
-    }, activeColor)
-    return steps
+    const steps = allowQueen(
+      board,
+      {
+        vertically: data.from.vertically,
+        horizontally: data.from.horizontally,
+      },
+      activeColor
+    );
+    return steps;
   }
   if (board[data.from.vertically][data.from.horizontally].pieces == "king") {
-    const steps = allowKing(board, {
-      vertically: data.from.vertically,
-      horizontally: data.from.horizontally,
-    }, activeColor)
-    return steps
+    const steps = allowKing(
+      board,
+      {
+        vertically: data.from.vertically,
+        horizontally: data.from.horizontally,
+      },
+      activeColor
+    );
+    return steps;
   }
 }
 function checkSteps(step, allowSteps) {
   for (let i = 0; i < allowSteps.length; i++) {
-    if (step.vertically == allowSteps[i].vertically && step.horizontally == allowSteps[i].horizontally) {
-      return true
+    if (
+      step.vertically == allowSteps[i].vertically &&
+      step.horizontally == allowSteps[i].horizontally
+    ) {
+      return true;
     }
   }
-  return false
+  return false;
 }
-
-
-
 
 function allowQueen(board, data, activeColor) {
-  const steps1 = allowBishop(board, data, activeColor)
-  const steps2 = allowRook(board, data, activeColor)
+  const steps1 = allowBishop(board, data, activeColor);
+  const steps2 = allowRook(board, data, activeColor);
   for (let i = 0; i < steps2.length; i++) {
-    steps1.push(steps2[i])
+    steps1.push(steps2[i]);
   }
-  return steps1
+  return steps1;
 }
 
-
-
-
-
 function allowBishop(board, data, activeColor) {
-
-  let opponentColor = "black"
+  let opponentColor = "black";
   if (activeColor == "black") {
-    opponentColor = "white"
+    opponentColor = "white";
   }
   let allow = [];
   for (let i = 1; i < data.vertically + 1; i++) {
     if (data.vertically - i < 0 || data.horizontally - i < 0) {
       break;
     }
-    if (board[data.vertically - i][data.horizontally - i].color == activeColor
+    if (
+      board[data.vertically - i][data.horizontally - i].color == activeColor
     ) {
       break;
     }
-    if (board[data.vertically - i][data.horizontally - i].color == null
-    ) {
+    if (board[data.vertically - i][data.horizontally - i].color == null) {
       allow.push({
         vertically: data.vertically - i,
         horizontally: data.horizontally - i,
       });
     }
-    if (board[data.vertically - i][data.horizontally - i].color == opponentColor
+    if (
+      board[data.vertically - i][data.horizontally - i].color == opponentColor
     ) {
       allow.push({
         vertically: data.vertically - i,
@@ -324,28 +766,24 @@ function allowBishop(board, data, activeColor) {
       break;
     }
   }
-
-
-
-
 
   for (let i = 1; i < data.vertically + 1; i++) {
-    if (data.vertically - i < 0 || data.horizontally + i > 7
+    if (data.vertically - i < 0 || data.horizontally + i > 7) {
+      break;
+    }
+    if (
+      board[data.vertically - i][data.horizontally + i].color == activeColor
     ) {
       break;
     }
-    if (board[data.vertically - i][data.horizontally + i].color == activeColor
-    ) {
-      break;
-    }
-    if (board[data.vertically - i][data.horizontally + i].color == null
-    ) {
+    if (board[data.vertically - i][data.horizontally + i].color == null) {
       allow.push({
         vertically: data.vertically - i,
         horizontally: data.horizontally + i,
       });
     }
-    if (board[data.vertically - i][data.horizontally + i].color == opponentColor
+    if (
+      board[data.vertically - i][data.horizontally + i].color == opponentColor
     ) {
       allow.push({
         vertically: data.vertically - i,
@@ -355,30 +793,23 @@ function allowBishop(board, data, activeColor) {
     }
   }
 
-
-
-
-
-
-
-
   for (let i = 1; i < 8 - data.vertically; i++) {
-    if (data.vertically + i > 7 || data.horizontally - i < 0
+    if (data.vertically + i > 7 || data.horizontally - i < 0) {
+      break;
+    }
+    if (
+      board[data.vertically + i][data.horizontally - i].color == activeColor
     ) {
       break;
     }
-    if (board[data.vertically + i][data.horizontally - i].color == activeColor
-    ) {
-      break;
-    }
-    if (board[data.vertically + i][data.horizontally - i].color == null
-    ) {
+    if (board[data.vertically + i][data.horizontally - i].color == null) {
       allow.push({
         vertically: data.vertically + i,
         horizontally: data.horizontally - i,
       });
     }
-    if (board[data.vertically + i][data.horizontally - i].color == opponentColor
+    if (
+      board[data.vertically + i][data.horizontally - i].color == opponentColor
     ) {
       allow.push({
         vertically: data.vertically + i,
@@ -388,29 +819,23 @@ function allowBishop(board, data, activeColor) {
     }
   }
 
-
-
-
-
-
-
   for (let i = 1; i < 8 - data.vertically; i++) {
-    if (data.vertically + i > 7 || data.horizontally + i > 7
+    if (data.vertically + i > 7 || data.horizontally + i > 7) {
+      break;
+    }
+    if (
+      board[data.vertically + i][data.horizontally + i].color == activeColor
     ) {
       break;
     }
-    if (board[data.vertically + i][data.horizontally + i].color == activeColor
-    ) {
-      break;
-    }
-    if (board[data.vertically + i][data.horizontally + i].color == null
-    ) {
+    if (board[data.vertically + i][data.horizontally + i].color == null) {
       allow.push({
         vertically: data.vertically + i,
         horizontally: data.horizontally + i,
       });
     }
-    if (board[data.vertically + i][data.horizontally + i].color == opponentColor
+    if (
+      board[data.vertically + i][data.horizontally + i].color == opponentColor
     ) {
       allow.push({
         vertically: data.vertically + i,
@@ -420,184 +845,213 @@ function allowBishop(board, data, activeColor) {
     }
   }
 
-  return allow
+  return allow;
 }
-
-
 
 function allowKing(board, data, activeColor) {
   // data = { vertically: 0, horizontally: 0 };
   let allow = [];
-  if (data.vertically + 1 < 8 && data.horizontally + 1 < 8 && board[data.vertically + 1][data.horizontally + 1].color !== activeColor) {
+  if (
+    data.vertically + 1 < 8 &&
+    data.horizontally + 1 < 8 &&
+    board[data.vertically + 1][data.horizontally + 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically + 1,
       horizontally: data.horizontally + 1,
     });
   }
 
-  if (data.vertically < 8 && data.horizontally + 1 < 8 && board[data.vertically][data.horizontally + 1].color !== activeColor) {
+  if (
+    data.vertically < 8 &&
+    data.horizontally + 1 < 8 &&
+    board[data.vertically][data.horizontally + 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically,
       horizontally: data.horizontally + 1,
     });
   }
 
-  if (data.vertically < 8 && data.horizontally - 1 > -1 && board[data.vertically][data.horizontally - 1].color !== activeColor) {
+  if (
+    data.vertically < 8 &&
+    data.horizontally - 1 > -1 &&
+    board[data.vertically][data.horizontally - 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically,
       horizontally: data.horizontally - 1,
     });
   }
 
-  if (data.vertically + 1 < 8 && data.horizontally < 8 && board[data.vertically + 1][data.horizontally].color !== activeColor) {
+  if (
+    data.vertically + 1 < 8 &&
+    data.horizontally < 8 &&
+    board[data.vertically + 1][data.horizontally].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically + 1,
       horizontally: data.horizontally,
     });
   }
 
-
-  if (data.vertically + 1 < 8 && data.horizontally - 1 > -1 && board[data.vertically + 1][data.horizontally - 1].color !== activeColor) {
+  if (
+    data.vertically + 1 < 8 &&
+    data.horizontally - 1 > -1 &&
+    board[data.vertically + 1][data.horizontally - 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically + 1,
       horizontally: data.horizontally - 1,
     });
   }
 
-
-  if (data.vertically - 1 > -1 && data.horizontally - 1 > -1 && board[data.vertically - 1][data.horizontally - 1].color !== activeColor) {
+  if (
+    data.vertically - 1 > -1 &&
+    data.horizontally - 1 > -1 &&
+    board[data.vertically - 1][data.horizontally - 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically - 1,
       horizontally: data.horizontally - 1,
     });
   }
 
-
-
-  if (data.vertically - 1 > -1 && data.horizontally > -1 && board[data.vertically - 1][data.horizontally].color !== activeColor) {
+  if (
+    data.vertically - 1 > -1 &&
+    data.horizontally > -1 &&
+    board[data.vertically - 1][data.horizontally].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically - 1,
       horizontally: data.horizontally,
     });
   }
 
-
-
-  if (data.vertically - 1 > -1 && data.horizontally + 1 < 8 && board[data.vertically - 1][data.horizontally + 1].color !== activeColor) {
+  if (
+    data.vertically - 1 > -1 &&
+    data.horizontally + 1 < 8 &&
+    board[data.vertically - 1][data.horizontally + 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically - 1,
       horizontally: data.horizontally + 1,
     });
   }
-  return allow
+  return allow;
 }
-
-
-
-
-
-
-
-
 
 function allowknight(board, data, activeColor) {
-  // data = { vertically: 0, horizontally: 0 };
   let allow = [];
-  if (data.vertically + 2 < 8 && data.horizontally + 1 < 8 && board[data.vertically + 2][data.horizontally + 1].color !== activeColor) {
+  if (
+    data.vertically + 2 < 8 &&
+    data.horizontally + 1 < 8 &&
+    board[data.vertically + 2][data.horizontally + 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically + 2,
       horizontally: data.horizontally + 1,
     });
   }
 
-  if (data.vertically + 2 < 8 && data.horizontally - 1 > -1 && board[data.vertically + 2][data.horizontally - 1].color !== activeColor) {
+  if (
+    data.vertically + 2 < 8 &&
+    data.horizontally - 1 > -1 &&
+    board[data.vertically + 2][data.horizontally - 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically + 2,
       horizontally: data.horizontally - 1,
     });
   }
 
-  if (data.vertically + 1 < 8 && data.horizontally + 2 < 8 && board[data.vertically + 1][data.horizontally + 2].color !== activeColor) {
+  if (
+    data.vertically + 1 < 8 &&
+    data.horizontally + 2 < 8 &&
+    board[data.vertically + 1][data.horizontally + 2].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically + 1,
       horizontally: data.horizontally + 2,
     });
   }
 
-
-
-  if (data.vertically - 1 > -1 && data.horizontally + 2 < 8 && board[data.vertically - 1][data.horizontally + 2].color !== activeColor) {
+  if (
+    data.vertically - 1 > -1 &&
+    data.horizontally + 2 < 8 &&
+    board[data.vertically - 1][data.horizontally + 2].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically - 1,
       horizontally: data.horizontally + 2,
     });
   }
 
-
-  if (data.vertically - 2 > -1 && data.horizontally - 1 > -1 && board[data.vertically - 2][data.horizontally - 1].color !== activeColor) {
+  if (
+    data.vertically - 2 > -1 &&
+    data.horizontally - 1 > -1 &&
+    board[data.vertically - 2][data.horizontally - 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically - 2,
       horizontally: data.horizontally - 1,
     });
   }
 
-
-
-  if (data.vertically - 2 > -1 && data.horizontally + 1 < 8 && board[data.vertically - 2][data.horizontally + 1].color !== activeColor) {
+  if (
+    data.vertically - 2 > -1 &&
+    data.horizontally + 1 < 8 &&
+    board[data.vertically - 2][data.horizontally + 1].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically - 2,
       horizontally: data.horizontally + 1,
     });
   }
 
-  if (data.vertically - 1 > -1 && data.horizontally - 2 > -1 && board[data.vertically - 1][data.horizontally - 2].color !== activeColor) {
+  if (
+    data.vertically - 1 > -1 &&
+    data.horizontally - 2 > -1 &&
+    board[data.vertically - 1][data.horizontally - 2].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically - 1,
       horizontally: data.horizontally - 2,
     });
   }
 
-
-
-  if (data.vertically + 1 < 8 && data.horizontally - 2 > -1 && board[data.vertically + 1][data.horizontally - 2].color !== activeColor) {
+  if (
+    data.vertically + 1 < 8 &&
+    data.horizontally - 2 > -1 &&
+    board[data.vertically + 1][data.horizontally - 2].color !== activeColor
+  ) {
     allow.push({
       vertically: data.vertically + 1,
       horizontally: data.horizontally - 2,
     });
   }
-  return allow
+  return allow;
 }
 
-
-
-
-
-
-
-
-
-
 function allowRook(board, data, activeColor) {
-  // data = { vertically: 0, horizontally: 0 };
-  let opponentColor
+  let opponentColor;
   if (activeColor == "black") {
-    opponentColor = "white"
-  } else { opponentColor = "black" }
+    opponentColor = "white";
+  } else {
+    opponentColor = "black";
+  }
   let allow = [];
   for (let i = data.vertically + 1; i < 8; i++) {
-    if (board[i][data.horizontally].color == activeColor
-    ) {
+    if (board[i][data.horizontally].color == activeColor) {
       break;
     }
-    if (board[i][data.horizontally].color == null
-    ) {
+    if (board[i][data.horizontally].color == null) {
       allow.push({
         vertically: i,
         horizontally: data.horizontally,
       });
     }
-    if (board[i][data.horizontally].color == opponentColor
-    ) {
+    if (board[i][data.horizontally].color == opponentColor) {
       allow.push({
         vertically: i,
         horizontally: data.horizontally,
@@ -607,19 +1061,16 @@ function allowRook(board, data, activeColor) {
   }
 
   for (let i = data.vertically - 1; i > -1; i--) {
-    if (board[i][data.horizontally].color == activeColor
-    ) {
+    if (board[i][data.horizontally].color == activeColor) {
       break;
     }
-    if (board[i][data.horizontally].color == null
-    ) {
+    if (board[i][data.horizontally].color == null) {
       allow.push({
         vertically: i,
         horizontally: data.horizontally,
       });
     }
-    if (board[i][data.horizontally].color == opponentColor
-    ) {
+    if (board[i][data.horizontally].color == opponentColor) {
       allow.push({
         vertically: i,
         horizontally: data.horizontally,
@@ -627,47 +1078,37 @@ function allowRook(board, data, activeColor) {
       break;
     }
   }
-
-
 
   for (let i = data.horizontally - 1; i > -1; i--) {
-    if (board[data.vertically][i].color == activeColor
-    ) {
+    if (board[data.vertically][i].color == activeColor) {
       break;
     }
-    if (board[data.vertically][i].color == null
-    ) {
+    if (board[data.vertically][i].color == null) {
       allow.push({
         vertically: data.vertically,
         horizontally: i,
       });
     }
-    if (board[data.vertically][i].color == opponentColor
-    ) {
+    if (board[data.vertically][i].color == opponentColor) {
       allow.push({
         vertically: data.vertically,
         horizontally: i,
       });
       break;
     }
-
   }
-
 
   for (let i = data.horizontally + 1; i < 8; i++) {
-    if (board[data.vertically][i].color == activeColor
-    ) {
+    if (board[data.vertically][i].color == activeColor) {
       break;
     }
-    if (board[data.vertically][i].color == null
-    ) {
+    if (board[data.vertically][i].color == null) {
       allow.push({
         vertically: data.vertically,
         horizontally: i,
       });
     }
-    if (board[data.vertically][i].color == opponentColor
-    ) {
+    if (board[data.vertically][i].color == opponentColor) {
       allow.push({
         vertically: data.vertically,
         horizontally: i,
@@ -675,50 +1116,36 @@ function allowRook(board, data, activeColor) {
       break;
     }
   }
-  return allow
+  return allow;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let isTouched={}
 function allowWhitePawn(data, kingsPossitionFake) {
-  let bigData = { from: { vertically: data.vertically, horizontally: data.horizontally }, to: { vertically: data.vertically, horizontally: data.horizontally } }
-  // data = { vertically: 0, horizontally: 0 };
+  let bigData = {
+    from: { vertically: data.vertically, horizontally: data.horizontally },
+    to: { vertically: data.vertically, horizontally: data.horizontally },
+  };
   let allow = [];
   if (data.vertically < 1) {
     return [];
   }
-  // if (check(step(data,board,true),{vertically:kingsPossitionFake[activeColor].vertically,horizontally:kingsPossitionFake[activeColor].horizontally},activeColor)) {
-  //   notAllowed=true
-  // }
   if (board[data.vertically - 1][data.horizontally].color == null) {
-    bigData.to.vertically = data.vertically - 1
-    let step1 = step(bigData, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake["white"].vertically, horizontally: step1.kingsPossitionFake["white"].horizontally }, "white")) {
+    bigData.to.vertically = data.vertically - 1;
+    let step1 = step(bigData, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake["white"].vertically,
+          horizontally: step1.kingsPossitionFake["white"].horizontally,
+        },
+        "white"
+      )
+    ) {
       allow.push({
         vertically: data.vertically - 1,
         horizontally: data.horizontally,
       });
     }
-    // allow.push({
-    //   vertically: data.vertically - 1,
-    //   horizontally: data.horizontally,
-    // });
   }
   if (
     data.vertically > 0 &&
@@ -726,97 +1153,117 @@ function allowWhitePawn(data, kingsPossitionFake) {
     board[data.vertically - 2][data.horizontally].color == null &&
     board[data.vertically - 1][data.horizontally].color == null
   ) {
-    bigData.to.vertically = data.vertically - 2
-    let step1 = step(bigData, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake["white"].vertically, horizontally: step1.kingsPossitionFake["white"].horizontally }, "white")) {
+    bigData.to.vertically = data.vertically - 2;
+    let step1 = step(bigData, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake["white"].vertically,
+          horizontally: step1.kingsPossitionFake["white"].horizontally,
+        },
+        "white"
+      )
+    ) {
       allow.push({
         vertically: data.vertically - 2,
         horizontally: data.horizontally,
       });
     }
-
-    // allow.push({
-    //   vertically: data.vertically - 2,
-    //   horizontally: data.horizontally,
-    // });
   }
-  // if (
-  //   data.horizontally == 0 &&
-  //   board[data.vertically-1][data.horizontally + 1].color == null&&
-  //   (enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1)
-  // ) {  
-  //   allow.push({
-  //   vertically: data.vertically - 1,
-  //   horizontally: data.horizontally + 1,
-  // });}
 
   if (
-    data.horizontally == 0 &&
-    board[data.vertically - 1][data.horizontally + 1].color == "black"
-    || enPassant.black.vertically == data.vertically - 1 && enPassant.black.horizontally == data.horizontally + 1
+    (data.horizontally == 0 &&
+      board[data.vertically - 1][data.horizontally + 1].color == "black") ||
+    (enPassant.black.vertically == data.vertically - 1 &&
+      enPassant.black.horizontally == data.horizontally + 1)
   ) {
-    // if (board[data.vertically-1][data.horizontally + 1].color == "black"||enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
-    bigData.to.vertically = data.vertically - 1
-    bigData.to.horizontally = data.horizontally + 1
-    let step1 = step(bigData, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake["white"].vertically, horizontally: step1.kingsPossitionFake["white"].horizontally }, "white")) {
+    bigData.to.vertically = data.vertically - 1;
+    bigData.to.horizontally = data.horizontally + 1;
+    let step1 = step(bigData, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake["white"].vertically,
+          horizontally: step1.kingsPossitionFake["white"].horizontally,
+        },
+        "white"
+      )
+    ) {
       allow.push({
         vertically: data.vertically - 1,
         horizontally: data.horizontally + 1,
       });
     }
-    // allow.push({
-    //     vertically: data.vertically - 1,
-    //     horizontally: data.horizontally + 1,
-    //   });      
-    // }
-    // if (enPassant.black.vertically==data.vertically-1 &&enPassant.black.horizontally==data.horizontally+1) {
-    //   allow.push({
-    //     vertically: data.vertically - 1,
-    //     horizontally: data.horizontally + 1,
-    //   });
-    // }
-
   } else if (
-    data.horizontally == 7 &&
-    board[data.vertically - 1][data.horizontally - 1].color == "black"
-    || enPassant.black.vertically == data.vertically - 1 && enPassant.black.horizontally == data.horizontally - 1
+    (data.horizontally == 7 &&
+      board[data.vertically - 1][data.horizontally - 1].color == "black") ||
+    (enPassant.black.vertically == data.vertically - 1 &&
+      enPassant.black.horizontally == data.horizontally - 1)
   ) {
-    bigData.to.vertically = data.vertically - 1
-    bigData.to.horizontally = data.horizontally - 1
-    let step1 = step(bigData, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake["white"].vertically, horizontally: step1.kingsPossitionFake["white"].horizontally }, "white")) {
+    bigData.to.vertically = data.vertically - 1;
+    bigData.to.horizontally = data.horizontally - 1;
+    let step1 = step(bigData, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake["white"].vertically,
+          horizontally: step1.kingsPossitionFake["white"].horizontally,
+        },
+        "white"
+      )
+    ) {
       allow.push({
         vertically: data.vertically - 1,
         horizontally: data.horizontally - 1,
       });
     }
-    // allow.push({
-    //   vertically: data.vertically - 1,
-    //   horizontally: data.horizontally - 1,
-    // });
   } else {
     if (data.horizontally < 7 && data.horizontally > 0) {
-      if (board[data.vertically - 1][data.horizontally - 1].color == "black" || enPassant.black.vertically == data.vertically - 1 && enPassant.black.horizontally == data.horizontally - 1) {
-        bigData.to.vertically = data.vertically - 1
-        bigData.to.horizontally = data.horizontally - 1
-        let step1 = step(bigData, board, true)
-        if (!check(step1.board, { vertically: step1.kingsPossitionFake["white"].vertically, horizontally: step1.kingsPossitionFake["white"].horizontally }, "white")) {
+      if (
+        board[data.vertically - 1][data.horizontally - 1].color == "black" ||
+        (enPassant.black.vertically == data.vertically - 1 &&
+          enPassant.black.horizontally == data.horizontally - 1)
+      ) {
+        bigData.to.vertically = data.vertically - 1;
+        bigData.to.horizontally = data.horizontally - 1;
+        let step1 = step(bigData, board, true);
+        if (
+          !check(
+            step1.board,
+            {
+              vertically: step1.kingsPossitionFake["white"].vertically,
+              horizontally: step1.kingsPossitionFake["white"].horizontally,
+            },
+            "white"
+          )
+        ) {
           allow.push({
             vertically: data.vertically - 1,
             horizontally: data.horizontally - 1,
           });
         }
-        // allow.push({
-        //   vertically: data.vertically - 1,
-        //   horizontally: data.horizontally - 1,
-        // });
       }
-      if (board[data.vertically - 1][data.horizontally + 1].color == "black" || enPassant.black.vertically == data.vertically - 1 && enPassant.black.horizontally == data.horizontally + 1) {
-        bigData.to.vertically = data.vertically - 1
-        bigData.to.horizontally = data.horizontally + 1
-        let step1 = step(bigData, board, true)
-        if (!check(step1.board, { vertically: step1.kingsPossitionFake["white"].vertically, horizontally: step1.kingsPossitionFake["white"].horizontally }, "white")) {
+      if (
+        board[data.vertically - 1][data.horizontally + 1].color == "black" ||
+        (enPassant.black.vertically == data.vertically - 1 &&
+          enPassant.black.horizontally == data.horizontally + 1)
+      ) {
+        bigData.to.vertically = data.vertically - 1;
+        bigData.to.horizontally = data.horizontally + 1;
+        let step1 = step(bigData, board, true);
+        if (
+          !check(
+            step1.board,
+            {
+              vertically: step1.kingsPossitionFake["white"].vertically,
+              horizontally: step1.kingsPossitionFake["white"].horizontally,
+            },
+            "white"
+          )
+        ) {
           allow.push({
             vertically: data.vertically - 1,
             horizontally: data.horizontally + 1,
@@ -833,7 +1280,10 @@ function allowWhitePawn(data, kingsPossitionFake) {
 }
 
 function allowBlackPawn(data, kingsPossitionFake) {
-  let bigData = { from: { vertically: data.vertically, horizontally: data.horizontally }, to: { vertically: data.vertically, horizontally: data.horizontally } }
+  let bigData = {
+    from: { vertically: data.vertically, horizontally: data.horizontally },
+    to: { vertically: data.vertically, horizontally: data.horizontally },
+  };
 
   // data = { vertically: 0, horizontally: 0 };
   let allow = [];
@@ -841,16 +1291,24 @@ function allowBlackPawn(data, kingsPossitionFake) {
     return [];
   }
   if (board[data.vertically + 1][data.horizontally].color == null) {
-    bigData.to.vertically = data.vertically + 1
-    bigData.to.horizontally = data.horizontally
-    let step1 = step(bigData, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake["black"].vertically, horizontally: step1.kingsPossitionFake["black"].horizontally }, "black")) {
+    bigData.to.vertically = data.vertically + 1;
+    bigData.to.horizontally = data.horizontally;
+    let step1 = step(bigData, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake["black"].vertically,
+          horizontally: step1.kingsPossitionFake["black"].horizontally,
+        },
+        "black"
+      )
+    ) {
       allow.push({
         vertically: data.vertically + 1,
         horizontally: data.horizontally,
       });
     }
-
   }
   if (
     data.vertically < 6 &&
@@ -858,39 +1316,68 @@ function allowBlackPawn(data, kingsPossitionFake) {
     board[data.vertically + 2][data.horizontally].color == null &&
     board[data.vertically + 1][data.horizontally].color == null
   ) {
-    bigData.to.vertically = data.vertically + 2
-    bigData.to.horizontally = data.horizontally
-    let step1 = step(bigData, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake["black"].vertically, horizontally: step1.kingsPossitionFake["black"].horizontally }, "black")) {
+    bigData.to.vertically = data.vertically + 2;
+    bigData.to.horizontally = data.horizontally;
+    let step1 = step(bigData, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake["black"].vertically,
+          horizontally: step1.kingsPossitionFake["black"].horizontally,
+        },
+        "black"
+      )
+    ) {
       allow.push({
         vertically: data.vertically + 2,
         horizontally: data.horizontally,
       });
     }
-
   }
   if (
-    data.horizontally == 7 &&
-    board[data.vertically + 1][data.horizontally - 1].color == "white" || enPassant.white.vertically == data.vertically + 1 && enPassant.white.horizontally == data.horizontally - 1
+    (data.horizontally == 7 &&
+      board[data.vertically + 1][data.horizontally - 1].color == "white") ||
+    (enPassant.white.vertically == data.vertically + 1 &&
+      enPassant.white.horizontally == data.horizontally - 1)
   ) {
-    bigData.to.vertically = data.vertically + 1
-    bigData.to.horizontally = data.horizontally - 1
-    let step1 = step(bigData, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake["black"].vertically, horizontally: step1.kingsPossitionFake["black"].horizontally }, "black")) {
+    bigData.to.vertically = data.vertically + 1;
+    bigData.to.horizontally = data.horizontally - 1;
+    let step1 = step(bigData, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake["black"].vertically,
+          horizontally: step1.kingsPossitionFake["black"].horizontally,
+        },
+        "black"
+      )
+    ) {
       allow.push({
         vertically: data.vertically + 1,
         horizontally: data.horizontally - 1,
       });
     }
-
   } else if (
-    data.horizontally == 0 &&
-    board[data.vertically + 1][data.horizontally + 1].color == "white" || enPassant.white.vertically == data.vertically + 1 && enPassant.white.horizontally == data.horizontally + 1
+    (data.horizontally == 0 &&
+      board[data.vertically + 1][data.horizontally + 1].color == "white") ||
+    (enPassant.white.vertically == data.vertically + 1 &&
+      enPassant.white.horizontally == data.horizontally + 1)
   ) {
-    bigData.to.vertically = data.vertically + 1
-    bigData.to.horizontally = data.horizontally + 1
-    let step1 = step(bigData, board, true)
-    if (!check(step1.board, { vertically: step1.kingsPossitionFake["black"].vertically, horizontally: step1.kingsPossitionFake["black"].horizontally }, "black")) {
+    bigData.to.vertically = data.vertically + 1;
+    bigData.to.horizontally = data.horizontally + 1;
+    let step1 = step(bigData, board, true);
+    if (
+      !check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake["black"].vertically,
+          horizontally: step1.kingsPossitionFake["black"].horizontally,
+        },
+        "black"
+      )
+    ) {
       allow.push({
         vertically: data.vertically + 1,
         horizontally: data.horizontally + 1,
@@ -898,22 +1385,48 @@ function allowBlackPawn(data, kingsPossitionFake) {
     }
   } else {
     if (data.horizontally > 0 && data.horizontally < 7) {
-      if (board[data.vertically + 1][data.horizontally + 1].color == "white" || enPassant.white.vertically == data.vertically + 1 && enPassant.white.horizontally == data.horizontally + 1) {
-        bigData.to.vertically = data.vertically + 1
-        bigData.to.horizontally = data.horizontally + 1
-        let step1 = step(bigData, board, true)
-        if (!check(step1.board, { vertically: step1.kingsPossitionFake["black"].vertically, horizontally: step1.kingsPossitionFake["black"].horizontally }, "black")) {
+      if (
+        board[data.vertically + 1][data.horizontally + 1].color == "white" ||
+        (enPassant.white.vertically == data.vertically + 1 &&
+          enPassant.white.horizontally == data.horizontally + 1)
+      ) {
+        bigData.to.vertically = data.vertically + 1;
+        bigData.to.horizontally = data.horizontally + 1;
+        let step1 = step(bigData, board, true);
+        if (
+          !check(
+            step1.board,
+            {
+              vertically: step1.kingsPossitionFake["black"].vertically,
+              horizontally: step1.kingsPossitionFake["black"].horizontally,
+            },
+            "black"
+          )
+        ) {
           allow.push({
             vertically: data.vertically + 1,
             horizontally: data.horizontally + 1,
           });
         }
       }
-      if (board[data.vertically + 1][data.horizontally - 1].color == "white" || enPassant.white.vertically == data.vertically + 1 && enPassant.white.horizontally == data.horizontally - 1) {
-        bigData.to.vertically = data.vertically + 1
-        bigData.to.horizontally = data.horizontally - 1
-        let step1 = step(bigData, board, true)
-        if (!check(step1.board, { vertically: step1.kingsPossitionFake["black"].vertically, horizontally: step1.kingsPossitionFake["black"].horizontally }, "black")) {
+      if (
+        board[data.vertically + 1][data.horizontally - 1].color == "white" ||
+        (enPassant.white.vertically == data.vertically + 1 &&
+          enPassant.white.horizontally == data.horizontally - 1)
+      ) {
+        bigData.to.vertically = data.vertically + 1;
+        bigData.to.horizontally = data.horizontally - 1;
+        let step1 = step(bigData, board, true);
+        if (
+          !check(
+            step1.board,
+            {
+              vertically: step1.kingsPossitionFake["black"].vertically,
+              horizontally: step1.kingsPossitionFake["black"].horizontally,
+            },
+            "black"
+          )
+        ) {
           allow.push({
             vertically: data.vertically + 1,
             horizontally: data.horizontally - 1,
@@ -934,34 +1447,39 @@ function step(data, experimentalBoard, fake) {
 
   if (board[data.from.vertically][data.from.horizontally].pieces == "pawn") {
     if (board[data.from.vertically][data.from.horizontally].color == "white") {
-      if (data.from.vertically - data.to.vertically == 1 && Math.abs(data.from.horizontally - data.to.horizontally) == 1 && board[data.to.vertically][data.to.horizontally].color == null) {
+      if (
+        data.from.vertically - data.to.vertically == 1 &&
+        Math.abs(data.from.horizontally - data.to.horizontally) == 1 &&
+        board[data.to.vertically][data.to.horizontally].color == null
+      ) {
         board[data.to.vertically + 1][data.to.horizontally].color = null;
         board[data.to.vertically + 1][data.to.horizontally].pieces = null;
       }
     }
     if (board[data.from.vertically][data.from.horizontally].color == "black") {
-      if (data.to.vertically - data.from.vertically == 1 && Math.abs(data.from.horizontally - data.to.horizontally) == 1 && board[data.to.vertically][data.to.horizontally].color == null) {
+      if (
+        data.to.vertically - data.from.vertically == 1 &&
+        Math.abs(data.from.horizontally - data.to.horizontally) == 1 &&
+        board[data.to.vertically][data.to.horizontally].color == null
+      ) {
         board[data.to.vertically - 1][data.to.horizontally].color = null;
         board[data.to.vertically - 1][data.to.horizontally].pieces = null;
       }
     }
 
-
-
     if (!fake) {
       if (Math.abs(data.to.vertically - data.from.vertically) == 2) {
-        if (board[data.from.vertically][data.from.horizontally].color == "white") {
-
-          enPassant.white.vertically = data.from.vertically - 1
-          enPassant.white.horizontally = data.from.horizontally
+        if (
+          board[data.from.vertically][data.from.horizontally].color == "white"
+        ) {
+          enPassant.white.vertically = data.from.vertically - 1;
+          enPassant.white.horizontally = data.from.horizontally;
         } else {
-          enPassant.black.vertically = data.from.vertically + 1
-          enPassant.black.horizontally = data.from.horizontally
+          enPassant.black.vertically = data.from.vertically + 1;
+          enPassant.black.horizontally = data.from.horizontally;
         }
       }
     }
-
-
   }
   board[data.to.vertically][data.to.horizontally].color =
     board[data.from.vertically][data.from.horizontally].color;
@@ -973,25 +1491,24 @@ function step(data, experimentalBoard, fake) {
   board[data.to.vertically][data.to.horizontally].isTouched = true;
 
   if (board[data.to.vertically][data.to.horizontally].pieces == "king") {
-    let activeColor
+    let activeColor;
     if (globalColor == "white") {
-      activeColor = "black"
+      activeColor = "black";
     } else {
-      activeColor = "white"
+      activeColor = "white";
     }
-    kingsPossitionFake[activeColor].vertically = data.to.vertically
-    kingsPossitionFake[activeColor].horizontally = data.to.horizontally
+    kingsPossitionFake[activeColor].vertically = data.to.vertically;
+    kingsPossitionFake[activeColor].horizontally = data.to.horizontally;
   }
   if (!fake) {
     if (board[data.to.vertically][data.to.horizontally].color == "white") {
-      enPassant.black.vertically = null
-      enPassant.black.horizontally = null
+      enPassant.black.vertically = null;
+      enPassant.black.horizontally = null;
     } else {
-      enPassant.white.vertically = null
-      enPassant.white.horizontally = null
+      enPassant.white.vertically = null;
+      enPassant.white.horizontally = null;
     }
   }
-
 
   return { board, kingsPossitionFake };
 }
@@ -1009,7 +1526,7 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
-  allPlayers.push(socket.id)
+  allPlayers.push(socket.id);
   socket.on("start", (data) => {
     socket.join(board);
     for (let i = 0; i < allPlayers.length; i++) {
@@ -1021,70 +1538,113 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
-    if (!data || !data.from || !data.to || (!data.from.vertically && data.from.vertically !== 0) || (!data.from.horizontally && data.from.horizontally !== 0) || (!data.to.vertically && data.to.vertically !== 0) || (!data.to.horizontally && data.to.horizontally !== 0)) {
-      return false
+    if (
+      !data ||
+      !data.from ||
+      !data.to ||
+      (!data.from.vertically && data.from.vertically !== 0) ||
+      (!data.from.horizontally && data.from.horizontally !== 0) ||
+      (!data.to.vertically && data.to.vertically !== 0) ||
+      (!data.to.horizontally && data.to.horizontally !== 0)
+    ) {
+      return false;
     }
-    if (data.from.vertically < 0 || data.from.vertically > 7 || data.from.horizontally < 0 || data.from.horizontally > 7) {
-      return false
+    if (
+      data.from.vertically < 0 ||
+      data.from.vertically > 7 ||
+      data.from.horizontally < 0 ||
+      data.from.horizontally > 7
+    ) {
+      return false;
     }
-    if (data.to.vertically < 0 || data.to.vertically > 7 || data.to.horizontally < 0 || data.to.horizontally > 7) {
-      return []
+    if (
+      data.to.vertically < 0 ||
+      data.to.vertically > 7 ||
+      data.to.horizontally < 0 ||
+      data.to.horizontally > 7
+    ) {
+      return [];
     }
 
-    let notAllowed = false
-    let activeColor
+    let notAllowed = false;
+    let activeColor;
     if (globalColor == "white") {
-      activeColor = "black"
-    } else { activeColor = "white" }
-    if (board[data.from.vertically][data.from.horizontally].color == globalColor) {
-      notAllowed = true
+      activeColor = "black";
+    } else {
+      activeColor = "white";
+    }
+    if (
+      board[data.from.vertically][data.from.horizontally].color == globalColor
+    ) {
+      notAllowed = true;
     }
 
     if (kingsPossition[activeColor].check) {
-      checkMat(board, activeColor)
+      checkMat(board, activeColor);
     }
-    let step1 = step(data, board, true)
-    if (check(step1.board, { vertically: step1.kingsPossitionFake[activeColor].vertically, horizontally: step1.kingsPossitionFake[activeColor].horizontally }, activeColor)) {
-
-      notAllowed = true
+    let step1 = step(data, board, true);
+    if (
+      check(
+        step1.board,
+        {
+          vertically: step1.kingsPossitionFake[activeColor].vertically,
+          horizontally: step1.kingsPossitionFake[activeColor].horizontally,
+        },
+        activeColor
+      )
+    ) {
+      notAllowed = true;
     }
 
-    const steps = allowSteps(data, board[data.from.vertically][data.from.horizontally].color)
+    const steps = allowSteps(
+      data,
+      board[data.from.vertically][data.from.horizontally].color
+    );
     if (steps) {
       const myStep = {
         vertically: data.to.vertically,
-        horizontally: data.to.horizontally
-      }
+        horizontally: data.to.horizontally,
+      };
 
-      if (!checkSteps(myStep, steps) || globalColor == board[data.from.vertically][data.from.horizontally].color) {
-        notAllowed = true
+      if (
+        !checkSteps(myStep, steps) ||
+        globalColor == board[data.from.vertically][data.from.horizontally].color
+      ) {
+        notAllowed = true;
       }
 
       if (!notAllowed) {
-        step1 = step(data, board, false)
+        step1 = step(data, board, false);
         board = step1.board;
 
-        kingsPossition = step1.kingsPossitionFake
+        kingsPossition = step1.kingsPossitionFake;
         // baceq es koment@
-        if (check(board, { vertically: kingsPossitionFake[globalColor].vertically, horizontally: kingsPossitionFake[globalColor].horizontally }, globalColor)) {
-          kingsPossition[globalColor].check = true
+        if (
+          check(
+            board,
+            {
+              vertically: kingsPossitionFake[globalColor].vertically,
+              horizontally: kingsPossitionFake[globalColor].horizontally,
+            },
+            globalColor
+          )
+        ) {
+          kingsPossition[globalColor].check = true;
         }
 
         if (kingsPossition[globalColor].check) {
-          checkMat(board, globalColor)
+          checkMat(board, globalColor);
         }
-        kingsPossition[activeColor].check = false
-        let thiscolor
+        kingsPossition[activeColor].check = false;
+        let thiscolor;
         if (globalColor == "white") {
-          globalColor = "black"
-          thiscolor = "black"
+          globalColor = "black";
+          thiscolor = "black";
         } else {
-          thiscolor = "white"
-          globalColor = "white"
+          thiscolor = "white";
+          globalColor = "white";
         }
-
       }
-
     }
     for (let i = 0; i < allPlayers.length; i++) {
       socket.to(allPlayers[i]).emit("receive_step", board);
@@ -1094,29 +1654,48 @@ io.on("connection", (socket) => {
     }
   });
 
-
-
-
-
-
-
   socket.on("allow", (data) => {
-    if (!data || !data.from || !data.to || !data.from.vertically || !data.from.horizontally || !data.to.vertically || !data.to.horizontally) {
-      return false
+    if (
+      !data ||
+      !data.from ||
+      !data.to ||
+      !data.from.vertically ||
+      !data.from.horizontally ||
+      !data.to.vertically ||
+      !data.to.horizontally
+    ) {
+      // socket.emit("receive_allow", false);
+      return false;
     }
-    if (data.from.vertically < 0 || data.from.vertically > 7 || data.from.horizontally < 0 || data.from.horizontally > 7) {
-      return false
+    if (
+      data.from.vertically < 0 ||
+      data.from.vertically > 7 ||
+      data.from.horizontally < 0 ||
+      data.from.horizontally > 7
+    ) {
+      // socket.emit("receive_allow", false);
+      return false;
     }
-    if (data.to.vertically < 0 || data.to.vertically > 7 || data.to.horizontally < 0 || data.to.horizontally > 7) {
-      return []
+    if (
+      data.to.vertically < 0 ||
+      data.to.vertically > 7 ||
+      data.to.horizontally < 0 ||
+      data.to.horizontally > 7
+    ) {
+      return [];
     }
-    if (data.vertically < 0 || data.vertically > 7 || data.horizontally < 0 || data.horizontally > 7) {
-      return []
+    if (
+      data.vertically < 0 ||
+      data.vertically > 7 ||
+      data.horizontally < 0 ||
+      data.horizontally > 7
+    ) {
+      return [];
     }
     if (board[data.vertically][data.horizontally].color !== globalColor) {
-      return []
+      return [];
     }
-    let allow = allowSteps(data, globalColor)
+    let allow = allowSteps(data, globalColor);
     for (let i = 0; i < allPlayers.length; i++) {
       socket.to(allPlayers[i]).emit("receive_allow", allow);
     }
