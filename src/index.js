@@ -47,7 +47,6 @@ io.on("connection", (socket) => {
       const moves = chessBoard.whereCanMove(fromI, fromJ);
 
       if (moves.length > 0) {
-
         const toI = to.vertically;
         const toJ = to.horizontally;
         
