@@ -63,6 +63,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(3001, () => {
-  console.log('\n\n\n==================\n\n\n');
-  console.log("SERVER IS RUNNING");
+  console.log('\n\n\n========- SERVER IS RUNNING -========\n');
 });

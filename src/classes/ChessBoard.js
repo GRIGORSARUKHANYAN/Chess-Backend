@@ -125,6 +125,36 @@ class ChessBoard {
   #bishopMoves(vertically, horizontally) {
     const result = [];
 
+    for (let i = 1; i < 8; ++i) {
+      const newI = vertically - i;
+      const newJ = horizontally - i - 2;
+
+      console.log('-----------');
+      if (this.#isValidSquarePosition(newI, newJ)) {
+        console.log('- is valid posittion: ', newI, newJ);
+        // free square position push in to result
+        if(this.#isFreeSquare(newI, newJ)) {
+          console.log('-- is free square: ', newI, newJ);
+          result.push({ horizontally: newI, vertically: newJ });
+          continue;
+        }
+
+        if (this.#isEnemy(newI, newJ)) {
+          console.log('-- is enemy: ', newI, newJ);
+          // is enemy push to result and break;
+          result.push({ horizontally: newI, vertically: newJ });
+          break;
+        } else {
+          console.log('-- is friend: ', newI, newJ);
+          // is friend break;
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
+    console.log('result: ', result);
     return result;
   }
   #knightMoves(vertically, horizontally) { }
