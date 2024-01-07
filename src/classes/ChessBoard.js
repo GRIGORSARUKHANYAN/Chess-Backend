@@ -13,7 +13,7 @@ class ChessBoard {
   get board() { return this.#board; }
   get whoseMove() { return this.#whoseMove; }
 
-  // moveFigure(positionFrom, positionTo) {}
+  moveFigure(positionFrom, positionTo) {}
 
   whereCanMove(vertically, horizontally) {
     let result = [];
@@ -122,30 +122,99 @@ class ChessBoard {
 
     return result;
   }
+
   #bishopMoves(vertically, horizontally) {
     const result = [];
 
-    for (let i = 1; i < 8; ++i) {
-      const newI = vertically - i;
-      const newJ = horizontally - i - 2;
+    for (let i = 0; i < 8; ++i) {
+      const newI = vertically + i + 2;
+      const newJ = horizontally + i;
 
-      console.log('-----------');
       if (this.#isValidSquarePosition(newI, newJ)) {
-        console.log('- is valid posittion: ', newI, newJ);
         // free square position push in to result
-        if(this.#isFreeSquare(newI, newJ)) {
-          console.log('-- is free square: ', newI, newJ);
+        if (this.#isFreeSquare(newI, newJ)) {
           result.push({ horizontally: newI, vertically: newJ });
           continue;
         }
 
         if (this.#isEnemy(newI, newJ)) {
-          console.log('-- is enemy: ', newI, newJ);
           // is enemy push to result and break;
           result.push({ horizontally: newI, vertically: newJ });
           break;
         } else {
-          console.log('-- is friend: ', newI, newJ);
+          // is friend break;
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
+    for (let i = 1; i < 8; ++i) {
+      const newI = vertically - i;
+      const newJ = horizontally + i;
+
+      if (this.#isValidSquarePosition(newI, newJ)) {
+        // free square position push in to result
+        if (this.#isFreeSquare(newI, newJ)) {
+          result.push({ vertically: newI, horizontally: newJ });
+          continue;
+        }
+
+        if (this.#isEnemy(newI, newJ)) {
+          // is enemy push to result and break;
+          result.push({ vertically: newI, horizontally: newJ });
+          break;
+        } else {
+          // is friend break;
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
+    for (let i = 1; i < 8; ++i) {
+      const newI = vertically - i;
+      const newJ = horizontally - i;
+
+      if (this.#isValidSquarePosition(newI, newJ)) {
+        // free square position push in to result
+        if (this.#isFreeSquare(newI, newJ)) {
+          result.push({ vertically: newI, horizontally: newJ });
+          continue;
+        }
+
+        if (this.#isEnemy(newI, newJ)) {
+          // is enemy push to result and break;
+          result.push({ vertically: newI, horizontally: newJ });
+          break;
+        } else {
+          // is friend break;
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
+
+    for (let i = 1; i < 8; ++i) {
+      const newI = vertically + i;
+      const newJ = horizontally - i;
+
+      if (this.#isValidSquarePosition(newI, newJ)) {
+        // free square position push in to result
+        if (this.#isFreeSquare(newI, newJ)) {
+          result.push({ vertically: newI, horizontally: newJ });
+          continue;
+        }
+
+        if (this.#isEnemy(newI, newJ)) {
+          // is enemy push to result and break;
+          result.push({ vertically: newI, horizontally: newJ });
+          break;
+        } else {
           // is friend break;
           break;
         }
@@ -157,10 +226,40 @@ class ChessBoard {
     console.log('result: ', result);
     return result;
   }
-  #knightMoves(vertically, horizontally) { }
+
+  #knightMoves(vertically, horizontally) {
+    const movesList = [
+      { vertically: vertically + 2, horizontally: horizontally + 1},
+      { vertically: vertically + 2, horizontally: horizontally - 1},
+      { vertically: vertically - 2, horizontally: horizontally + 1},
+      { vertically: vertically - 2, horizontally: horizontally - 1},
+
+      { vertically: vertically + 1, horizontally: horizontally + 2},
+      { vertically: vertically + 1, horizontally: horizontally - 2},
+      { vertically: vertically - 1, horizontally: horizontally + 2},
+      { vertically: vertically - 1, horizontally: horizontally - 2},
+    ];
+
+    const result = [];
+
+    for (let i = 0; i < movesList.length; ++i) {
+      const newI = movesList[i].vertically;
+      const newJ = movesList[i].horizontally;
+
+      if (this.#isValidSquarePosition(newI, newJ)) {
+        if (this.#isFreeSquare(newI, newJ) || this.#isEnemy(newI, newJ)) {
+          result.push(movesList[i]);
+        }
+      }
+    }
+
+    return result;
+  }
+
   #queenMoves(vertically, horizontally) {
     return [...this.#bishopMoves(vertically, horizontally), ...this.#rookMoves(vertically, horizontally)];
   }
+
   #kingMoves(vertically, horizontally) { }
   #pawnMoves(vertically, horizontally) { }
 };
