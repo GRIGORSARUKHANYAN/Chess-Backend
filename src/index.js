@@ -34,13 +34,35 @@ io.on("connection", (socket) => {
 
   socket.on("step", (data) => {
     const {from, to} = data;
+    
+    const fromI = from.vertically;
+    const fromJ = from.horizontally;
 
-    // check figure type
-    // check can move
-    // if not, emit(false)
-    // else send board where moved
+    const board = chessBoard.board;
+    const whoseMove = chessBoard.whoseMove;
 
-    socket.emit("receive_step", false);
+    let result = false;
+    
+    if (board[fromI][fromJ].color === whoseMove) {
+      const moves = chessBoard.whereCanMove(fromI, fromJ);
+
+      if (moves.length > 0) {
+
+        const toI = to.vertically;
+        const toJ = to.horizontally;
+        
+        for (let i = 0; i < moves.length; ++i) {
+          const everyCanMove = moves[i];
+          if (everyCanMove.vertically === toI && everyCanMove.horizontally === toJ) {
+            chessBoard.moveFigure(from, to);
+            result = chessBoard.board;
+            break;
+          }
+        }
+      }
+    }
+
+    socket.emit("receive_step", result);
   });
 
   socket.on("showMoves", (figureFrom) => {

@@ -13,7 +13,28 @@ class ChessBoard {
   get board() { return this.#board; }
   get whoseMove() { return this.#whoseMove; }
 
-  moveFigure(positionFrom, positionTo) {}
+  moveFigure(positionFrom, positionTo) {
+    const fromI = positionFrom.vertically;
+    const fromJ = positionFrom.horizontally;
+    const toI = positionTo.vertically;
+    const toJ = positionTo.horizontally;
+
+    this.#board[fromI][fromJ].isTouched = true;
+
+    // save current figure datas
+    const tmpColor = this.#board[fromI][fromJ].color;
+    const tmpPieces = this.#board[fromI][fromJ].pieces;
+
+    // reset old figure position data
+    this.#board[fromI][fromJ].color = null;
+    this.#board[fromI][fromJ].pieces = null;
+
+    // set old figure data in new position
+    this.#board[toI][toJ].color = tmpColor;
+    this.#board[toI][toJ].pieces = tmpPieces;
+
+    this.#whoseMove = ((this.#whoseMove === 'white') ? 'black' : 'white');
+  }
 
   whereCanMove(vertically, horizontally) {
     let result = [];
@@ -126,20 +147,20 @@ class ChessBoard {
   #bishopMoves(vertically, horizontally) {
     const result = [];
 
-    for (let i = 0; i < 8; ++i) {
-      const newI = vertically + i + 2;
+    for (let i = 1; i < 8; ++i) {
+      const newI = vertically + i;
       const newJ = horizontally + i;
 
       if (this.#isValidSquarePosition(newI, newJ)) {
         // free square position push in to result
         if (this.#isFreeSquare(newI, newJ)) {
-          result.push({ horizontally: newI, vertically: newJ });
+          result.push({ vertically: newI, horizontally: newJ });
           continue;
         }
 
         if (this.#isEnemy(newI, newJ)) {
           // is enemy push to result and break;
-          result.push({ horizontally: newI, vertically: newJ });
+          result.push({ vertically: newI, horizontally: newJ });
           break;
         } else {
           // is friend break;
@@ -149,6 +170,8 @@ class ChessBoard {
         break;
       }
     }
+
+
 
     for (let i = 1; i < 8; ++i) {
       const newI = vertically - i;
