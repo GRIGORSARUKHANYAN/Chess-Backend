@@ -17,11 +17,13 @@ const io = new Server(server, {
   },
 });
 
-const allPlayers = [];
+let allPlayers = [];
 
 io.on("connection", (socket) => {
   console.log(`>> ${socket.id}`);
   allPlayers.push(socket.id);
+
+  showAllPlayers(allPlayers);
 
   socket.on("start", _ => {
     for (let i = 0; i < allPlayers.length; ++i) {
@@ -81,9 +83,30 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     // do any task when player disconnected
+    const newAllPlayers = [];
+
+    for (let i = 0; i < allPlayers.length; ++i) {
+      if (allPlayers[i] === socket.id) {
+        console.log(`<< ${socket.id}`);
+      } else {
+        newAllPlayers.push(allPlayers[i]);
+      }
+    }
+
+    allPlayers = newAllPlayers;
+    showAllPlayers(allPlayers);
   });
 });
 
 server.listen(3001, () => {
   console.log('\n\n\n========- SERVER IS RUNNING -========\n');
 });
+
+function showAllPlayers(allPlayersList) {
+  // return;
+  console.log('\n\n----- All Players -----');
+  for (let i = 0; i < allPlayersList.length; ++i) {
+    console.log(`| ${allPlayersList[i]}`);
+  }
+  console.log('-----------------------');
+}
