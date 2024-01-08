@@ -1160,10 +1160,12 @@ if (!notAllowed) {
      activeColor="white" }
     
     let allow=allowSteps(data,activeColor)
+    let showMoves=allowedArray(board,{vertically:data.from.vertically,horizontally:data.from.horizontally},allow,activeColor)
+
     for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_showMoves", allow);
+      socket.to(allPlayers[i]).emit("receive_showMoves", showMoves);
     }
-      socket.emit("receive_showMoves", allow);
+      socket.emit("receive_showMoves", showMoves);
   });
 });
 
