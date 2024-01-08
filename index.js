@@ -103,13 +103,13 @@ let kingsPossition = {black:{vertically:0,horizontally:4,check:false},white:{ver
 // }
 
 
-function checkMat(board,activeColor) {
+function checkMat(board,thisColor) {
   for (let v = 0; v < 8; v++) {
     for (let h = 0; h <8; h++) {
-      if (board[v][h].color==activeColor) {
-       let toArray= allowSteps({from:{vertically:v,horizontally:h}},activeColor)
+      if (board[v][h].color==thisColor) {
+       let toArray= allowSteps({from:{vertically:v,horizontally:h}},thisColor)
 
-       let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,activeColor)
+       let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,thisColor)
        if (mat.length) {
         console.log(mat,h,v);
         return false
@@ -128,7 +128,7 @@ function checkMat(board,activeColor) {
 
 
 
-function allowedArray(board,from,toArray,activeColor) {
+function allowedArray(board,from,toArray,thisColor) {
 let result=[]
 for (let i = 0; i < toArray.length; i++) {
 let data = {
@@ -136,12 +136,12 @@ let data = {
   to:{vertically:toArray[i].vertically,horizontally:toArray[i].horizontally}
 }
 let step1 =step(data,board,true)
-  if (!check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
+  if (!check(step1.board,{vertically:step1.kingsPossitionFake[thisColor].vertically,horizontally:step1.kingsPossitionFake[thisColor].horizontally},thisColor)) {
     result.push(toArray[i])
 
 
     console.log("-------------------------------------");
-console.log(activeColor);
+console.log(thisColor);
     console.log("-------------------------------------");
 
   }  
@@ -1068,7 +1068,9 @@ io.on("connection", (socket) => {
     }
 // ban @lni hani comic
     if (kingsPossition[activeColor].check) {
+
       console.log("mat",checkMat(board,activeColor));
+      
     }
     let step1 =step(data,board,true) 
     if (check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
@@ -1090,7 +1092,6 @@ io.on("connection", (socket) => {
 if (!notAllowed) {
   step1 = step(data,board,false)
   board = step1.board;
-
   kingsPossition=step1.kingsPossitionFake
 // baceq es koment@
   if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)) {
@@ -1101,9 +1102,9 @@ if (!notAllowed) {
 
      kingsPossition[activeColor].check=false
      if (kingsPossition[globalColor].check) {
+
       console.log("mat",globalColor,checkMat(board,globalColor));
     }
-console.log(kingsPossition);
     if (globalColor=="white") {
       globalColor="black"
     }else{
@@ -1137,27 +1138,32 @@ console.log(kingsPossition);
 
 
 
-  socket.on("allow", (data) => {
-    if (!data||!data.from||!data.to||!data.from.vertically||!data.from.horizontally||!data.to.vertically||!data.to.horizontally) {
+  socket.on("showMoves", (data) => {
+
+    if (!data||!data.from||!(data.from.vertically ||data.from.vertically==0) ||!(data.from.horizontally||data.from.horizontally==0)) {
+      console.log(!data,data.from,!data.from.vertically,!data.from.horizontally);
+
       return false
     }
     if (data.from.vertically<0||data.from.vertically>7||data.from.horizontally<0||data.from.horizontally>7) {
       return false
     }
-    if (data.to.vertically<0||data.to.vertically>7||data.to.horizontally<0||data.to.horizontally>7) {
-      return []
-    }    
-    if (data.vertically<0||data.vertically>7||data.horizontally<0||data.horizontally>7) {
-      return []
+ 
+    if (board[data.from.vertically][data.from.horizontally].color==globalColor) {
+      return false
+
     }
-    if (board[data.vertically][data.horizontally].color!==globalColor) {
-      return[]
-    }
-    let allow=allowSteps(data,globalColor)
+    let activeColor
+    if (globalColor=="white") {
+      activeColor="black"
+    }else{
+     activeColor="white" }
+    
+    let allow=allowSteps(data,activeColor)
     for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_allow", allow);
+      socket.to(allPlayers[i]).emit("receive_showMoves", allow);
     }
-      socket.emit("receive_allow", allow);
+      socket.emit("receive_showMoves", allow);
   });
 });
 
