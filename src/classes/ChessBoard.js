@@ -284,7 +284,12 @@ class ChessBoard {
   }
 
   #kingMoves(vertically, horizontally) { }
-  #pawnMoves(vertically, horizontally) { }
+  #pawnMoves(vertically, horizontally) { 
+    // check pawn color
+    // if white call pawnMoves for white color
+    // else call pawnMoves for black color
+    
+  }
 };
 
 module.exports = { ChessBoard };

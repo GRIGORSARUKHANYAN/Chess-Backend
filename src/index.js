@@ -20,6 +20,7 @@ const io = new Server(server, {
 let allPlayers = [];
 
 io.on("connection", (socket) => {
+  console.log('\n----- Player Connect -----');
   console.log(`>> ${socket.id}`);
   allPlayers.push(socket.id);
 
@@ -87,6 +88,7 @@ io.on("connection", (socket) => {
 
     for (let i = 0; i < allPlayers.length; ++i) {
       if (allPlayers[i] === socket.id) {
+        console.log('\n----- Player Disconnect -----');
         console.log(`<< ${socket.id}`);
       } else {
         newAllPlayers.push(allPlayers[i]);
