@@ -20,7 +20,7 @@ const io = new Server(server, {
 const allPlayers = [];
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+  console.log(`>> ${socket.id}`);
   allPlayers.push(socket.id);
 
   socket.on("start", _ => {
@@ -64,7 +64,8 @@ io.on("connection", (socket) => {
     socket.emit("receive_step", result);
   });
 
-  socket.on("showMoves", (figureFrom) => {
+  socket.on("showMoves", (data) => {
+    const figureFrom = data.from;
     const {vertically, horizontally} = figureFrom;
     let recieve_result = false;
     
