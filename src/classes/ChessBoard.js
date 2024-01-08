@@ -283,12 +283,39 @@ class ChessBoard {
     return [...this.#bishopMoves(vertically, horizontally), ...this.#rookMoves(vertically, horizontally)];
   }
 
-  #kingMoves(vertically, horizontally) { }
+  #kingMoves(vertically, horizontally) {
+    const potencialPositions = [
+      { vertically: vertically - 1, horizontally: horizontally - 1 },
+      { vertically: vertically -1 , horizontally: horizontally },
+      { vertically: vertically - 1, horizontally: horizontally + 1 },
+      { vertically: vertically, horizontally: horizontally - 1 },
+      { vertically: vertically, horizontally: horizontally + 1 },
+      { vertically: vertically + 1, horizontally: horizontally - 1 },
+      { vertically: vertically + 1, horizontally: horizontally },
+      { vertically: vertically + 1, horizontally: horizontally + 1 },
+    ];
+
+    const result = [];
+
+    for (let k = 0; k < potencialPositions.length; ++k) {
+      const pos = potencialPositions[k];
+      const i = pos.vertically;
+      const j = pos.horizontally;
+
+      if (this.#isValidSquarePosition(i, j)) {
+        if (this.#isFreeSquare(i, j) || this.#isEnemy(i, j)) {
+          result.push(pos);
+        }
+      }
+    }
+
+    return result;
+  }
+  
   #pawnMoves(vertically, horizontally) { 
     // check pawn color
     // if white call pawnMoves for white color
     // else call pawnMoves for black color
-    
   }
 };
 
