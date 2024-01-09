@@ -6,6 +6,7 @@ const cors = require("cors");
 const { verify } = require("crypto");
 let globalColor="black"
 // let activeColor="white"
+let history=[]
 let allPlayers =[]
 // vertically:^^^^^,horizontally:>>>>>>
 globaklcheck=false
@@ -108,7 +109,9 @@ function checkMat(board,thisColor) {
     for (let h = 0; h <8; h++) {
       if (board[v][h].color==thisColor) {
        let toArray= allowSteps({from:{vertically:v,horizontally:h}},thisColor)
-
+        if (toArray.length) {
+          continue
+        }
        let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,thisColor)
        if (mat.length) {
         return false
@@ -124,7 +127,19 @@ function checkMat(board,thisColor) {
 
 
 
+function draw(arrHistory) {
+for (let i = 0; i < 4; i++) {
 
+  if ((arrHistory[i].from.vertically!==arrHistory[i+2].to.vertically||arrHistory[i].from.horizontally!==arrHistory[i+2].to.horizontally)) {
+    return false
+  }
+  if ((arrHistory[i].to.vertically!==arrHistory[i+2].from.vertically||arrHistory[i].to.horizontally!==arrHistory[i+2].from.horizontally)) {
+    return false
+  }
+
+}
+return true
+}
 
 
 function allowedArray(board,from,toArray,thisColor) {
@@ -201,7 +216,6 @@ function check(board,data,activeColor) {
   const knightStep = allowknight(board,data,activeColor)
   for (let i = 0; i < knightStep.length; i++) {
     if (board[knightStep[i].vertically][knightStep[i].horizontally].pieces=="knight") {
-      console.log("126");
       return true
     }
   }  
@@ -210,7 +224,6 @@ function check(board,data,activeColor) {
   const kingStep = allowKing(board,data,activeColor)
   for (let i = 0; i < kingStep.length; i++) {
     if (board[kingStep[i].vertically][kingStep[i].horizontally].pieces=="king") {
-      console.log("135");
       return true
     }
   }  
@@ -220,15 +233,12 @@ function check(board,data,activeColor) {
   if (activeColor=="black"&&data.vertically<7) {
     if (data.horizontally+1<7) {
       if (board[data.vertically+1][data.horizontally+1].color=="white" &&board[data.vertically+1][data.horizontally+1].pieces=="pawn" ) {
-        console.log("145");
         return true
       }
     }
 
     if (data.horizontally-1>-1) {
       if (board[data.vertically+1][data.horizontally-1].color=="white" &&board[data.vertically+1][data.horizontally-1].pieces=="pawn" ) {
-        console.log("152");
-        
         return true
       }
     }
@@ -236,15 +246,12 @@ function check(board,data,activeColor) {
   if (activeColor=="white" &&data.vertically>0) {
     if (data.horizontally+1<7) {
       if (board[data.vertically-1][data.horizontally+1].color=="black" &&board[data.vertically-1][data.horizontally+1].pieces=="pawn" ) {
-        console.log("161");
         return true
       }
     }
 
     if (data.horizontally-1>-1) {
       if (board[data.vertically-1][data.horizontally-1].color=="black" &&board[data.vertically-1][data.horizontally-1].pieces=="pawn" ) {
-        console.log("168");
-        
         return true
       }
     }
@@ -1003,25 +1010,7 @@ function step(data,experimentalBoard,fake) {
     }  
 
 
-    if (board[data.from.vertically][data.from.horizontally].pieces = "king") {
-      if (data.from.horizontally-data.to.horizontally>1) {
-        board[data.to.vertically][data.to.horizontally].color = null;
-        board[data.to.vertically-1][data.to.horizontally].pieces = null;
-      }
-      if (from.horizontally-toArray[i].horizontally<0) {
-        if ( !check(board,{vertically:from.vertically,horizontally:from.horizontally +1},thisColor)) {
-          if (!check(step1.board,{vertically:step1.kingsPossitionFake[thisColor].vertically,horizontally:step1.kingsPossitionFake[thisColor].horizontally},thisColor)) {
-            result.push(toArray[i])
-          } 
-        }
-      }
-    
-      if (Math.abs(from.horizontally-toArray[i].horizontally)==1||Math.abs(from.horizontally-toArray[i].horizontally)==0) {
-        if (!check(step1.board,{vertically:step1.kingsPossitionFake[thisColor].vertically,horizontally:step1.kingsPossitionFake[thisColor].horizontally},thisColor)) {
-          result.push(toArray[i])
-        }  
-      }
-    }
+
 
 
 
@@ -1043,6 +1032,28 @@ if (!fake) {
 
 
   }
+
+
+
+  if (board[data.from.vertically][data.from.horizontally].pieces == "king") {
+    if (data.from.horizontally-data.to.horizontally>1) {
+      board[data.to.vertically][0].color = null;
+      board[data.to.vertically][0].pieces = null;
+      board[data.to.vertically][3].color = board[data.from.vertically][data.from.horizontally].color;
+      board[data.to.vertically][3].pieces = "rook";
+      board[data.from.vertically][0].isTouched = true;
+      board[data.to.vertically][4].isTouched = true;
+    }
+    if (data.from.horizontally-data.to.horizontally<0) {
+      board[data.to.vertically][7].color = null;
+      board[data.to.vertically][7].pieces = null;
+      board[data.to.vertically][5].color = board[data.from.vertically][data.from.horizontally].color;
+      board[data.to.vertically][5].pieces = "rook";
+      board[data.from.vertically][7].isTouched = true;
+      board[data.to.vertically][4].isTouched = true;
+    }
+
+  }
   board[data.to.vertically][data.to.horizontally].color =
   board[data.from.vertically][data.from.horizontally].color;
   board[data.to.vertically][data.to.horizontally].pieces =
@@ -1051,6 +1062,12 @@ if (!fake) {
   board[data.from.vertically][data.from.horizontally].pieces = null;
   board[data.from.vertically][data.from.horizontally].isTouched = true;
   board[data.to.vertically][data.to.horizontally].isTouched = true;
+
+
+
+
+
+
 
 if (board[data.to.vertically][data.to.horizontally].pieces=="king") {
   let activeColor
@@ -1134,8 +1151,7 @@ io.on("connection", (socket) => {
 // ban @lni hani comic
     if (kingsPossition[activeColor].check) {
 
-      console.log("mat",checkMat(board,activeColor));
-      
+      console.log("pat",activeColor,checkMat(board,activeColor));
     }
     let step1 =step(data,board,true) 
     if (check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
@@ -1160,7 +1176,7 @@ if (!notAllowed) {
   kingsPossition=step1.kingsPossitionFake
 // baceq es koment@
   if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)) {
-    console.log("ayauuuuuu",globalColor);
+    console.log("shaxxxxxxxxxx",globalColor);
     kingsPossition[globalColor].check=true
   }
   
@@ -1174,6 +1190,16 @@ if (!notAllowed) {
       globalColor="black"
     }else{
      globalColor="white" }
+
+     history.push(data)
+if (history.length>6) {
+  history.shift()
+  console.log(draw(history),"drow--nichya");
+  // if (draw(history)) {
+  //   console.log("drow--nichya");
+  //   console.table(history)
+  // }
+}
     //  console.log("this",kingsPossition[thiscolor].check);
     //  kingsPossition[thiscolor].check=false
 // console.log(kingsPossition);
