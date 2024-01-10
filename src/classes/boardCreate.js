@@ -72,12 +72,12 @@ const chessBoardCreate = () => {
      ],
      [
       {color:"white",vertically:7,horizontally:0,pieces:"rook",isTouched:false},
-      {color:"white",vertically:7,horizontally:1,pieces:"knight",isTouched:false},
-      {color:"white",vertically:7,horizontally:2,pieces:"bishop",isTouched:false},
-      {color:"white",vertically:7,horizontally:3,pieces:"queen",isTouched:false},
+      {color:null,vertically:7,horizontally:1,pieces:null,isTouched:false},
+      {color:null,vertically:7,horizontally:2,pieces:null,isTouched:false},
+      {color:null,vertically:7,horizontally:3,pieces:null,isTouched:false},
       {color:"white",vertically:7,horizontally:4,pieces:"king",isTouched:false},
-      {color:"white",vertically:7,horizontally:5,pieces:"bishop",isTouched:false},
-      {color:"white",vertically:7,horizontally:6,pieces:"knight",isTouched:false},
+      {color:null,vertically:7,horizontally:5,pieces:null,isTouched:false},
+      {color:null,vertically:7,horizontally:6,pieces:null,isTouched:false},
       {color:"white",vertically:7,horizontally:7,pieces:"rook",isTouched:false},
      ],
   ];

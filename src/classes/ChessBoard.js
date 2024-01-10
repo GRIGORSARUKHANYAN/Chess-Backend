@@ -8,8 +8,6 @@ class ChessBoard {
 
   #whoseMove = 'white';
 
-  // constructor() {}
-
   get board() { return this.#board; }
   get whoseMove() { return this.#whoseMove; }
 
@@ -47,10 +45,11 @@ class ChessBoard {
       case 'bishop': { result = this.#bishopMoves(vertically, horizontally); break; }
       case 'queen': { result = this.#queenMoves(vertically, horizontally); break; }
       case 'king': { result = this.#kingMoves(vertically, horizontally); break; }
-      default: {
-        console.error('wrong figure');
-      }
+      default: { console.error('wrong figure'); }
     }
+
+    // checkMoves check
+    // checkmate check
 
     return result;
   }
@@ -252,15 +251,15 @@ class ChessBoard {
 
   #knightMoves(vertically, horizontally) {
     const movesList = [
-      { vertically: vertically + 2, horizontally: horizontally + 1},
-      { vertically: vertically + 2, horizontally: horizontally - 1},
-      { vertically: vertically - 2, horizontally: horizontally + 1},
-      { vertically: vertically - 2, horizontally: horizontally - 1},
+      { vertically: vertically + 2, horizontally: horizontally + 1 },
+      { vertically: vertically + 2, horizontally: horizontally - 1 },
+      { vertically: vertically - 2, horizontally: horizontally + 1 },
+      { vertically: vertically - 2, horizontally: horizontally - 1 },
 
-      { vertically: vertically + 1, horizontally: horizontally + 2},
-      { vertically: vertically + 1, horizontally: horizontally - 2},
-      { vertically: vertically - 1, horizontally: horizontally + 2},
-      { vertically: vertically - 1, horizontally: horizontally - 2},
+      { vertically: vertically + 1, horizontally: horizontally + 2 },
+      { vertically: vertically + 1, horizontally: horizontally - 2 },
+      { vertically: vertically - 1, horizontally: horizontally + 2 },
+      { vertically: vertically - 1, horizontally: horizontally - 2 },
     ];
 
     const result = [];
@@ -286,7 +285,7 @@ class ChessBoard {
   #kingMoves(vertically, horizontally) {
     const potencialPositions = [
       { vertically: vertically - 1, horizontally: horizontally - 1 },
-      { vertically: vertically -1 , horizontally: horizontally },
+      { vertically: vertically - 1, horizontally: horizontally },
       { vertically: vertically - 1, horizontally: horizontally + 1 },
       { vertically: vertically, horizontally: horizontally - 1 },
       { vertically: vertically, horizontally: horizontally + 1 },
@@ -309,10 +308,46 @@ class ChessBoard {
       }
     }
 
+    if (this.#board[vertically, horizontally].isTouched === false) {
+      // 0-0 check
+      result.push(...this.#kingMoves_00(vertically));
+      // 0-0-0 check
+      result.push(...this.#kingMoves_000(vertically));
+    }
+
     return result;
   }
-  
-  #pawnMoves(vertically, horizontally) { 
+
+  #kingMoves_00(vertically) {
+    const result = [];
+
+    // color check
+    if (vertically === 7) {
+      // white
+      if (this.#isFreeSquare(7, 5) && this.#isFreeSquare(7, 6)) {
+        // can move
+        result.push({ vertically: 7, horizontally: 6});
+      }
+    } else
+    if (vertically === 0) {
+      // black
+      if (this.#isFreeSquare(0, 5) && this.#isFreeSquare(0, 6)) {
+        // can move
+        result.push({ vertically: 0, horizontally: 6});
+      }
+    }
+
+    // free square check
+
+    return result;
+  }
+
+  #kingMoves_000(vertically, horizontally) {
+    const result = [];
+    return result;
+  }
+
+  #pawnMoves(vertically, horizontally) {
     // check pawn color
     // if white call pawnMoves for white color
     // else call pawnMoves for black color
