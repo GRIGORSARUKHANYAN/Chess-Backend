@@ -1239,8 +1239,15 @@ if (history.length>6) {
   //   kingsPossition[thiscolor].check=false
   // }
 
-
-
+console.log("ariva",board[data.to.vertically][data.to.horizontally].pieces);
+if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.vertically == 0 || data.to.vertically == 7)) {
+  // board[data.to.vertically][data.to.horizontally].pieces="queen"
+  socket.emit("receive_promotion", true);
+  socket.on("promotion", (data) => {
+    board[data.to.vertically][data.to.horizontally].pieces=data
+  
+  })
+}
 }
 
     }
@@ -1282,9 +1289,9 @@ if (history.length>6) {
     let allow=allowSteps(data,activeColor)
     let showMoves=allowedArray(board,{vertically:data.from.vertically,horizontally:data.from.horizontally},allow,activeColor)
 
-    for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_showMoves", showMoves);
-    }
+    // for (let i = 0; i < allPlayers.length; i++) {
+    //   socket.to(allPlayers[i]).emit("receive_showMoves", showMoves);
+    // }
       socket.emit("receive_showMoves", showMoves);
   });
 });
