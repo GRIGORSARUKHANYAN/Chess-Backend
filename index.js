@@ -1243,8 +1243,10 @@ console.log("ariva",board[data.to.vertically][data.to.horizontally].pieces);
 if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.vertically == 0 || data.to.vertically == 7)) {
   // board[data.to.vertically][data.to.horizontally].pieces="queen"
   socket.emit("receive_promotion", true);
-  socket.on("promotion", (data) => {
-    board[data.to.vertically][data.to.horizontally].pieces=data
+  socket.on("promotion", (name) => {
+    console.log(name);
+    board[data.to.vertically][data.to.horizontally].pieces=name
+    console.log(board[data.to.vertically][data.to.horizontally],name);
   
   })
 }
