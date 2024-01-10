@@ -109,7 +109,8 @@ function checkMat(board,thisColor) {
     for (let h = 0; h <8; h++) {
       if (board[v][h].color==thisColor) {
        let toArray= allowSteps({from:{vertically:v,horizontally:h}},thisColor)
-        if (toArray.length) {
+
+        if (!toArray.length) {
           continue
         }
        let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,thisColor)
@@ -125,11 +126,21 @@ function checkMat(board,thisColor) {
   return true
 }
 
+function draw50MoveRule(arrHistory) {
+if (arrHistory.length<50) {
+  return false
+}
+for (let i = arrHistory.length-50; i < arrHistory.length; i++) {
+if (arrHistory[i].take==true) {
+  return false
+}
+}
+return true
+}
 
 
-function draw(arrHistory) {
-for (let i = 0; i < 4; i++) {
-
+function draw3foldRepetition(arrHistory) {
+  for (let i = arrHistory.length-7; i < arrHistory.length-2; i++) {
   if ((arrHistory[i].from.vertically!==arrHistory[i+2].to.vertically||arrHistory[i].from.horizontally!==arrHistory[i+2].to.horizontally)) {
     return false
   }
@@ -149,6 +160,9 @@ let forbid=false
 if (board[from.vertically][from.horizontally].pieces=="king") {
   isKing=true
 }
+if (!toArray||!toArray.length) {
+  return []
+}
 for (let i = 0; i < toArray.length; i++) {
 let data = {
   from:from,
@@ -156,16 +170,17 @@ let data = {
 }
 let step1 =step(data,board,true)
 if (isKing) {
-  if (from.horizontally-toArray[i].horizontally>1) {
+  if (from.horizontally-toArray[i].horizontally>1 && !check(board,{vertically:from.vertically,horizontally:from.horizontally },thisColor)) {
     if ( !check(board,{vertically:from.vertically,horizontally:from.horizontally -1},thisColor)) {
-      if (!check(step1.board,{vertically:step1.kingsPossitionFake[thisColor].vertically,horizontally:step1.kingsPossitionFake[thisColor].horizontally},thisColor)) {
+
+      if (!check(board,{vertically:from.vertically,horizontally:from.horizontally -2},thisColor)) {
         result.push(toArray[i])
       } 
     }
   }
-  if (from.horizontally-toArray[i].horizontally<0) {
+  if (from.horizontally-toArray[i].horizontally<-1 && !check(board,{vertically:from.vertically,horizontally:from.horizontally },thisColor)) {
     if ( !check(board,{vertically:from.vertically,horizontally:from.horizontally +1},thisColor)) {
-      if (!check(step1.board,{vertically:step1.kingsPossitionFake[thisColor].vertically,horizontally:step1.kingsPossitionFake[thisColor].horizontally},thisColor)) {
+      if (!check(board,{vertically:from.vertically,horizontally:from.horizontally +2},thisColor)) {
         result.push(toArray[i])
       } 
     }
@@ -177,6 +192,7 @@ if (isKing) {
     }  
   }
 }else{
+  
   if (!check(step1.board,{vertically:step1.kingsPossitionFake[thisColor].vertically,horizontally:step1.kingsPossitionFake[thisColor].horizontally},thisColor)) {
     result.push(toArray[i])
   }  
@@ -537,6 +553,8 @@ function allowKing(board,data,activeColor) {
           horizontally: data.horizontally+1,
         });
       }    
+
+
       if ((data.vertically==7 ||data.vertically==0)  && data.horizontally==4 && board[data.vertically][data.horizontally].isTouched==false) {
         if (( board[data.vertically][5].color==null) &&( board[data.vertically][6].color==null)&&(board[data.vertically][7].isTouched==false && board[data.vertically][7].color==activeColor && board[data.vertically][7].pieces=="rook")) {
           allow.push({
@@ -989,7 +1007,7 @@ function allowBlackPawn(data,kingsPossitionFake) {
 }
 
 function step(data,experimentalBoard,fake) {
-  kingsPossitionFake=JSON.parse(JSON.stringify(kingsPossition));
+  let kingsPossitionFake=JSON.parse(JSON.stringify(kingsPossition));
   // if (board[data.to.horizontally][data.from.vertically].color== board[data.from.horizontally][data.from.vertically].color) {
   // 			throw new HttpException(400, 'you cannot perform this step');
   // }
@@ -1044,7 +1062,7 @@ if (!fake) {
       board[data.from.vertically][0].isTouched = true;
       board[data.to.vertically][4].isTouched = true;
     }
-    if (data.from.horizontally-data.to.horizontally<0) {
+    if (data.from.horizontally-data.to.horizontally<-1) {
       board[data.to.vertically][7].color = null;
       board[data.to.vertically][7].pieces = null;
       board[data.to.vertically][5].color = board[data.from.vertically][data.from.horizontally].color;
@@ -1070,12 +1088,13 @@ if (!fake) {
 
 
 if (board[data.to.vertically][data.to.horizontally].pieces=="king") {
-  let activeColor
-  if (globalColor=="white") {
-    activeColor="black"
-  }else{
-    activeColor="white"
-  }
+  let activeColor=board[data.to.vertically][data.to.horizontally].color
+  // if (globalColor=="white") {
+  //   activeColor="black"
+  // }else{
+  //   activeColor="white"
+  // }
+
   kingsPossitionFake[activeColor].vertically=data.to.vertically
   kingsPossitionFake[activeColor].horizontally=data.to.horizontally
 }
@@ -1118,7 +1137,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
-
     if (!data||!data.from||!data.to||(!data.from.vertically&&data.from.vertically!==0)||(!data.from.horizontally&&data.from.horizontally!==0)||(!data.to.vertically&&data.to.vertically!==0)||(!data.to.horizontally&&data.to.horizontally!==0)) {
       return false
     }
@@ -1149,7 +1167,7 @@ io.on("connection", (socket) => {
      notAllowed=true 
     }
 // ban @lni hani comic
-    if (kingsPossition[activeColor].check) {
+    if (!kingsPossition[activeColor].check) {
 
       console.log("pat",activeColor,checkMat(board,activeColor));
     }
@@ -1160,17 +1178,27 @@ io.on("connection", (socket) => {
     }
 
     const steps= allowSteps(data,board[data.from.vertically][data.from.horizontally].color)
-    if (steps) {
+ let allow=allowedArray(board,{vertically:data.from.vertically,horizontally:data.from.horizontally},steps,activeColor)
+    
+    if (allow) {
       const myStep={
         vertically: data.to.vertically,
         horizontally: data.to.horizontally
   }
 
-  if (!checkSteps(myStep,steps)||globalColor==board[data.from.vertically][data.from.horizontally].color) {
+  if (!allow.length) {
+    notAllowed=true
+  }
+  if (!checkSteps(myStep,allow)||globalColor==board[data.from.vertically][data.from.horizontally].color) {
+
     notAllowed=true
   }
 
 if (!notAllowed) {
+  let take = false
+  if (board[data.to.vertically][data.to.horizontally].color == globalColor) {
+    take=true
+  }
   step1 = step(data,board,false)
   board = step1.board;
   kingsPossition=step1.kingsPossitionFake
@@ -1190,11 +1218,12 @@ if (!notAllowed) {
       globalColor="black"
     }else{
      globalColor="white" }
-
+      data.take=take
      history.push(data)
 if (history.length>6) {
-  history.shift()
-  console.log(draw(history),"drow--nichya");
+  if (draw3foldRepetition(history)) {
+    console.log("drow--nichya");    
+  }
   // if (draw(history)) {
   //   console.log("drow--nichya");
   //   console.table(history)
