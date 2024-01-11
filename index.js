@@ -1242,17 +1242,7 @@ if (history.length>6) {
 
 if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.vertically == 0 || data.to.vertically == 7)) {
   // board[data.to.vertically][data.to.horizontally].pieces="queen"
-  socket.emit("receive_promotion", true);
-  socket.on("promotion", (name) => {
-    board[data.to.vertically][data.to.horizontally].pieces=name
-    console.log(board[data.to.vertically][data.to.horizontally],name);
-    for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_step", board);
-    }
-    if (allPlayers.length) {
-      socket.emit("receive_step", board);
-    }
-  })
+  socket.emit("receive_promotion", {vertically:data.to.vertically,horizontally:data.to.horizontally});
 }
 }
 
@@ -1266,7 +1256,17 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
   });
 
 
+  socket.on("promotion", (data) => {
+    console.log(data);
 
+    board[data.position.vertically][data.position.horizontally].pieces=data.name
+    for (let i = 0; i < allPlayers.length; i++) {
+      socket.to(allPlayers[i]).emit("receive_step", board);
+    }
+    if (allPlayers.length) {
+      socket.emit("receive_step", board);
+    }
+  })
 
 
 
