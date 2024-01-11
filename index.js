@@ -104,7 +104,7 @@ let kingsPossition = {black:{vertically:0,horizontally:4,check:false},white:{ver
 // }
 
 
-function checkMat(board,thisColor) {
+function checkMate(board,thisColor) {
   for (let v = 0; v < 8; v++) {
     for (let h = 0; h <8; h++) {
       if (board[v][h].color==thisColor) {
@@ -113,8 +113,8 @@ function checkMat(board,thisColor) {
         if (!toArray.length) {
           continue
         }
-       let mat=allowedArray(board,{vertically:v,horizontally:h},toArray,thisColor)
-       if (mat.length) {
+       let mate=allowedArray(board,{vertically:v,horizontally:h},toArray,thisColor)
+       if (mate.length) {
         return false
        }
        
@@ -1169,7 +1169,7 @@ io.on("connection", (socket) => {
 // ban @lni hani comic
     if (!kingsPossition[activeColor].check) {
 
-      console.log("pat",activeColor,checkMat(board,activeColor));
+      console.log("pat",activeColor,checkMate(board,activeColor));
     }
     let step1 =step(data,board,true) 
     if (check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
@@ -1204,15 +1204,20 @@ if (!notAllowed) {
   kingsPossition=step1.kingsPossitionFake
 // baceq es koment@
   if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)) {
-    console.log("shaxxxxxxxxxx",globalColor);
+
+    socket.emit("receive_check", {vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally});
     kingsPossition[globalColor].check=true
+
   }
   
 
      kingsPossition[activeColor].check=false
      if (kingsPossition[globalColor].check) {
 
-      console.log("mat",globalColor,checkMat(board,globalColor));
+      console.log("mate",globalColor,checkMate(board,globalColor));
+      if (checkMate(board,globalColor)) {
+        socket.emit("receive_checkmate", activeColor);
+      }
     }
     if (globalColor=="white") {
       globalColor="black"
