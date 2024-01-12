@@ -9,6 +9,7 @@ let globalColor="black"
 let history=[]
 let allPlayers =[]
 // vertically:^^^^^,horizontally:>>>>>>
+let promotionBishop=false
 globaklcheck=false
 let board=
 [
@@ -96,7 +97,7 @@ let board=
 // pawn  unexpected
 let  enPassant={black:{vertically:null,horizontally:null},white:{vertically:7,horizontally:0}}
 let kingsPossition = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
-let takedBoard={black:{pawn:0,rook:0,knight:0,bishop:0,queen:0},white:{pawn:0,rook:0,knight:0,bishop:0,queen:0}}
+let figures={black:{pawn:8,rook:2,knight:2,bishop:2,queen:1},white:{pawn:8,rook:2,knight:2,bishop:2,queen:1}}
 // let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
 
 // let datas = {
@@ -129,13 +130,14 @@ function checkMate(board,thisColor) {
   return true
 }
 
-function drawDeadPosition(takedBoard) {
-if (takedBoard.white.pawn!==8 || takedBoard.black.pawn!==8 || !takedBoard.black.queen ||!takedBoard.white.queen || takedBoard.white.rook!==2 || takedBoard.black.rook!==2) {
+function drawDeadPosition(figures) {
+if (figures.white.pawn || figures.black.pawn || figures.black.queen ||figures.white.queen || figures.white.rook || figures.black.rook) {
   return false
 }
-if ((takedBoard.white.knight!==2 && takedBoard.white.bishop!==2) || takedBoard.black.knight!==2 && takedBoard.black.bishop!==2 ) {
+if ((figures.white.knight && figures.white.bishop) || figures.black.knight>1 ) {
   return false
 }
+
 return true
 }
 function draw50MoveRule(arrHistory) {
@@ -1214,13 +1216,13 @@ if (!notAllowed) {
   let take = false
   if (board[data.to.vertically][data.to.horizontally].color == globalColor) {
 
-    takedBoard[globalColor][board[data.to.vertically][data.to.horizontally].pieces]++
+    figures[globalColor][board[data.to.vertically][data.to.horizontally].pieces]++
     
     take=true
   }
   if (board[data.from.vertically][data.from.horizontally].pieces=="pawn") {
     if (data.from.horizontally!== data.to.horizontally && board[data.to.vertically][data.to.horizontally].color !== globalColor) {
-      takedBoard[globalColor]["pawn"]++
+      figures[globalColor]["pawn"]++
       take=true
     }
   }
@@ -1261,7 +1263,7 @@ if (history.length>7) {
     console.log("drow--nichya 3");   
      draw=true
   }
-  if (drawDeadPosition(takedBoard)) {
+  if (drawDeadPosition(figures)) {
     draw=true
     console.log("drow--nichya dead");    
   }
@@ -1312,6 +1314,7 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
 
   socket.on("promotion", (data) => {
     board[data.position.vertically][data.position.horizontally].pieces=data.name
+
     for (let i = 0; i < allPlayers.length; i++) {
       socket.to(allPlayers[i]).emit("receive_step", {board,kingCheck:false} );
     }
