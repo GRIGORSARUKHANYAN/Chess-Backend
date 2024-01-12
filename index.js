@@ -96,12 +96,15 @@ let board=
 // pawn  unexpected
 let  enPassant={black:{vertically:null,horizontally:null},white:{vertically:7,horizontally:0}}
 let kingsPossition = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
+let takedBoard={black:{pawn:0,rook:0,knight:0,bishop:0,queen:0},white:{pawn:0,rook:0,knight:0,bishop:0,queen:0}}
 // let kingsPossitionFake = {black:{vertically:0,horizontally:4,check:false},white:{vertically:7,horizontally:4,check:false}}
 
 // let datas = {
 //   from:{vertically:1,horizontally:0},
 //   to:{vertically:1,horizontally:0}
 // }
+
+
 
 
 function checkMate(board,thisColor) {
@@ -126,6 +129,15 @@ function checkMate(board,thisColor) {
   return true
 }
 
+function drawDeadPosition(takedBoard) {
+if (takedBoard.white.pawn!==8 || takedBoard.black.pawn!==8 || !takedBoard.black.queen ||!takedBoard.white.queen || takedBoard.white.rook!==2 || takedBoard.black.rook!==2) {
+  return false
+}
+if ((takedBoard.white.knight!==2 && takedBoard.white.bishop!==2) || takedBoard.black.knight!==2 && takedBoard.black.bishop!==2 ) {
+  return false
+}
+return true
+}
 function draw50MoveRule(arrHistory) {
 if (arrHistory.length<50) {
   return false
@@ -140,8 +152,8 @@ return true
 
 
 function draw3foldRepetition(arrHistory) {
-  for (let i = arrHistory.length-7; i < arrHistory.length-2; i++) {
-  if ((arrHistory[i].from.vertically!==arrHistory[i+2].to.vertically||arrHistory[i].from.horizontally!==arrHistory[i+2].to.horizontally)) {
+  for (let i = arrHistory.length-8; i < arrHistory.length-2; i++) {
+    if ((arrHistory[i].from.vertically!==arrHistory[i+2].to.vertically||arrHistory[i].from.horizontally!==arrHistory[i+2].to.horizontally)) {
     return false
   }
   if ((arrHistory[i].to.vertically!==arrHistory[i+2].from.vertically||arrHistory[i].to.horizontally!==arrHistory[i+2].from.horizontally)) {
@@ -1137,6 +1149,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("step", (data) => {
+    let kingCheck=false
     if (!data||!data.from||!data.to||(!data.from.vertically&&data.from.vertically!==0)||(!data.from.horizontally&&data.from.horizontally!==0)||(!data.to.vertically&&data.to.vertically!==0)||(!data.to.horizontally&&data.to.horizontally!==0)) {
       return false
     }
@@ -1168,8 +1181,9 @@ io.on("connection", (socket) => {
     }
 // ban @lni hani comic
     if (!kingsPossition[activeColor].check) {
-
-      console.log("pat",activeColor,checkMate(board,activeColor));
+if (checkMate(board,activeColor)) {
+  console.log("pat",activeColor,checkMate(board,activeColor));
+}
     }
     let step1 =step(data,board,true) 
     if (check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
@@ -1197,24 +1211,32 @@ io.on("connection", (socket) => {
 if (!notAllowed) {
   let take = false
   if (board[data.to.vertically][data.to.horizontally].color == globalColor) {
+
+    takedBoard[globalColor][board[data.to.vertically][data.to.horizontally].pieces]++
+    
     take=true
+  }
+  if (board[data.from.vertically][data.from.horizontally].pieces=="pawn") {
+    if (data.from.horizontally!== data.to.horizontally && board[data.to.vertically][data.to.horizontally].color !== globalColor) {
+      takedBoard[globalColor]["pawn"]++
+      take=true
+    }
   }
   step1 = step(data,board,false)
   board = step1.board;
   kingsPossition=step1.kingsPossitionFake
-// baceq es koment@
+
+
   if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)) {
-
-    socket.emit("receive_check", {vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally});
+    kingCheck={vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally}
     kingsPossition[globalColor].check=true
-
   }
   
 
      kingsPossition[activeColor].check=false
      if (kingsPossition[globalColor].check) {
 
-      console.log("mate",globalColor,checkMate(board,globalColor));
+      // console.log("mate",globalColor,checkMate(board,globalColor));
       if (checkMate(board,globalColor)) {
         socket.emit("receive_checkmate", activeColor);
       }
@@ -1225,10 +1247,18 @@ if (!notAllowed) {
      globalColor="white" }
       data.take=take
      history.push(data)
-if (history.length>6) {
+if (history.length>7) {
   if (draw3foldRepetition(history)) {
-    console.log("drow--nichya");    
+    console.log("drow--nichya 3");    
   }
+  if (drawDeadPosition(takedBoard)) {
+    console.log("drow--nichya dead");    
+  }
+  if (draw50MoveRule(history)) {
+    console.log("drow--nichya 50");    
+    
+  }
+
   // if (draw(history)) {
   //   console.log("drow--nichya");
   //   console.table(history)
@@ -1256,14 +1286,12 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
       socket.to(allPlayers[i]).emit("receive_step", board);
     }
     if (allPlayers.length) {
-      socket.emit("receive_step", board);
+      socket.emit("receive_step", {board,kingCheck});
     }
   });
 
 
   socket.on("promotion", (data) => {
-    console.log(data);
-
     board[data.position.vertically][data.position.horizontally].pieces=data.name
     for (let i = 0; i < allPlayers.length; i++) {
       socket.to(allPlayers[i]).emit("receive_step", board);
