@@ -258,8 +258,9 @@ function check(board,data,activeColor) {
 
 
   // pawn
-  if (activeColor=="black"&&data.vertically<7) {
-    if (data.horizontally+1<7) {
+  
+  if (activeColor=="black"&&data.vertically<8) {
+    if (data.horizontally+1<8) {
       if (board[data.vertically+1][data.horizontally+1].color=="white" &&board[data.vertically+1][data.horizontally+1].pieces=="pawn" ) {
         return true
       }
@@ -271,8 +272,8 @@ function check(board,data,activeColor) {
       }
     }
   }
-  if (activeColor=="white" &&data.vertically>0) {
-    if (data.horizontally+1<7) {
+  if (activeColor=="white" &&data.vertically>-1) {
+    if (data.horizontally+1<8) {
       if (board[data.vertically-1][data.horizontally+1].color=="black" &&board[data.vertically-1][data.horizontally+1].pieces=="pawn" ) {
         return true
       }
@@ -1186,8 +1187,9 @@ if (checkMate(board,activeColor)) {
 }
     }
     let step1 =step(data,board,true) 
+
     if (check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
-    
+    console.log("E");
       notAllowed=true
     }
 
@@ -1300,7 +1302,7 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
 
     }
     for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_step", {board,kingCheck:false});
+      socket.to(allPlayers[i]).emit("receive_step", {board,kingCheck});
     }
     if (allPlayers.length) {
       socket.emit("receive_step", {board,kingCheck});
