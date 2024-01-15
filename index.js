@@ -9,89 +9,89 @@ let globalColor="black"
 let history=[]
 let allPlayers =[]
 // vertically:^^^^^,horizontally:>>>>>>
-let promotionBishop=false
+let promotionBishop={white:false,black:false}
 globaklcheck=false
 let board=
 [
 [
-  {color:"black",vertically:0,horizontally:0,pieces:"rook",isTouched:false},
-  {color:"black",vertically:0,horizontally:1,pieces:"knight",isTouched:false},
-  {color:"black",vertically:0,horizontally:2,pieces:"bishop",isTouched:false},
-  {color:"black",vertically:0,horizontally:3,pieces:"queen",isTouched:false},
-  {color:"black",vertically:0,horizontally:4,pieces:"king",isTouched:false},
-  {color:"black",vertically:0,horizontally:5,pieces:"bishop",isTouched:false},
-  {color:"black",vertically:0,horizontally:6,pieces:"knight",isTouched:false},
-  {color:"black",vertically:0,horizontally:7,pieces:"rook",isTouched:false},
+  {color:"black",vertically:0,horizontally:0,pieces:"rook",isTouched:false,positionColor:"white"},
+  {color:"black",vertically:0,horizontally:1,pieces:"knight",isTouched:false,positionColor:"black"},
+  {color:"black",vertically:0,horizontally:2,pieces:"bishop",isTouched:false,positionColor:"white"},
+  {color:"black",vertically:0,horizontally:3,pieces:"queen",isTouched:false,positionColor:"black"},
+  {color:"black",vertically:0,horizontally:4,pieces:"king",isTouched:false,positionColor:"white"},
+  {color:"black",vertically:0,horizontally:5,pieces:"bishop",isTouched:false,positionColor:"black"},
+  {color:"black",vertically:0,horizontally:6,pieces:"knight",isTouched:false,positionColor:"white"},
+  {color:"black",vertically:0,horizontally:7,pieces:"rook",isTouched:false,positionColor:"black"},
  ],
  [
-  {color:"black",vertically:1,horizontally:0,pieces:"pawn",isTouched:false},
-  {color:"black",vertically:1,horizontally:1,pieces:"pawn",isTouched:false},
-  {color:"black",vertically:1,horizontally:2,pieces:"pawn",isTouched:false},
-  {color:"black",vertically:1,horizontally:3,pieces:"pawn",isTouched:false},
-  {color:"black",vertically:1,horizontally:4,pieces:"pawn",isTouched:false},
-  {color:"black",vertically:1,horizontally:5,pieces:"pawn",isTouched:false},
-  {color:"black",vertically:1,horizontally:6,pieces:"pawn",isTouched:false},
-  {color:"black",vertically:1,horizontally:7,pieces:"pawn",isTouched:false},
+  {color:"black",vertically:1,horizontally:0,pieces:"pawn",isTouched:false,positionColor:"black"},
+  {color:"black",vertically:1,horizontally:1,pieces:"pawn",isTouched:false,positionColor:"white"},
+  {color:"black",vertically:1,horizontally:2,pieces:"pawn",isTouched:false,positionColor:"black"},
+  {color:"black",vertically:1,horizontally:3,pieces:"pawn",isTouched:false,positionColor:"white"},
+  {color:"black",vertically:1,horizontally:4,pieces:"pawn",isTouched:false,positionColor:"black"},
+  {color:"black",vertically:1,horizontally:5,pieces:"pawn",isTouched:false,positionColor:"white"},
+  {color:"black",vertically:1,horizontally:6,pieces:"pawn",isTouched:false,positionColor:"black"},
+  {color:"black",vertically:1,horizontally:7,pieces:"pawn",isTouched:false,positionColor:"white"},
  ],
  [
-  {color:null,vertically:2,horizontally:0,pieces:null,isTouched:false},
-  {color:null,vertically:2,horizontally:1,pieces:null,isTouched:false},
-  {color:null,vertically:2,horizontally:2,pieces:null,isTouched:false},
-  {color:null,vertically:2,horizontally:3,pieces:null,isTouched:false},
-  {color:null,vertically:2,horizontally:4,pieces:null,isTouched:false},
-  {color:null,vertically:2,horizontally:5,pieces:null,isTouched:false},
-  {color:null,vertically:2,horizontally:6,pieces:null,isTouched:false},
-  {color:null,vertically:2,horizontally:7,pieces:null,isTouched:false},
+  {color:null,vertically:2,horizontally:0,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:2,horizontally:1,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:2,horizontally:2,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:2,horizontally:3,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:2,horizontally:4,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:2,horizontally:5,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:2,horizontally:6,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:2,horizontally:7,pieces:null,isTouched:false,positionColor:"black"},
  ],
  [
-  {color:null,vertically:3,horizontally:0,pieces:null,isTouched:false},
-  {color:null,vertically:3,horizontally:1,pieces:null,isTouched:false},
-  {color:null,vertically:3,horizontally:2,pieces:null,isTouched:false},
-  {color:null,vertically:3,horizontally:3,pieces:null,isTouched:false},
-  {color:null,vertically:3,horizontally:4,pieces:null,isTouched:false},
-  {color:null,vertically:3,horizontally:5,pieces:null,isTouched:false},
-  {color:null,vertically:3,horizontally:6,pieces:null,isTouched:false},
-  {color:null,vertically:3,horizontally:7,pieces:null,isTouched:false},
+  {color:null,vertically:3,horizontally:0,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:3,horizontally:1,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:3,horizontally:2,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:3,horizontally:3,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:3,horizontally:4,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:3,horizontally:5,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:3,horizontally:6,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:3,horizontally:7,pieces:null,isTouched:false,positionColor:"white"},
  ],
  [
-  {color:null,vertically:4,horizontally:0,pieces:null,isTouched:false},
-  {color:null,vertically:4,horizontally:1,pieces:null,isTouched:false},
-  {color:null,vertically:4,horizontally:2,pieces:null,isTouched:false},
-  {color:null,vertically:4,horizontally:3,pieces:null,isTouched:false},
-  {color:null,vertically:4,horizontally:4,pieces:null,isTouched:false},
-  {color:null,vertically:4,horizontally:5,pieces:null,isTouched:false},
-  {color:null,vertically:4,horizontally:6,pieces:null,isTouched:false},
-  {color:null,vertically:4,horizontally:7,pieces:null,isTouched:false},
+  {color:null,vertically:4,horizontally:0,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:4,horizontally:1,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:4,horizontally:2,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:4,horizontally:3,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:4,horizontally:4,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:4,horizontally:5,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:4,horizontally:6,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:4,horizontally:7,pieces:null,isTouched:false,positionColor:"black"},
  ],
  [
-  {color:null,vertically:5,horizontally:0,pieces:null,isTouched:false},
-  {color:null,vertically:5,horizontally:1,pieces:null,isTouched:false},
-  {color:null,vertically:5,horizontally:2,pieces:null,isTouched:false},
-  {color:null,vertically:5,horizontally:3,pieces:null,isTouched:false},
-  {color:null,vertically:5,horizontally:4,pieces:null,isTouched:false},
-  {color:null,vertically:5,horizontally:5,pieces:null,isTouched:false},
-  {color:null,vertically:5,horizontally:6,pieces:null,isTouched:false},
-  {color:null,vertically:5,horizontally:7,pieces:null,isTouched:false},
+  {color:null,vertically:5,horizontally:0,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:5,horizontally:1,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:5,horizontally:2,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:5,horizontally:3,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:5,horizontally:4,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:5,horizontally:5,pieces:null,isTouched:false,positionColor:"white"},
+  {color:null,vertically:5,horizontally:6,pieces:null,isTouched:false,positionColor:"black"},
+  {color:null,vertically:5,horizontally:7,pieces:null,isTouched:false,positionColor:"white"},
  ],
  [
-  {color:"white",vertically:6,horizontally:0,pieces:"pawn",isTouched:false},
-  {color:"white",vertically:6,horizontally:1,pieces:"pawn",isTouched:false},
-  {color:"white",vertically:6,horizontally:2,pieces:"pawn",isTouched:false},
-  {color:"white",vertically:6,horizontally:3,pieces:"pawn",isTouched:false},
-  {color:"white",vertically:6,horizontally:4,pieces:"pawn",isTouched:false},
-  {color:"white",vertically:6,horizontally:5,pieces:"pawn",isTouched:false},
-  {color:"white",vertically:6,horizontally:6,pieces:"pawn",isTouched:false},
-  {color:"white",vertically:6,horizontally:7,pieces:"pawn",isTouched:false},
+  {color:"white",vertically:6,horizontally:0,pieces:"pawn",isTouched:false,positionColor:"white"},
+  {color:"white",vertically:6,horizontally:1,pieces:"pawn",isTouched:false,positionColor:"black"},
+  {color:"white",vertically:6,horizontally:2,pieces:"pawn",isTouched:false,positionColor:"white"},
+  {color:"white",vertically:6,horizontally:3,pieces:"pawn",isTouched:false,positionColor:"black"},
+  {color:"white",vertically:6,horizontally:4,pieces:"pawn",isTouched:false,positionColor:"white"},
+  {color:"white",vertically:6,horizontally:5,pieces:"pawn",isTouched:false,positionColor:"black"},
+  {color:"white",vertically:6,horizontally:6,pieces:"pawn",isTouched:false,positionColor:"white"},
+  {color:"white",vertically:6,horizontally:7,pieces:"pawn",isTouched:false,positionColor:"black"},
  ],
  [
-  {color:"white",vertically:7,horizontally:0,pieces:"rook",isTouched:false},
-  {color:"white",vertically:7,horizontally:1,pieces:"knight",isTouched:false},
-  {color:"white",vertically:7,horizontally:2,pieces:"bishop",isTouched:false},
-  {color:"white",vertically:7,horizontally:3,pieces:"queen",isTouched:false},
-  {color:"white",vertically:7,horizontally:4,pieces:"king",isTouched:false},
-  {color:"white",vertically:7,horizontally:5,pieces:"bishop",isTouched:false},
-  {color:"white",vertically:7,horizontally:6,pieces:"knight",isTouched:false},
-  {color:"white",vertically:7,horizontally:7,pieces:"rook",isTouched:false},
+  {color:"white",vertically:7,horizontally:0,pieces:"rook",isTouched:false,positionColor:"black"},
+  {color:"white",vertically:7,horizontally:1,pieces:"knight",isTouched:false,positionColor:"white"},
+  {color:"white",vertically:7,horizontally:2,pieces:"bishop",isTouched:false,positionColor:"black"},
+  {color:"white",vertically:7,horizontally:3,pieces:"queen",isTouched:false,positionColor:"white"},
+  {color:"white",vertically:7,horizontally:4,pieces:"king",isTouched:false,positionColor:"black"},
+  {color:"white",vertically:7,horizontally:5,pieces:"bishop",isTouched:false,positionColor:"white"},
+  {color:"white",vertically:7,horizontally:6,pieces:"knight",isTouched:false,positionColor:"black"},
+  {color:"white",vertically:7,horizontally:7,pieces:"rook",isTouched:false,positionColor:"white"},
  ],
 ]
 // pawn  unexpected
@@ -104,7 +104,22 @@ let figures={black:{pawn:8,rook:2,knight:2,bishop:2,queen:1},white:{pawn:8,rook:
 //   from:{vertically:1,horizontally:0},
 //   to:{vertically:1,horizontally:0}
 // }
+function squareColor(v, h) {
+  let result = 'black';
 
+  if (v % 2 === 0) {
+    result = 'white';
+    if (h % 2 === 1) {
+      result = 'black';
+    }
+  } else {
+    if (h % 2 === 1) {
+      result = 'white';
+    }
+  }
+
+  return result;
+}
 
 
 
@@ -134,10 +149,9 @@ function drawDeadPosition(figures) {
 if (figures.white.pawn || figures.black.pawn || figures.black.queen ||figures.white.queen || figures.white.rook || figures.black.rook) {
   return false
 }
-if ((figures.white.knight && figures.white.bishop) || figures.black.knight>1 ) {
+if ((figures.white.knight && figures.white.bishop) || (figures.white.bishop>1 && promotionBishop.white ==false ) || (figures.black.bishop>1 && promotionBishop.black ==false ) ) {
   return false
 }
-
 return true
 }
 function draw50MoveRule(arrHistory) {
@@ -824,7 +838,7 @@ function allowWhitePawn(data) {
   ) {
     bigData.to.vertically=data.vertically - 2
     let step1=step(bigData,board,true)
-      if (!check(step1.board,{vertically:step1.kingsPossitionFake["white"].vertically,horizontally:step1.kingsPossitionFake["white"].horizontally},"white")) {
+    if (!check(step1.board,{vertically:step1.kingsPossitionFake["white"].vertically,horizontally:step1.kingsPossitionFake["white"].horizontally},"white")) {
         allow.push({
           vertically: data.vertically - 2,
           horizontally: data.horizontally,
@@ -1214,13 +1228,13 @@ if (!notAllowed) {
   let take = false
   if (board[data.to.vertically][data.to.horizontally].color == globalColor) {
 
-    figures[globalColor][board[data.to.vertically][data.to.horizontally].pieces]++
+    figures[globalColor][board[data.to.vertically][data.to.horizontally].pieces]--
     
     take=true
   }
   if (board[data.from.vertically][data.from.horizontally].pieces=="pawn") {
     if (data.from.horizontally!== data.to.horizontally && board[data.to.vertically][data.to.horizontally].color !== globalColor) {
-      figures[globalColor]["pawn"]++
+      figures[globalColor]["pawn"]--
       take=true
     }
   }
@@ -1310,8 +1324,23 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
 
 
   socket.on("promotion", (data) => {
+    let promotionColor =board[data.position.vertically][data.position.horizontally].color
+    figures[promotionColor][data.name]++
+    figures[promotionColor]["pawn"]--
 if (data.name=="bishop") {
-  
+  let oppositeBishop=false
+  for (let v = 0; v < board.length; v++) {
+for (let h = 0; h < board.length; h++) {
+  if (board[v][h].pieces=="bishop" && board[v][h].color==promotionColor && 
+  squareColor(v,h)!==squareColor(data.position.vertically,data.position.horizontally)) {
+    oppositeBishop=true
+  }
+}
+
+  }
+  if (!oppositeBishop) {
+    promotionBishop[promotionColor]=true
+  }
 }
 
 
@@ -1322,9 +1351,8 @@ if (data.name=="bishop") {
     }else{color="white"}
 
     if (check(board,{vertically:kingsPossition[color].vertically,horizontally:kingsPossition[color].horizontally},color)) {
-      kingsPossition[globalColor].check=true
-      console.log("g cvhghg",globalColor,color);
-      if (checkMate(board,color),color) {
+      kingsPossition[color].check=true
+      if (checkMate(board,color)) {
         socket.emit("receive_checkmate", globalColor);
         for (let i = 0; i < allPlayers.length; i++) {
           socket.to(allPlayers[i]).emit("receive_checkmate", globalColor);
@@ -1347,12 +1375,12 @@ if (data.name=="bishop") {
 
 
   socket.on("showMoves", (data) => {
-
     if (!data||!data.from||!(data.from.vertically ||data.from.vertically==0) ||!(data.from.horizontally||data.from.horizontally==0)) {
-
-
+      
+      
       return false
     }
+    
     if (data.from.vertically<0||data.from.vertically>7||data.from.horizontally<0||data.from.horizontally>7) {
       return false
     }
