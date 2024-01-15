@@ -1190,7 +1190,6 @@ if (checkMate(board,activeColor)) {
     let step1 =step(data,board,true) 
 
     if (check(step1.board,{vertically:step1.kingsPossitionFake[activeColor].vertically,horizontally:step1.kingsPossitionFake[activeColor].horizontally},activeColor)) {
-    console.log("E");
       notAllowed=true
     }
 
@@ -1311,7 +1310,7 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
 
 
   socket.on("promotion", (data) => {
-if (data.name="bishop") {
+if (data.name=="bishop") {
   
 }
 
@@ -1324,7 +1323,18 @@ if (data.name="bishop") {
 
     if (check(board,{vertically:kingsPossition[color].vertically,horizontally:kingsPossition[color].horizontally},color)) {
       kingsPossition[globalColor].check=true
+      console.log("g cvhghg",globalColor,color);
+      if (checkMate(board,color),color) {
+        socket.emit("receive_checkmate", globalColor);
+        for (let i = 0; i < allPlayers.length; i++) {
+          socket.to(allPlayers[i]).emit("receive_checkmate", globalColor);
+        }
+        if (allPlayers.length) {
+          socket.emit("receive_checkmate", globalColor);
+        }
+      }
     }
+
     for (let i = 0; i < allPlayers.length; i++) {
       socket.to(allPlayers[i]).emit("receive_step", {board,kingsPossition} );
     }
