@@ -1144,15 +1144,14 @@ io.on("connection", (socket) => {
   socket.on("start", (data) => {
     socket.join(board);
     for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_step", {board,kingCheck:false});
+      socket.to(allPlayers[i]).emit("receive_step", {board,kingsPossition});
     }
     if (allPlayers.length) {
-      socket.emit("receive_step", {board,kingCheck:false});
+      socket.emit("receive_step", {board,kingsPossition});
     }
   });
 
   socket.on("step", (data) => {
-    let kingCheck=false
     if (!data||!data.from||!data.to||(!data.from.vertically&&data.from.vertically!==0)||(!data.from.horizontally&&data.from.horizontally!==0)||(!data.to.vertically&&data.to.vertically!==0)||(!data.to.horizontally&&data.to.horizontally!==0)) {
       return false
     }
@@ -1232,7 +1231,6 @@ if (!notAllowed) {
 
 
   if (check(board,{vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally},globalColor)) {
-    kingCheck={vertically:kingsPossition[globalColor].vertically,horizontally:kingsPossition[globalColor].horizontally}
     kingsPossition[globalColor].check=true
   }
   
@@ -1273,10 +1271,10 @@ if (history.length>7) {
   }
   if (draw) {
     for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_draw", {board,kingCheck:false});
+      socket.to(allPlayers[i]).emit("receive_draw", {board,kingsPossition});
     }
     if (allPlayers.length) {
-      socket.emit("receive_draw", {board,kingCheck:false});
+      socket.emit("receive_draw", {board,kingsPossition});
     }
   }
 
@@ -1304,16 +1302,20 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
 
     }
     for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_step", {board,kingCheck});
+      socket.to(allPlayers[i]).emit("receive_step", {board,kingsPossition});
     }
     if (allPlayers.length) {
-      socket.emit("receive_step", {board,kingCheck});
+      socket.emit("receive_step", {board,kingsPossition});
     }
   });
 
 
   socket.on("promotion", (data) => {
-    let kingCheck=false
+if (data.name="bishop") {
+  
+}
+
+
     board[data.position.vertically][data.position.horizontally].pieces=data.name
     let color
     if (board[data.position.vertically][data.position.horizontally].color=="white") {
@@ -1321,14 +1323,13 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
     }else{color="white"}
 
     if (check(board,{vertically:kingsPossition[color].vertically,horizontally:kingsPossition[color].horizontally},color)) {
-      kingCheck={vertically:kingsPossition[color].vertically,horizontally:kingsPossition[color].horizontally}
       kingsPossition[globalColor].check=true
     }
     for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_step", {board,kingCheck} );
+      socket.to(allPlayers[i]).emit("receive_step", {board,kingsPossition} );
     }
     if (allPlayers.length) {
-      socket.emit("receive_step", {board,kingCheck});
+      socket.emit("receive_step", {board,kingsPossition});
     }
   })
 
