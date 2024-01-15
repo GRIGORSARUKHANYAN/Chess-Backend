@@ -1313,13 +1313,22 @@ if (board[data.to.vertically][data.to.horizontally].pieces=="pawn"&&(data.to.ver
 
 
   socket.on("promotion", (data) => {
+    let kingCheck=false
     board[data.position.vertically][data.position.horizontally].pieces=data.name
+    let color
+    if (board[data.position.vertically][data.position.horizontally].color=="white") {
+      color="black"
+    }else{color="white"}
 
+    if (check(board,{vertically:kingsPossition[color].vertically,horizontally:kingsPossition[color].horizontally},color)) {
+      kingCheck={vertically:kingsPossition[color].vertically,horizontally:kingsPossition[color].horizontally}
+      kingsPossition[globalColor].check=true
+    }
     for (let i = 0; i < allPlayers.length; i++) {
-      socket.to(allPlayers[i]).emit("receive_step", {board,kingCheck:false} );
+      socket.to(allPlayers[i]).emit("receive_step", {board,kingCheck} );
     }
     if (allPlayers.length) {
-      socket.emit("receive_step", {board,kingCheck:false});
+      socket.emit("receive_step", {board,kingCheck});
     }
   })
 
